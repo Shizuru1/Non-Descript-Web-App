@@ -1,7 +1,3 @@
-# Pairing Exercise
-
-This started as a multi step pairing exercise.
-
 ## Getting Started
 
 To run the application, follow these steps:
