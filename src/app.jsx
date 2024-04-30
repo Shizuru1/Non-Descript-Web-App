@@ -5,34 +5,34 @@ import "bulma/css/bulma.min.css";
 import Counters from "./Counters";
 import StarRating from "./StarRating";
 import TicTacToe from "./Tictac";
+import Test from "./test";
+import Checkers from "./Checkers";
 
 // App
 function App() {
   // Controls whether you see the Counter, Star Rating, or Tic Tac Toe components
-  const [state, setState] = useState("counter"); // ['counter', 'star', 'ttt']
+  const [state, setState] = useState("counter"); // ['counter', 'star', 'ttt', 'test', 'checkers']
 
   return (
     <>
       <header>Header</header>
-      <div>
+      <span>
         <nav>
-          <div onClick={() => setState("counter")}>
-            <span className="tag">Counters</span>
-          </div>
-          <div onClick={() => setState("star")}>
-            <span className="tag">Star Rating</span>
-          </div>
-          <div onClick={() => setState("ttt")}>
-            <span className="tag">Tic Tac Toe</span>
-          </div>
+          <div className="tag" onClick={() => setState("counter")}>Counters</div>
+          <div className="tag" onClick={() => setState("star")}>Star Rating</div>
+          <div className="tag" onClick={() => setState("ttt")}>Tic Tac Toe</div>
+          <div className="tag" onClick={() => setState("test")}>Test</div>
+          <div className="tag" onClick={() => setState("checkers")}>Checkers</div>
         </nav>
         <main>
-          {state === "counter" && <Counters />}
+          {state === "counter" && <Counters amount={14} />}
           {state === "star" && <StarRating />}
           {state === "ttt" && <TicTacToe />}
+          {state === "test" && <Test />}
+          {state === "checkers" && <Checkers />}
         </main>
         <aside>Sidebar</aside>
-      </div>
+      </span>
       <footer>Footer</footer>
     </>
   );

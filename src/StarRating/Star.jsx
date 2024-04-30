@@ -1,6 +1,6 @@
 import React from "react";
 
-export function Star({ filled }) {
+export function Star({ filled, hoverRating, setRating, persistRating }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -9,6 +9,9 @@ export function Star({ filled }) {
       viewBox="0 0 24 24"
       stroke="currentColor"
       strokeWidth="2"
+      onClick={setRating}
+      onMouseOver={hoverRating}
+      onMouseOut={persistRating}
     >
       <path
         strokeLinecap="round"
