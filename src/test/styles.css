@@ -1,0 +1,53 @@
+body {
+    font-family: sans-serif;
+  }
+  
+  .appa {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 320px;
+    margin: 0 auto;
+    row-gap: 16px;
+  }
+  
+  .boarda {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .cella {
+    background-color: #fff;
+    color: #000;
+    font-size: min(48px, 10vw);
+    font-weight: bold;
+    vertical-align: middle;
+    aspect-ratio: 1 / 1;
+  }
+
+  .cella:before {
+    content: "";
+    height: 0;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+    border-right: 30px solid #ccc;
+  }
+
+  .cella:after {
+    content: "";
+    height: 0;
+    border-top: 52px solid transparent;
+    border-bottom: 52px solid transparent;
+    border-left: 30px solid #ccc;
+  }
+  
+  .cella:not(:disabled) {
+    cursor: pointer;
+  }
+  
+  .cella:not(:disabled):hover {
+    background-color: #fafafa;
+  }
+  
