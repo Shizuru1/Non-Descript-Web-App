@@ -6,3 +6,5 @@ To run the application, follow these steps:
 2. Install the project dependencies using `yarn`
 3. Start the development server using `yarn start`
 4. Open your web browser and go to `http://localhost:3000` to access the App.
+
+Original Framework built by: [vyin1989](https://github.com/vyin89)
