@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./styles.css";
 
@@ -15,25 +15,30 @@ const Cell = (props) => {
 };
 
 export default function App() {
-  const [ player, setPlayer ] = useState('O'); // whose turn
+  const [ player, setPlayer ] = useState('Black'); // whose turn
   const [ win, setWin ] = useState(''); // win state
-  const [ values, setValues ] = useState(new Array(64).fill('')); // board state
+  const initArray = new Array(64).fill('');
+  const initBlacks = new Array(12).fill('○');
+  const initWhites = new Array(12).fill('●');
+  const initArrayBlacks = initArray.map((value, index) => (initBlacks.forEach((val, id) => ((index == id * 2 + 1) ? "○" : value))));
+  const initArrayFull = initArrayBlacks.map((value, index) => (initWhites.forEach((val, id) => ((index == id * 2 + 40) ? "●" : value))));
+  const [ values, setValues ] = useState(initArrayFull); // board state
 
   useEffect(() => {
     checkForWin();
   }, [values]);
 
   const arrayModifier = (id) => {
-    setValues(values.map((value, index) => (index == id ? value = player : value)));
+    setValues(values.map((value, index) => (index == id ? value = (player == 'Black' ? '○' : '●') : value)));
   }
 
   const playerModifier = (func) => {
-    (player == 'O') ? func('X') : func('O');
+    (player == 'Black') ? func('White') : func('Black');
   }
 
   const reset = () => {
-    setValues(new Array(64).fill(''));
-    setPlayer('O');
+    setValues(initArray);
+    setPlayer('Black');
     setWin('');
   }
 

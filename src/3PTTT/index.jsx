@@ -3,14 +3,14 @@ import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 const Cell = (props) => {
-  const { value, win, setPlayer, setArray } = props;
+  const { index, value, win, setPlayer, setArray } = props;
 
   const handleClick = () => {
     setPlayer();
     setArray();
   }
 
-  return <button className="cella" onClick={handleClick} disabled={(value != '') || (win != '')}>{value}</button>;
+  return <button className={"cell" + String.fromCharCode(97 + index)} onClick={handleClick} disabled={(value != '') || (win != '')}>{value}</button>;
 };
 
 export default function App() {
@@ -26,10 +26,6 @@ export default function App() {
     setValues(values.map((value, index) => (index == id ? value = player : value)));
   }
 
-  const playerModifier = (func) => {
-    (player == 'O') ? func('X') : func('O');
-  }
-
   const reset = () => {
     setValues(new Array(13).fill(''));
     setPlayer('O');
@@ -37,14 +33,18 @@ export default function App() {
   }
 
   const winningCombos = [
-    [0,3,6],
-    [1,4,7],
-    [2,5,8],
     [0,1,2],
-    [3,4,5],
-    [6,7,8],
-    [0,4,8],
-    [2,4,6],
+    [0,5,8],
+    [0,6,12],
+    [1,6,11],
+    [2,3,4],
+    [2,6,10],
+    [3,6,9],
+    [4,6,8],
+    [4,7,12],
+    [5,6,7],
+    [8,9,10],
+    [10,11,12],
   ];
 
   const checkForWin = () => {
@@ -55,7 +55,7 @@ export default function App() {
       const [a, b, c]  = combin;
       if (values[a] != '') {
         if(values[a] == values[b] && values[b] == values[c]) {
-          playerModifier(setWin);
+          (player == 'O') ? setWin('∆') : (player == 'X' ? setWin('O') : setWin('X'));
         }
       }
     })
@@ -67,7 +67,7 @@ export default function App() {
         {((win == '') ? ('Player ' + player + "'s turn") : ((win == 'draw') ? 'Draw' : ('Winner is ' + win)))}
       </div>
       <div className="boarda">
-        {values.map((value, index) => (<Cell key={index} value={value} win={win} setPlayer={() => playerModifier(setPlayer)} setArray={() => arrayModifier(index)} />))}
+        {values.map((value, index) => (<Cell index={index} value={value} win={win} setPlayer={() => ((player == 'O') ? setPlayer('X') : (player == 'X' ? setPlayer('∆') : setPlayer('O')))} setArray={() => arrayModifier(index)} />))}
       </div>
       <button onClick={reset}>Reset</button>
     </div>
