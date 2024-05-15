@@ -1,8 +1,8 @@
 body {
     font-family: sans-serif;
-  }
-  
-  .app2 {
+}
+
+.app2 {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -10,27 +10,26 @@ body {
     max-width: 640px;
     margin: 0 auto;
     row-gap: 16px;
-  }
-  
-  .board2 {
+}
+
+.board2 {
     display: grid;
     width: 100%;
     grid-template-columns: repeat(8, 1fr);
-  }
-  
-  .cell2 {
+}
+
+.cell2 {
     border: 1px solid #ccc;
     font-size: min(48px, 10vw);
     font-weight: bold;
     vertical-align: middle;
     aspect-ratio: 1 / 1;
-  }
-  
-  .cell2:not(:disabled) {
-    cursor: pointer;
-  }
-  
-  .cell2:not(:disabled):hover {
-    background-color: #fafafa;
-  }
-  
+}
+
+    .cell2:not(:disabled) {
+        cursor: pointer;
+    }
+
+        .cell2:not(:disabled):hover {
+            background-color: #fafafa;
+        }

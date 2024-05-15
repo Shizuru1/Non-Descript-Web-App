@@ -8,6 +8,7 @@ build/
 
 # Editor files
 .vscode/
+.vs/
 .idea/
 
 # macOS
