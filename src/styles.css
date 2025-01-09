@@ -67,6 +67,7 @@ header {
 
 nav {
   background-color: rgb(255, 116, 70);
+  display: grid;
   text-align: center;
   font-weight: bold;
   width: 10%;

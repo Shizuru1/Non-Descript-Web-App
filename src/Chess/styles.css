@@ -2,7 +2,7 @@ body {
     font-family: sans-serif;
 }
 
-.app2 {
+.app3 {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -12,13 +12,13 @@ body {
     row-gap: 16px;
 }
 
-.board2 {
+.board3 {
     display: grid;
     width: 100%;
     grid-template-columns: repeat(8, 1fr);
 }
 
-.cell2black {
+.cell3black {
     border: 1px solid rgb(255, 224, 171);
     font-size: min(48px, 10vw);
     vertical-align: middle;
@@ -27,7 +27,7 @@ body {
     color: #000;
 }
 
-.cell2white {
+.cell3white {
     border: 1px solid rgb(255, 224, 171);
     font-size: min(48px, 10vw);
     vertical-align: middle;
@@ -36,19 +36,20 @@ body {
     color: #000;
 }
 
-    .cell2black:not(:disabled),
-    .cell2white:not(:disabled) {
+    .cell3black:not(:disabled) {
         cursor: pointer;
-    }
-
-    .cell2black:not(:disabled) {
         background-color: #97b556;
     }
 
-        .cell2black:not(:disabled):hover {
+    .cell3white:not(:disabled) {
+        cursor: pointer;
+        background-color: #cbccd0;
+    }
+
+        .cell3black:not(:disabled):hover {
             background-color: #97b576;
         }
 
-        .cell2white:not(:disabled):hover {
-            background-color: #dbdcc0;
+        .cell3white:not(:disabled):hover {
+            background-color: #cbccb0;
         }
