@@ -2,6 +2,12 @@ body {
     font-family: sans-serif;
 }
 
+@font-face {
+    font-family: 'Nishiki-Teki';
+    font-weight: 900;
+    src: local('Nishiki-Teki'), url(../../nishiki-teki.ttf) format('truetype');
+}
+
 .app2 {
     align-items: center;
     display: flex;
@@ -25,6 +31,7 @@ body {
     aspect-ratio: 1 / 1;
     background-color: #779556;
     color: #000;
+    font-family: Nishiki-Teki;
 }
 
 .cell2white {
@@ -34,6 +41,7 @@ body {
     aspect-ratio: 1 / 1;
     background-color: #ebecd0;
     color: #000;
+    font-family: Nishiki-Teki;
 }
 
     .cell2black:not(:disabled),

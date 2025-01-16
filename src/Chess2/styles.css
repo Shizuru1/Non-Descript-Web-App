@@ -1,0 +1,63 @@
+body {
+    font-family: sans-serif;
+}
+
+@font-face {
+    font-family: 'Nishiki-Teki';
+    font-weight: 900;
+    src: local('Nishiki-Teki'), url(../../nishiki-teki.ttf) format('truetype');
+}
+
+.app4 {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 640px;
+    margin: 0 auto;
+    row-gap: 16px;
+}
+
+.board4 {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.cell4black {
+    border: 1px solid rgb(255, 224, 171);
+    font-size: min(48px, 10vw);
+    vertical-align: middle;
+    aspect-ratio: 1 / 1;
+    background-color: #779556;
+    color: #000;
+    font-family: Nishiki-Teki;
+}
+
+.cell4white {
+    border: 1px solid rgb(255, 224, 171);
+    font-size: min(48px, 10vw);
+    vertical-align: middle;
+    aspect-ratio: 1 / 1;
+    background-color: #ebecd0;
+    color: #000;
+    font-family: Nishiki-Teki;
+}
+
+    .cell4black:not(:disabled) {
+        cursor: pointer;
+        background-color: #97b556;
+    }
+
+    .cell4white:not(:disabled) {
+        cursor: pointer;
+        background-color: #cbccd0;
+    }
+
+        .cell4black:not(:disabled):hover {
+            background-color: #97b576;
+        }
+
+        .cell4white:not(:disabled):hover {
+            background-color: #cbccb0;
+        }
