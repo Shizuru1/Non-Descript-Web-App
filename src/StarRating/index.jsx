@@ -10,6 +10,8 @@ export default function App() {
             <StarRating max={22} filled={0} />
             <StarRating max={6} filled={2} />
             <StarRating max={3} filled={4} />
+            <StarRating max={1} filled={0} />
+            <StarRating max={12} filled={1} />
         </div>
     );
 }

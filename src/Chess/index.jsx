@@ -31,6 +31,19 @@ const Cell = (props) => {
                         moves[5] = true;
                     }
                 }
+                if (value == '♖') {
+                    if (id == 56 && !moves[2]) {
+                        moves[2] = true;
+                    } else if (id == 63 && !moves[3]) {
+                        moves[3] = true;
+                    }
+                } else if (value == '♜') {
+                    if (id == 0 && !moves[4]) {
+                        moves[4] = true;
+                    } else if (id == 7 && !moves[5]) {
+                        moves[5] = true;
+                    }
+                }
                 if ((selected.piece == '♔' || selected.piece == '♚') && Math.abs(id - selected.id) == 2) {
                     if (id == 2) {
                         setArray(0, '');
@@ -89,8 +102,8 @@ const Cell = (props) => {
     const checkerboard = ((id % 2 != 1) && (Math.floor(id / 8) % 2 != 1)) || ((id % 2 == 1) && (Math.floor(id / 8) % 2 == 1));
     const blackSelect = player == 'Black' && value != '♟' && value != '♜' && value != '♞' && value != '♝' && value != '♛' && value != '♚';
     const whiteSelect = player == 'White' && value != '♙' && value != '♖' && value != '♘' && value != '♗' && value != '♕' && value != '♔';
-    const blackCastle = (checkForCastle(4, 0) ? id != 2 : true) && (checkForCastle(4, 7) ? id != 6 : true);
-    const whiteCastle = (checkForCastle(60, 56) ? id != 58 : true) && (checkForCastle(60, 63) ? id != 62 : true);
+    const blackCastle = selected.piece == '♚' ? (checkForCastle(4, 0) ? id != 2 : true) && (checkForCastle(4, 7) ? id != 6 : true) : true;
+    const whiteCastle = selected.piece == '♔' ? (checkForCastle(60, 56) ? id != 58 : true) && (checkForCastle(60, 63) ? id != 62 : true) : true;
     const blackPassant = (id != selected.passant || id != selected.id + 7) && (id != selected.passant || id != selected.id + 9);
     const whitePassant = (id != selected.passant || id != selected.id - 7) && (id != selected.passant || id != selected.id - 9);
     const select = !selected.value && (selected.blockedArray.some(val => (id == val)) || (blackSelect || whiteSelect));
@@ -127,6 +140,61 @@ export default function App() {
         checkForMate();
     }, [repetitions]);
 
+    const upArray = [-1, -1, -1, -1, -1, -1, -1, -1,
+        0, 1, 2, 3, 4, 5, 6, 7,
+        8, 9, 10, 11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20, 21, 22, 23,
+        24, 25, 26, 27, 28, 29, 30, 31,
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55];
+
+    const downArray = [8, 9, 10, 11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20, 21, 22, 23,
+        24, 25, 26, 27, 28, 29, 30, 31,
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55,
+        56, 57, 58, 59, 60, 61, 62, 63,
+        -1, -1, -1, -1, -1, -1, -1, -1];
+
+    const leftArray = [-1, 0, 1, 2, 3, 4, 5, 6,
+        -1, 8, 9, 10, 11, 12, 13, 14,
+        -1, 16, 17, 18, 19, 20, 21, 22,
+        -1, 24, 25, 26, 27, 28, 29, 30,
+        -1, 32, 33, 34, 35, 36, 37, 38,
+        -1, 40, 41, 42, 43, 44, 45, 46,
+        -1, 48, 49, 50, 51, 52, 53, 54,
+        -1, 56, 57, 58, 59, 60, 61, 62];
+
+    const rightArray = [1, 2, 3, 4, 5, 6, 7, -1,
+        9, 10, 11, 12, 13, 14, 15, -1,
+        17, 18, 19, 20, 21, 22, 23, -1,
+        25, 26, 27, 28, 29, 30, 31, -1,
+        33, 34, 35, 36, 37, 38, 39, -1,
+        41, 42, 43, 44, 45, 46, 47, -1,
+        49, 50, 51, 52, 53, 54, 55, -1,
+        57, 58, 59, 60, 61, 62, 63, -1];
+
+    const whitePieces = (piece) => {
+        return piece == '♙' || piece == '♖' || piece == '♘' || piece == '♗' || piece == '♕';
+    }
+
+    const blackPieces = (piece) => {
+        return piece == '♟' || piece == '♜' || piece == '♞' || piece == '♝' || piece == '♛';
+    }
+
+    const checkForPiece = (piece, array) => {
+        var aa = values.findIndex(value => value == piece);
+        var bb = values.findLastIndex(value => value == piece);
+        if (aa == bb && aa != -1) {
+            array.push(aa);
+        } else if (aa != -1) {
+            array.push(aa);
+            array.push(bb);
+        }
+    }
+
     const arrayModifier = (id, newVal) => {
         setValues(values => values.map((value, index) => (index == id ? newVal : value)));
     }
@@ -157,321 +225,265 @@ export default function App() {
     }
 
     const checkForCheckWhite = (index) => {
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (i == 1 && values[index - (8 * i)] == '♔') {
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == upArray[index]) {
                     continue;
                 }
-                if (values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (i == 1 && values[index + (8 * i)] == '♔') {
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == downArray[index]) {
                     continue;
                 }
-                if (values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (i == 1 && values[index - i] == '♔') {
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == leftArray[index]) {
                     continue;
                 }
-                if (values[index - i] == '♜' || values[index - i] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (i == 1 && values[index + i] == '♔') {
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == rightArray[index]) {
                     continue;
                 }
-                if (values[index + i] == '♜' || values[index + i] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        if (index % 8 > 0) {
-            if (index % 8 > 1) {
-                if (values[index - 10] == '♞') {
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♝' || values[i] == '♛') {
                     return true;
-                }
-                if (values[index + 6] == '♞') {
-                    return true;
-                }
-            }
-            if (values[index - 17] == '♞') {
-                return true;
-            }
-            if (values[index + 15] == '♞') {
-                return true;
-            }
-        }
-        if (index % 8 < 7) {
-            if (index % 8 < 6) {
-                if (values[index - 6] == '♞') {
-                    return true;
-                }
-                if (values[index + 10] == '♞') {
-                    return true;
-                }
-            }
-            if (values[index - 15] == '♞') {
-                return true;
-            }
-            if (values[index + 17] == '♞') {
-                return true;
-            }
-        }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (i == 1 && values[index - (9 * i)] == '♔') {
+                } else if (values[i] == '♔' && i == upArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index - (9 * i)] == '♝' || values[index - (9 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (i == 1 && values[index + (9 * i)] == '♔') {
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♝' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == downArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index + (9 * i)] == '♝' || values[index + (9 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (i == 1 && values[index - (7 * i)] == '♔') {
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♝' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == upArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index - (7 * i)] == '♝' || values[index - (7 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (i == 1 && values[index + (7 * i)] == '♔') {
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♝' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == downArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index + (7 * i)] == '♝' || values[index + (7 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        if (values[index - 8] == '♚') {
+        if (values[upArray[index]] == '♚') {
             return true;
         }
-        if (values[index + 8] == '♚') {
+        if (values[downArray[index]] == '♚') {
             return true;
         }
-        if (index % 8 > 0) {
-            if (values[index - 1] == '♚') {
-                return true;
-            }
-            if (values[index - 9] == '♚' || values[index - 9] == '♟') {
-                return true;
-            }
-            if (values[index + 7] == '♚') {
-                return true;
-            }
+        if (values[leftArray[index]] == '♚') {
+            return true;
         }
-        if (index % 8 < 7) {
-            if (values[index + 1] == '♚') {
-                return true;
-            }
-            if (values[index - 7] == '♚' || values[index - 7] == '♟') {
-                return true;
-            }
-            if (values[index + 9] == '♚') {
-                return true;
-            }
+        if (values[rightArray[index]] == '♚') {
+            return true;
+        }
+        if (values[downArray[leftArray[index]]] == '♚') {
+            return true;
+        }
+        if (values[downArray[rightArray[index]]] == '♚') {
+            return true;
+        }
+        if (values[upArray[leftArray[index]]] == '♚' || values[upArray[leftArray[index]]] == '♟') {
+            return true;
+        }
+        if (values[upArray[rightArray[index]]] == '♚' || values[upArray[rightArray[index]]] == '♟') {
+            return true;
+        }
+        if (values[upArray[leftArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[leftArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[upArray[upArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[downArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[upArray[rightArray[rightArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[rightArray[rightArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[upArray[upArray[rightArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[downArray[rightArray[index]]]] == '♞') {
+            return true;
         }
         return false;
     }
 
     const checkForCheckBlack = (index) => {
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (i == 1 && values[index - (8 * i)] == '♚') {
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == upArray[index]) {
                     continue;
                 }
-                if (values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (i == 1 && values[index + (8 * i)] == '♚') {
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == downArray[index]) {
                     continue;
                 }
-                if (values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (i == 1 && values[index - i] == '♚') {
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == leftArray[index]) {
                     continue;
                 }
-                if (values[index - i] == '♖' || values[index - i] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (i == 1 && values[index + i] == '♚') {
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == rightArray[index]) {
                     continue;
                 }
-                if (values[index + i] == '♖' || values[index + i] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        if (index % 8 > 0) {
-            if (index % 8 > 1) {
-                if (values[index - 10] == '♘') {
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♗' || values[i] == '♕') {
                     return true;
-                }
-                if (values[index + 6] == '♘') {
-                    return true;
-                }
-            }
-            if (values[index - 17] == '♘') {
-                return true;
-            }
-            if (values[index + 15] == '♘') {
-                return true;
-            }
-        }
-        if (index % 8 < 7) {
-            if (index % 8 < 6) {
-                if (values[index - 6] == '♘') {
-                    return true;
-                }
-                if (values[index + 10] == '♘') {
-                    return true;
-                }
-            }
-            if (values[index - 15] == '♘') {
-                return true;
-            }
-            if (values[index + 17] == '♘') {
-                return true;
-            }
-        }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (i == 1 && values[index - (9 * i)] == '♚') {
+                } else if (values[i] == '♚' && i == upArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index - (9 * i)] == '♗' || values[index - (9 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (i == 1 && values[index + (9 * i)] == '♚') {
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♗' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == downArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index + (9 * i)] == '♗' || values[index + (9 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (i == 1 && values[index - (7 * i)] == '♚') {
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♗' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == upArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index - (7 * i)] == '♗' || values[index - (7 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (i == 1 && values[index + (7 * i)] == '♚') {
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '♗' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == downArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index + (7 * i)] == '♗' || values[index + (7 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        if (values[index - 8] == '♔') {
+        if (values[upArray[index]] == '♔') {
             return true;
         }
-        if (values[index + 8] == '♔') {
+        if (values[downArray[index]] == '♔') {
             return true;
         }
-        if (index % 8 > 0) {
-            if (values[index - 1] == '♔') {
-                return true;
-            }
-            if (values[index - 9] == '♔') {
-                return true;
-            }
-            if (values[index + 7] == '♔' || values[index + 7] == '♙') {
-                return true;
-            }
+        if (values[leftArray[index]] == '♔') {
+            return true;
         }
-        if (index % 8 < 7) {
-            if (values[index + 1] == '♔') {
-                return true;
-            }
-            if (values[index - 7] == '♔') {
-                return true;
-            }
-            if (values[index + 9] == '♔' || values[index + 9] == '♙') {
-                return true;
-            }
+        if (values[rightArray[index]] == '♔') {
+            return true;
+        }
+        if (values[upArray[leftArray[index]]] == '♔') {
+            return true;
+        }
+        if (values[upArray[rightArray[index]]] == '♔') {
+            return true;
+        }
+        if (values[downArray[leftArray[index]]] == '♔' || values[downArray[leftArray[index]]] == '♙') {
+            return true;
+        }
+        if (values[downArray[rightArray[index]]] == '♔' || values[downArray[rightArray[index]]] == '♙') {
+            return true;
+        }
+        if (values[upArray[leftArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[leftArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[upArray[upArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[downArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[upArray[rightArray[rightArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[rightArray[rightArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[upArray[upArray[rightArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[downArray[rightArray[index]]]] == '♘') {
+            return true;
         }
         return false;
     }
@@ -479,180 +491,148 @@ export default function App() {
     const checkForDiscoverCheckWhite = (index) => {
         // check for black rooks, bishops and queens that will check white king if a white piece moves
         var discoverArray = [];
-        var disca = '';
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (values[index - (8 * i)] == '♙' || values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♘' || values[index - (8 * i)] == '♗' || values[index - (8 * i)] == '♕') {
-                    if (disca.length > 0) {
-                        break;
-                    } else {
-                        disca = values[index - (8 * i)];
-                        var aa = index - (8 * i);
+        var disca = -1;
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (disca == -1) {
+                        disca = i;
                     }
-                } else if (disca.length > 0) {
-                    if (values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♛') {
-                        discoverArray.push({ direction: 'up', piece: aa });
-                        break;
-                    } else {
+                    break;
+                } else if (disca > -1) {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'up', piece: disca });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discb = '';
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (values[index + (8 * i)] == '♙' || values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♘' || values[index + (8 * i)] == '♗' || values[index + (8 * i)] == '♕') {
-                    if (discb.length > 0) {
-                        break;
-                    } else {
-                        discb = values[index + (8 * i)];
-                        var bb = index + (8 * i);
+        var discb = -1;
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (discb == -1) {
+                        discb = i;
                     }
-                } else if (discb.length > 0) {
-                    if (values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♛') {
-                        discoverArray.push({ direction: 'down', piece: bb });
-                        break;
-                    } else {
+                    break;
+                } else if (discb > -1) {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'down', piece: discb });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discc = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (values[index - i] == '♙' || values[index - i] == '♖' || values[index - i] == '♘' || values[index - i] == '♗' || values[index - i] == '♕') {
-                    if (discc.length > 0) {
-                        break;
-                    } else {
-                        discc = values[index - i];
-                        var cc = index - i;
+        var discc = -1;
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (discc == -1) {
+                        discc = i;
                     }
-                } else if (discc.length > 0) {
-                    if (values[index - i] == '♜' || values[index - i] == '♛') {
-                        discoverArray.push({ direction: 'left', piece: cc });
-                        break;
-                    } else {
+                    break;
+                } else if (discc > -1) {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'left', piece: discc });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discd = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (values[index + i] == '♙' || values[index + i] == '♖' || values[index + i] == '♘' || values[index + i] == '♗' || values[index + i] == '♕') {
-                    if (discd.length > 0) {
-                        break;
-                    } else {
-                        discd = values[index + i];
-                        var dd = index + i;
+        var discd = -1;
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (discd == -1) {
+                        discd = i;
                     }
-                } else if (discd.length > 0) {
-                    if (values[index + i] == '♜' || values[index + i] == '♛') {
-                        discoverArray.push({ direction: 'right', piece: dd });
-                        break;
-                    } else {
+                    break;
+                } else if (discd > -1) {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'right', piece: discd });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var disce = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (values[index - (9 * i)] == '♙' || values[index - (9 * i)] == '♖' || values[index - (9 * i)] == '♘' || values[index - (9 * i)] == '♗' || values[index - (9 * i)] == '♕') {
-                    if (disce.length > 0) {
-                        break;
-                    } else {
-                        disce = values[index - (9 * i)];
-                        var ee = index - (9 * i);
+        var disce = -1;
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (disce == -1) {
+                        disce = i;
                     }
-                } else if (disce.length > 0) {
-                    if (values[index - (9 * i)] == '♝' || values[index - (9 * i)] == '♛') {
-                        discoverArray.push({ direction: 'up-left', piece: ee });
-                        break;
-                    } else {
+                    break;
+                } else if (disce > -1) {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'up-left', piece: disce });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discf = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (values[index + (9 * i)] == '♙' || values[index + (9 * i)] == '♖' || values[index + (9 * i)] == '♘' || values[index + (9 * i)] == '♗' || values[index + (9 * i)] == '♕') {
-                    if (discf.length > 0) {
-                        break;
-                    } else {
-                        discf = values[index + (9 * i)];
-                        var ff = index - (9 * i);
+        var discf = -1;
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (discf == -1) {
+                        discf = i;
                     }
-                } else if (discf.length > 0) {
-                    if (values[index + (9 * i)] == '♝' || values[index + (9 * i)] == '♛') {
-                        discoverArray.push({ direction: 'down-right', piece: ff });
-                        break;
-                    } else {
+                    break;
+                } else if (discf > -1) {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'down-right', piece: discf });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discg = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (values[index - (7 * i)] == '♙' || values[index - (7 * i)] == '♖' || values[index - (7 * i)] == '♘' || values[index - (7 * i)] == '♗' || values[index - (7 * i)] == '♕') {
-                    if (discg.length > 0) {
-                        break;
-                    } else {
-                        discg = values[index - (7 * i)];
-                        var gg = index - (7 * i);
+        var discg = -1;
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (discg == -1) {
+                        discg = i;
                     }
-                } else if (discg.length > 0) {
-                    if (values[index - (7 * i)] == '♝' || values[index - (7 * i)] == '♛') {
-                        discoverArray.push({ direction: 'up-right', piece: gg });
-                        break;
-                    } else {
+                    break;
+                } else if (discg > -1) {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'up-right', piece: discg });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var disch = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (values[index + (7 * i)] == '♙' || values[index + (7 * i)] == '♖' || values[index + (7 * i)] == '♘' || values[index + (7 * i)] == '♗' || values[index + (7 * i)] == '♕') {
-                    if (disch.length > 0) {
-                        break;
-                    } else {
-                        disch = values[index + (7 * i)];
-                        var hh = index + (7 * i)
+        var disch = -1;
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (disch == -1) {
+                        disch = i;
                     }
-                } else if (disch.length > 0) {
-                    if (values[index + (7 * i)] == '♝' || values[index + (7 * i)] == '♛') {
-                        discoverArray.push({ direction: 'down-left', piece: hh });
-                        break;
-                    } else {
+                    break;
+                } else if (disch > -1) {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'down-left', piece: disch });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
         return discoverArray;
@@ -661,180 +641,148 @@ export default function App() {
     const checkForDiscoverCheckBlack = (index) => {
         // check for white rooks, bishops and queens that will check black king if a black piece moves
         var discoverArray = [];
-        var disca = '';
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (values[index - (8 * i)] == '♟' || values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♞' || values[index - (8 * i)] == '♝' || values[index - (8 * i)] == '♛') {
-                    if (disca.length > 0) {
-                        break;
-                    } else {
-                        disca = values[index - (8 * i)];
-                        var aa = index - (8 * i);
+        var disca = -1;
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (disca == -1) {
+                        disca = i;
                     }
-                } else if (disca.length > 0) {
-                    if (values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♕') {
-                        discoverArray.push({ direction: 'up', piece: aa });
-                        break;
-                    } else {
+                    break;
+                } else if (disca > -1) {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'up', piece: disca });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discb = '';
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (values[index + (8 * i)] == '♟' || values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♞' || values[index + (8 * i)] == '♝' || values[index + (8 * i)] == '♛') {
-                    if (discb.length > 0) {
-                        break;
-                    } else {
-                        discb = values[index + (8 * i)];
-                        var bb = index + (8 * i);
+        var discb = -1;
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (discb == -1) {
+                        discb = i;
                     }
-                } else if (discb.length > 0) {
-                    if (values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♕') {
-                        discoverArray.push({ direction: 'down', piece: bb });
-                        break;
-                    } else {
+                    break;
+                } else if (discb > -1) {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'down', piece: discb });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discc = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (values[index - i] == '♟' || values[index - i] == '♜' || values[index - i] == '♞' || values[index - i] == '♝' || values[index - i] == '♛') {
-                    if (discc.length > 0) {
-                        break;
-                    } else {
-                        discc = values[index - i];
-                        var cc = index - i;
+        var discc = -1;
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (discc == -1) {
+                        discc = i;
                     }
-                } else if (discc.length > 0) {
-                    if (values[index - i] == '♖' || values[index - i] == '♕') {
-                        discoverArray.push({ direction: 'left', piece: cc });
-                        break;
-                    } else {
+                    break;
+                } else if (discc > -1) {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'left', piece: discc });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discd = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (values[index + i] == '♟' || values[index + i] == '♜' || values[index + i] == '♞' || values[index + i] == '♝' || values[index + i] == '♛') {
-                    if (discd.length > 0) {
-                        break;
-                    } else {
-                        discd = values[index + i];
-                        var dd = index + i;
+        var discd = -1;
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (discd == -1) {
+                        discd = i;
                     }
-                } else if (discd.length > 0) {
-                    if (values[index + i] == '♖' || values[index + i] == '♕') {
-                        discoverArray.push({ direction: 'right', piece: dd });
-                        break;
-                    } else {
+                    break;
+                } else if (discd > -1) {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'right', piece: discd });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var disce = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (values[index - (9 * i)] == '♟' || values[index - (9 * i)] == '♜' || values[index - (9 * i)] == '♞' || values[index - (9 * i)] == '♝' || values[index - (9 * i)] == '♛') {
-                    if (disce.length > 0) {
-                        break;
-                    } else {
-                        disce = values[index - (9 * i)];
-                        var ee = index - (9 * i);
+        var disce = -1;
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (disce == -1) {
+                        disce = i;
                     }
-                } else if (disce.length > 0) {
-                    if (values[index - (9 * i)] == '♗' || values[index - (9 * i)] == '♕') {
-                        discoverArray.push({ direction: 'up-left', piece: ee });
-                        break;
-                    } else {
+                    break;
+                } else if (disce > -1) {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'up-left', piece: disce });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discf = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (values[index + (9 * i)] == '♟' || values[index + (9 * i)] == '♜' || values[index + (9 * i)] == '♞' || values[index + (9 * i)] == '♝' || values[index + (9 * i)] == '♛') {
-                    if (discf.length > 0) {
-                        break;
-                    } else {
-                        discf = values[index + (9 * i)];
-                        var ff = index + (9 * i);
+        var discf = -1;
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (discf == -1) {
+                        discf = i;
                     }
-                } else if (discf.length > 0) {
-                    if (values[index + (9 * i)] == '♗' || values[index + (9 * i)] == '♕') {
-                        discoverArray.push({ direction: 'down-right', piece: ff });
-                        break;
-                    } else {
+                    break;
+                } else if (discf > -1) {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'down-right', piece: discf });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discg = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (values[index - (7 * i)] == '♟' || values[index - (7 * i)] == '♜' || values[index - (7 * i)] == '♞' || values[index - (7 * i)] == '♝' || values[index - (7 * i)] == '♛') {
-                    if (discg.length > 0) {
-                        break;
-                    } else {
-                        discg = values[index - (7 * i)];
-                        var gg = index - (7 * i);
+        var discg = -1;
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (discg == -1) {
+                        discg = i;
                     }
-                } else if (discg.length > 0) {
-                    if (values[index - (7 * i)] == '♗' || values[index - (7 * i)] == '♕') {
-                        discoverArray.push({ direction: 'up-right', piece: gg });
-                        break;
-                    } else {
+                    break;
+                } else if (discg > -1) {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'up-right', piece: discg });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var disch = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (values[index + (7 * i)] == '♟' || values[index + (7 * i)] == '♜' || values[index + (7 * i)] == '♞' || values[index + (7 * i)] == '♝' || values[index + (7 * i)] == '♛') {
-                    if (disch.length > 0) {
-                        break;
-                    } else {
-                        disch = values[index + (7 * i)];
-                        var hh = index + (7 * i);
+        var disch = -1;
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (disch == -1) {
+                        disch = i;
                     }
-                } else if (disch.length > 0) {
-                    if (values[index + (7 * i)] == '♗' || values[index + (7 * i)] == '♕') {
-                        discoverArray.push({ direction: 'down-left', piece: hh });
-                        break;
-                    } else {
+                    break;
+                } else if (disch > -1) {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'down-left', piece: disch });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
         return discoverArray;
@@ -843,242 +791,210 @@ export default function App() {
     const checkArray = (index, colour) => {
         var checkArray = [];
         if (colour == 'Black') {
-            for (let i = 1; i <= Math.floor(index / 8); i++) {
-                if (values[index - (8 * i)] != '') {
-                    if (values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♕') {
-                        checkArray.push({ index: index - (8 * i), piece: values[index - (8 * i)] });
-                        break;
-                    } else {
+            for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                if (values[index + (8 * i)] != '') {
-                    if (values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♕') {
-                        checkArray.push({ index: index + (8 * i), piece: values[index + (8 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - i] != '') {
-                    if (values[index - i] == '♖' || values[index - i] == '♕') {
-                        checkArray.push({ index: index - i, piece: values[index - i] });
-                        break;
-                    } else {
+            for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + i] != '') {
-                    if (values[index + i] == '♖' || values[index + i] == '♕') {
-                        checkArray.push({ index: index + i, piece: values[index + i] });
-                        break;
-                    } else {
+            for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♖' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            if (index % 8 > 0) {
-                if (index % 8 > 1) {
-                    if (values[index - 10] == '♘') {
-                        checkArray.push({ index: index - 10, piece: '♘' });
+            for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
+                        break;
                     }
-                    if (values[index + 6] == '♘') {
-                        checkArray.push({ index: index + 6, piece: '♘' });
-                    }
-                }
-                if (values[index - 17] == '♘') {
-                    checkArray.push({ index: index - 17, piece: '♘' });
-                }
-                if (values[index + 15] == '♘') {
-                    checkArray.push({ index: index + 15, piece: '♘' });
-                }
-                if (values[index + 7] == '♙') {
-                    checkArray.push({ index: index + 7, piece: '♙' });
+                    break;
                 }
             }
-            if (index % 8 < 7) {
-                if (index % 8 < 6) {
-                    if (values[index - 6] == '♘') {
-                        checkArray.push({ index: index - 6, piece: '♘' });
+            for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
+                        break;
                     }
-                    if (values[index + 10] == '♘') {
-                        checkArray.push({ index: index + 10, piece: '♘' });
-                    }
-                }
-                if (values[index - 15] == '♘') {
-                    checkArray.push({ index: index - 15, piece: '♘' });
-                }
-                if (values[index + 17] == '♘') {
-                    checkArray.push({ index: index + 17, piece: '♘' });
-                }
-                if (values[index + 9] == '♙') {
-                    checkArray.push({ index: index + 9, piece: '♙' });
+                    break;
                 }
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - (9 * i)] != '') {
-                    if (values[index - (9 * i)] == '♗' || values[index - (9 * i)] == '♕') {
-                        checkArray.push({ index: index - (9 * i), piece: values[index - (9 * i)] });
-                        break;
-                    } else {
+            for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + (9 * i)] != '') {
-                    if (values[index + (9 * i)] == '♗' || values[index + (9 * i)] == '♕') {
-                        checkArray.push({ index: index + (9 * i), piece: values[index + (9 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♗' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index - (7 * i)] != '') {
-                    if (values[index - (7 * i)] == '♗' || values[index - (7 * i)] == '♕') {
-                        checkArray.push({ index: index - (7 * i), piece: values[index - (7 * i)] });
-                        break;
-                    } else {
-                        break;
-                    }
-                }
+            if (values[downArray[leftArray[index]]] == '♙') {
+                checkArray.push({ index: downArray[leftArray[index]], piece: '♙' });
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index + (7 * i)] != '') {
-                    if (values[index + (7 * i)] == '♗' || values[index + (7 * i)] == '♕') {
-                        checkArray.push({ index: index + (7 * i), piece: values[index + (7 * i)] });
-                        break;
-                    } else {
-                        break;
-                    }
-                }
+            if (values[downArray[rightArray[index]]] == '♙') {
+                checkArray.push({ index: downArray[rightArray[index]], piece: '♙' });
+            }
+            if (values[upArray[leftArray[leftArray[index]]]] == '♘') {
+                checkArray.push({ index: upArray[leftArray[leftArray[index]]], piece: '♘' });
+            }
+            if (values[downArray[leftArray[leftArray[index]]]] == '♘') {
+                checkArray.push({ index: downArray[leftArray[leftArray[index]]], piece: '♘' });
+            }
+            if (values[upArray[upArray[leftArray[index]]]] == '♘') {
+                checkArray.push({ index: upArray[upArray[leftArray[index]]], piece: '♘' });
+            }
+            if (values[downArray[downArray[leftArray[index]]]] == '♘') {
+                checkArray.push({ index: downArray[downArray[leftArray[index]]], piece: '♘' });
+            }
+            if (values[upArray[rightArray[rightArray[index]]]] == '♘') {
+                checkArray.push({ index: upArray[rightArray[rightArray[index]]], piece: '♘' });
+            }
+            if (values[downArray[rightArray[rightArray[index]]]] == '♘') {
+                checkArray.push({ index: downArray[rightArray[rightArray[index]]], piece: '♘' });
+            }
+            if (values[upArray[upArray[rightArray[index]]]] == '♘') {
+                checkArray.push({ index: upArray[upArray[rightArray[index]]], piece: '♘' });
+            }
+            if (values[downArray[downArray[rightArray[index]]]] == '♘') {
+                checkArray.push({ index: downArray[downArray[rightArray[index]]], piece: '♘' });
             }
         } else if (colour == 'White') {
-            for (let i = 1; i <= Math.floor(index / 8); i++) {
-                if (values[index - (8 * i)] != '') {
-                    if (values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♛') {
-                        checkArray.push({ index: index - (8 * i), piece: values[index - (8 * i)] });
-                        break;
-                    } else {
+            for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                if (values[index + (8 * i)] != '') {
-                    if (values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♛') {
-                        checkArray.push({ index: index + (8 * i), piece: values[index + (8 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - i] != '') {
-                    if (values[index - i] == '♜' || values[index - i] == '♛') {
-                        checkArray.push({ index: index - i, piece: values[index - i] });
-                        break;
-                    } else {
+            for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + i] != '') {
-                    if (values[index + i] == '♜' || values[index + i] == '♛') {
-                        checkArray.push({ index: index + i, piece: values[index + i] });
-                        break;
-                    } else {
+            for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                if (values[i] != '') {
+                    if (values[i] == '♜' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            if (index % 8 > 0) {
-                if (index % 8 > 1) {
-                    if (values[index - 10] == '♞') {
-                        checkArray.push({ index: index - 10, piece: '♞' });
+            for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
+                        break;
                     }
-                    if (values[index + 6] == '♞') {
-                        checkArray.push({ index: index + 6, piece: '♞' });
-                    }
-                }
-                if (values[index - 17] == '♞') {
-                    checkArray.push({ index: index - 17, piece: '♞' });
-                }
-                if (values[index + 15] == '♞') {
-                    checkArray.push({ index: index + 15, piece: '♞' });
-                }
-                if (values[index - 9] == '♟') {
-                    checkArray.push({ index: index - 9, piece: '♟' });
+                    break;
                 }
             }
-            if (index % 8 < 7) {
-                if (index % 8 < 6) {
-                    if (values[index - 6] == '♞') {
-                        checkArray.push({ index: index - 6, piece: '♞' });
+            for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
+                        break;
                     }
-                    if (values[index + 10] == '♞') {
-                        checkArray.push({ index: index + 10, piece: '♞' });
-                    }
-                }
-                if (values[index - 15] == '♞') {
-                    checkArray.push({ index: index - 15, piece: '♞' });
-                }
-                if (values[index + 17] == '♞') {
-                    checkArray.push({ index: index + 17, piece: '♞' });
-                }
-                if (values[index - 7] == '♟') {
-                    checkArray.push({ index: index - 7, piece: '♟' });
+                    break;
                 }
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - (9 * i)] != '') {
-                    if (values[index - (9 * i)] == '♝' || values[index - (9 * i)] == '♛') {
-                        checkArray.push({ index: index - (9 * i), piece: values[index - (9 * i)] });
-                        break;
-                    } else {
+            for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + (9 * i)] != '') {
-                    if (values[index + (9 * i)] == '♝' || values[index + (9 * i)] == '♛') {
-                        checkArray.push({ index: index + (9 * i), piece: values[index + (9 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '♝' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index - (7 * i)] != '') {
-                    if (values[index - (7 * i)] == '♝' || values[index - (7 * i)] == '♛') {
-                        checkArray.push({ index: index - (7 * i), piece: values[index - (7 * i)] });
-                        break;
-                    } else {
-                        break;
-                    }
-                }
+            if (values[upArray[leftArray[index]]] == '♟') {
+                checkArray.push({ index: upArray[leftArray[index]], piece: '♟' });
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index + (7 * i)] != '') {
-                    if (values[index + (7 * i)] == '♝' || values[index + (7 * i)] == '♛') {
-                        checkArray.push({ index: index + (7 * i), piece: values[index + (7 * i)] });
-                        break;
-                    } else {
-                        break;
-                    }
-                }
+            if (values[upArray[rightArray[index]]] == '♟') {
+                checkArray.push({ index: upArray[rightArray[index]], piece: '♟' });
+            }
+            if (values[upArray[leftArray[leftArray[index]]]] == '♞') {
+                checkArray.push({ index: upArray[leftArray[leftArray[index]]], piece: '♞' });
+            }
+            if (values[downArray[leftArray[leftArray[index]]]] == '♞') {
+                checkArray.push({ index: downArray[leftArray[leftArray[index]]], piece: '♞' });
+            }
+            if (values[upArray[upArray[leftArray[index]]]] == '♞') {
+                checkArray.push({ index: upArray[upArray[leftArray[index]]], piece: '♞' });
+            }
+            if (values[downArray[downArray[leftArray[index]]]] == '♞') {
+                checkArray.push({ index: downArray[downArray[leftArray[index]]], piece: '♞' });
+            }
+            if (values[upArray[rightArray[rightArray[index]]]] == '♞') {
+                checkArray.push({ index: upArray[rightArray[rightArray[index]]], piece: '♞' });
+            }
+            if (values[downArray[rightArray[rightArray[index]]]] == '♞') {
+                checkArray.push({ index: downArray[rightArray[rightArray[index]]], piece: '♞' });
+            }
+            if (values[upArray[upArray[rightArray[index]]]] == '♞') {
+                checkArray.push({ index: upArray[upArray[rightArray[index]]], piece: '♞' });
+            }
+            if (values[downArray[downArray[rightArray[index]]]] == '♞') {
+                checkArray.push({ index: downArray[downArray[rightArray[index]]], piece: '♞' });
             }
         }
         return checkArray;
@@ -1115,6 +1031,92 @@ export default function App() {
         return false;
     }
 
+    const whiteKingMovement = (array, index) => {
+        if (values[upArray[index]] == '' || blackPieces(values[upArray[index]])) {
+            if (!checkForCheckWhite(upArray[index])) {
+                array.push(upArray[index]);
+            }
+        }
+        if (values[downArray[index]] == '' || blackPieces(values[downArray[index]])) {
+            if (!checkForCheckWhite(downArray[index])) {
+                array.push(downArray[index]);
+            }
+        }
+        if (values[leftArray[index]] == '' || blackPieces(values[leftArray[index]])) {
+            if (!checkForCheckWhite(leftArray[index])) {
+                array.push(leftArray[index]);
+            }
+        }
+        if (values[rightArray[index]] == '' || blackPieces(values[rightArray[index]])) {
+            if (!checkForCheckWhite(rightArray[index])) {
+                array.push(rightArray[index]);
+            }
+        }
+        if (values[upArray[leftArray[index]]] == '' || blackPieces(values[upArray[leftArray[index]]])) {
+            if (!checkForCheckWhite(upArray[leftArray[index]])) {
+                array.push(upArray[leftArray[index]]);
+            }
+        }
+        if (values[downArray[leftArray[index]]] == '' || blackPieces(values[downArray[leftArray[index]]])) {
+            if (!checkForCheckWhite(downArray[leftArray[index]])) {
+                array.push(downArray[leftArray[index]]);
+            }
+        }
+        if (values[upArray[rightArray[index]]] == '' || blackPieces(values[upArray[rightArray[index]]])) {
+            if (!checkForCheckWhite(upArray[rightArray[index]])) {
+                array.push(upArray[rightArray[index]]);
+            }
+        }
+        if (values[downArray[rightArray[index]]] == '' || blackPieces(values[downArray[rightArray[index]]])) {
+            if (!checkForCheckWhite(downArray[rightArray[index]])) {
+                array.push(downArray[rightArray[index]]);
+            }
+        }
+    }
+
+    const blackKingMovement = (array, index) => {
+        if (values[upArray[index]] == '' || whitePieces(values[upArray[index]])) {
+            if (!checkForCheckBlack(upArray[index])) {
+                array.push(upArray[index]);
+            }
+        }
+        if (values[downArray[index]] == '' || whitePieces(values[downArray[index]])) {
+            if (!checkForCheckBlack(downArray[index])) {
+                array.push(downArray[index]);
+            }
+        }
+        if (values[leftArray[index]] == '' || whitePieces(values[leftArray[index]])) {
+            if (!checkForCheckBlack(leftArray[index])) {
+                array.push(leftArray[index]);
+            }
+        }
+        if (values[rightArray[index]] == '' || whitePieces(values[rightArray[index]])) {
+            if (!checkForCheckBlack(rightArray[index])) {
+                array.push(rightArray[index]);
+            }
+        }
+        if (values[upArray[leftArray[index]]] == '' || whitePieces(values[upArray[leftArray[index]]])) {
+            if (!checkForCheckBlack(upArray[leftArray[index]])) {
+                array.push(upArray[leftArray[index]]);
+            }
+        }
+        if (values[downArray[leftArray[index]]] == '' || whitePieces(values[downArray[leftArray[index]]])) {
+            if (!checkForCheckBlack(downArray[leftArray[index]])) {
+                array.push(downArray[leftArray[index]]);
+            }
+        }
+        if (values[upArray[rightArray[index]]] == '' || whitePieces(values[upArray[rightArray[index]]])) {
+            if (!checkForCheckBlack(upArray[rightArray[index]])) {
+                array.push(upArray[rightArray[index]]);
+            }
+        }
+        if (values[downArray[rightArray[index]]] == '' || whitePieces(values[downArray[rightArray[index]]])) {
+            if (!checkForCheckBlack(downArray[rightArray[index]])) {
+                array.push(downArray[rightArray[index]]);
+            }
+        }
+    }
+
     const checkForMovement = (index) => {
         var moveArray = [];
         moveArray.push(index);
@@ -1142,97 +1144,11 @@ export default function App() {
             switch (values[index]) {
                 // White King Movement
                 case '♔':
-                    if (values[index - 8] == '' || values[index - 8] == '♟' || values[index - 8] == '♜' || values[index - 8] == '♞' || values[index - 8] == '♝' || values[index - 8] == '♛' || values[index - 8] == '♚') {
-                        if (!checkForCheckWhite(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '' || values[index + 8] == '♟' || values[index + 8] == '♜' || values[index + 8] == '♞' || values[index + 8] == '♝' || values[index + 8] == '♛' || values[index + 8] == '♚') {
-                        if (!checkForCheckWhite(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '' || values[index - 1] == '♟' || values[index - 1] == '♜' || values[index - 1] == '♞' || values[index - 1] == '♝' || values[index - 1] == '♛' || values[index - 1] == '♚') {
-                            if (!checkForCheckWhite(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '' || values[index - 9] == '♟' || values[index - 9] == '♜' || values[index - 9] == '♞' || values[index - 9] == '♝' || values[index - 9] == '♛' || values[index - 9] == '♚') {
-                            if (!checkForCheckWhite(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '' || values[index + 7] == '♟' || values[index + 7] == '♜' || values[index + 7] == '♞' || values[index + 7] == '♝' || values[index + 7] == '♛' || values[index + 7] == '♚') {
-                            if (!checkForCheckWhite(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '' || values[index + 1] == '♟' || values[index + 1] == '♜' || values[index + 1] == '♞' || values[index + 1] == '♝' || values[index + 1] == '♛' || values[index + 1] == '♚') {
-                            if (!checkForCheckWhite(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '' || values[index - 7] == '♟' || values[index - 7] == '♜' || values[index - 7] == '♞' || values[index - 7] == '♝' || values[index - 7] == '♛' || values[index - 7] == '♚') {
-                            if (!checkForCheckWhite(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '' || values[index + 9] == '♟' || values[index + 9] == '♜' || values[index + 9] == '♞' || values[index + 9] == '♝' || values[index + 9] == '♛' || values[index + 9] == '♚') {
-                            if (!checkForCheckWhite(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    whiteKingMovement(moveArray, index);
                     break;
                 // Black King Movement
                 case '♚':
-                    if (values[index - 8] == '' || values[index - 8] == '♙' || values[index - 8] == '♖' || values[index - 8] == '♘' || values[index - 8] == '♗' || values[index - 8] == '♕' || values[index - 8] == '♔') {
-                        if (!checkForCheckBlack(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '' || values[index + 8] == '♙' || values[index + 8] == '♖' || values[index + 8] == '♘' || values[index + 8] == '♗' || values[index + 8] == '♕' || values[index + 8] == '♔') {
-                        if (!checkForCheckBlack(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '' || values[index - 1] == '♙' || values[index - 1] == '♖' || values[index - 1] == '♘' || values[index - 1] == '♗' || values[index - 1] == '♕' || values[index - 1] == '♔') {
-                            if (!checkForCheckBlack(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '' || values[index - 9] == '♙' || values[index - 9] == '♖' || values[index - 9] == '♘' || values[index - 9] == '♗' || values[index - 9] == '♕' || values[index - 9] == '♔') {
-                            if (!checkForCheckBlack(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '' || values[index + 7] == '♙' || values[index + 7] == '♖' || values[index + 7] == '♘' || values[index + 7] == '♗' || values[index + 7] == '♕' || values[index + 7] == '♔') {
-                            if (!checkForCheckBlack(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '' || values[index + 1] == '♙' || values[index + 1] == '♖' || values[index + 1] == '♘' || values[index + 1] == '♗' || values[index + 1] == '♕' || values[index + 1] == '♔') {
-                            if (!checkForCheckBlack(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '' || values[index - 7] == '♙' || values[index - 7] == '♖' || values[index - 7] == '♘' || values[index - 7] == '♗' || values[index - 7] == '♕' || values[index - 7] == '♔') {
-                            if (!checkForCheckBlack(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '' || values[index + 9] == '♙' || values[index + 9] == '♖' || values[index + 9] == '♘' || values[index + 9] == '♗' || values[index + 9] == '♕' || values[index + 9] == '♔') {
-                            if (!checkForCheckBlack(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    blackKingMovement(moveArray, index);
                     break;
                 default:
                     break;
@@ -1241,50 +1157,6 @@ export default function App() {
             var uncheckArray = [];
             switch (checkArr[0].piece) {
                 case '♕':
-                    if (Math.floor(checkArr[0].index / 8) == Math.floor(checkIndex / 8)) {
-                        // same rank
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i--) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i++) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 8 == checkIndex % 8) {
-                        // same file
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 8) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 8) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 9 == checkIndex % 9) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 9) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 9) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 7 == checkIndex % 7) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 7) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 7) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    }
-                    break;
                 case '♛':
                     if (Math.floor(checkArr[0].index / 8) == Math.floor(checkIndex / 8)) {
                         // same rank
@@ -1331,28 +1203,6 @@ export default function App() {
                     }
                     break;
                 case '♗':
-                    if (checkArr[0].index % 9 == checkIndex % 9) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 9) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 9) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 7 == checkIndex % 7) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 7) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 7) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    }
-                    break;
                 case '♝':
                     if (checkArr[0].index % 9 == checkIndex % 9) {
                         if (checkArr[0].index > checkIndex) {
@@ -1377,30 +1227,6 @@ export default function App() {
                     }
                     break;
                 case '♖':
-                    if (Math.floor(checkArr[0].index / 8) == Math.floor(checkIndex / 8)) {
-                        // same rank
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i--) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i++) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 8 == checkIndex % 8) {
-                        // same file
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 8) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 8) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    }
-                    break;
                 case '♜':
                     if (Math.floor(checkArr[0].index / 8) == Math.floor(checkIndex / 8)) {
                         // same rank
@@ -1427,14 +1253,8 @@ export default function App() {
                     }
                     break;
                 case '♘':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '♞':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '♙':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '♟':
                     uncheckArray.push(checkArr[0].index);
                     break;
@@ -1444,117 +1264,67 @@ export default function App() {
             switch (values[index]) {
                 // White Pawn Movement
                 case '♙':
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && uncheckArray.some(val => (index - 7 == val))) {
-                                moveArray.push(index - 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (uncheckArray.some(val => (upArray[rightArray[index]] == val)) && values[upArray[rightArray[index]]] != '') {
+                            moveArray.push(upArray[rightArray[index]]);
                         }
                     }
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && uncheckArray.some(val => (index - 9 == val))) {
-                                moveArray.push(index - 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (uncheckArray.some(val => (upArray[leftArray[index]] == val)) && values[upArray[leftArray[index]]] != '') {
+                            moveArray.push(upArray[leftArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (values[index - 8] == '' && uncheckArray.some(val => (index - 8 == val))) {
-                            moveArray.push(index - 8);
+                        if (uncheckArray.some(val => (upArray[index] == val)) && values[upArray[index]] == '') {
+                            moveArray.push(upArray[index]);
                         }
-                        if (values[index - 8] == '' && Math.floor(index / 8) == 6) {
-                            if (values[index - 16] == '' && uncheckArray.some(val => (index - 16 == val))) {
-                                moveArray.push(index - 16);
+                        if (Math.floor(index / 8) == 6 && values[upArray[index]] == '') {
+                            if (uncheckArray.some(val => (upArray[upArray[index]] == val)) && values[upArray[upArray[index]]] == '') {
+                                moveArray.push(upArray[upArray[index]]);
                             }
                         }
                     }
                     break;
                 // Black Pawn Movement
                 case '♟':
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && uncheckArray.some(val => (index + 7 == val))) {
-                                moveArray.push(index + 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (uncheckArray.some(val => (downArray[leftArray[index]] == val)) && values[downArray[leftArray[index]]] != '') {
+                            moveArray.push(downArray[leftArray[index]]);
                         }
                     }
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && uncheckArray.some(val => (index + 9 == val))) {
-                                moveArray.push(index + 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (uncheckArray.some(val => (downArray[rightArray[index]] == val)) && values[downArray[rightArray[index]]] != '') {
+                            moveArray.push(downArray[rightArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (values[index + 8] == '' && uncheckArray.some(val => (index + 8 == val))) {
-                            moveArray.push(index + 8);
+                        if (uncheckArray.some(val => (downArray[index] == val)) && values[downArray[index]] == '') {
+                            moveArray.push(downArray[index]);
                         }
-                        if (values[index + 8] == '' && Math.floor(index / 8) == 1) {
-                            if (values[index + 16] == '' && uncheckArray.some(val => (index + 9 == val))) {
-                                moveArray.push(index + 16);
+                        if (Math.floor(index / 8) == 1 && values[downArray[index]] == '') {
+                            if (uncheckArray.some(val => (downArray[downArray[index]] == val)) && values[downArray[downArray[index]]] == '') {
+                                moveArray.push(downArray[downArray[index]]);
                             }
                         }
                     }
                     break;
-                // White Rook Movement
+                // Rook Movement
                 case '♖':
-                    if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                // Black Rook Movement
                 case '♜':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1562,19 +1332,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1582,139 +1352,53 @@ export default function App() {
                         }
                     }
                     break;
-                // White Knight Movement
+                // Knight Movement
                 case '♘':
-                    if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (uncheckArray.some(val => (index - 10 == val))) {
-                                    moveArray.push(index - 10);
-                                }
-                                if (uncheckArray.some(val => (index + 6 == val))) {
-                                    moveArray.push(index + 6);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 17 == val))) {
-                                moveArray.push(index - 17);
-                            }
-                            if (uncheckArray.some(val => (index + 15 == val))) {
-                                moveArray.push(index + 15);
-                            }
-                        }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (uncheckArray.some(val => (index - 6 == val))) {
-                                    moveArray.push(index - 6);
-                                }
-                                if (uncheckArray.some(val => (index + 10 == val))) {
-                                    moveArray.push(index + 10);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 15 == val))) {
-                                moveArray.push(index - 15);
-                            }
-                            if (uncheckArray.some(val => (index + 17 == val))) {
-                                moveArray.push(index + 17);
-                            }
-                        }
-                    }
-                    break;
-                // Black Knight Movement
                 case '♞':
                     if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (uncheckArray.some(val => (index - 10 == val))) {
-                                    moveArray.push(index - 10);
-                                }
-                                if (uncheckArray.some(val => (index + 6 == val))) {
-                                    moveArray.push(index + 6);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 17 == val))) {
-                                moveArray.push(index - 17);
-                            }
-                            if (uncheckArray.some(val => (index + 15 == val))) {
-                                moveArray.push(index + 15);
-                            }
+                        if (uncheckArray.some(val => (upArray[leftArray[leftArray[index]]] == val))) {
+                            moveArray.push(upArray[leftArray[leftArray[index]]]);
                         }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (uncheckArray.some(val => (index - 6 == val))) {
-                                    moveArray.push(index - 6);
-                                }
-                                if (uncheckArray.some(val => (index + 10 == val))) {
-                                    moveArray.push(index + 10);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 15 == val))) {
-                                moveArray.push(index - 15);
-                            }
-                            if (uncheckArray.some(val => (index + 17 == val))) {
-                                moveArray.push(index + 17);
-                            }
+                        if (uncheckArray.some(val => (downArray[leftArray[leftArray[index]]] == val))) {
+                            moveArray.push(downArray[leftArray[leftArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (upArray[upArray[leftArray[index]]] == val))) {
+                            moveArray.push(upArray[upArray[leftArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (downArray[downArray[leftArray[index]]] == val))) {
+                            moveArray.push(downArray[downArray[leftArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (upArray[rightArray[rightArray[index]]] == val))) {
+                            moveArray.push(upArray[rightArray[rightArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (downArray[rightArray[rightArray[index]]] == val))) {
+                            moveArray.push(downArray[rightArray[rightArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (upArray[upArray[rightArray[index]]] == val))) {
+                            moveArray.push(upArray[upArray[rightArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (downArray[downArray[rightArray[index]]] == val))) {
+                            moveArray.push(downArray[downArray[rightArray[index]]]);
                         }
                     }
                     break;
-                // White Bishop Movement
+                // Bishop Movement
                 case '♗':
-                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                // Black Bishop Movement
                 case '♝':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1722,19 +1406,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1742,105 +1426,23 @@ export default function App() {
                         }
                     }
                     break;
-                // White Queen Movement
+                // Queen Movement
                 case '♕':
-                    if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                // Black Queen Movement
                 case '♛':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1848,19 +1450,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1868,19 +1470,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1888,19 +1490,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -1910,97 +1512,11 @@ export default function App() {
                     break;
                 // White King Movement
                 case '♔':
-                    if (values[index - 8] == '' || values[index - 8] == '♟' || values[index - 8] == '♜' || values[index - 8] == '♞' || values[index - 8] == '♝' || values[index - 8] == '♛' || values[index - 8] == '♚') {
-                        if (!checkForCheckWhite(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '' || values[index + 8] == '♟' || values[index + 8] == '♜' || values[index + 8] == '♞' || values[index + 8] == '♝' || values[index + 8] == '♛' || values[index + 8] == '♚') {
-                        if (!checkForCheckWhite(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '' || values[index - 1] == '♟' || values[index - 1] == '♜' || values[index - 1] == '♞' || values[index - 1] == '♝' || values[index - 1] == '♛' || values[index - 1] == '♚') {
-                            if (!checkForCheckWhite(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '' || values[index - 9] == '♟' || values[index - 9] == '♜' || values[index - 9] == '♞' || values[index - 9] == '♝' || values[index - 9] == '♛' || values[index - 9] == '♚') {
-                            if (!checkForCheckWhite(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '' || values[index + 7] == '♟' || values[index + 7] == '♜' || values[index + 7] == '♞' || values[index + 7] == '♝' || values[index + 7] == '♛' || values[index + 7] == '♚') {
-                            if (!checkForCheckWhite(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '' || values[index + 1] == '♟' || values[index + 1] == '♜' || values[index + 1] == '♞' || values[index + 1] == '♝' || values[index + 1] == '♛' || values[index + 1] == '♚') {
-                            if (!checkForCheckWhite(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '' || values[index - 7] == '♟' || values[index - 7] == '♜' || values[index - 7] == '♞' || values[index - 7] == '♝' || values[index - 7] == '♛' || values[index - 7] == '♚') {
-                            if (!checkForCheckWhite(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '' || values[index + 9] == '♟' || values[index + 9] == '♜' || values[index + 9] == '♞' || values[index + 9] == '♝' || values[index + 9] == '♛' || values[index + 9] == '♚') {
-                            if (!checkForCheckWhite(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    whiteKingMovement(moveArray, index);
                     break;
                 // Black King Movement
                 case '♚':
-                    if (values[index - 8] == '' || values[index - 8] == '♙' || values[index - 8] == '♖' || values[index - 8] == '♘' || values[index - 8] == '♗' || values[index - 8] == '♕' || values[index - 8] == '♔') {
-                        if (!checkForCheckBlack(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '' || values[index + 8] == '♙' || values[index + 8] == '♖' || values[index + 8] == '♘' || values[index + 8] == '♗' || values[index + 8] == '♕' || values[index + 8] == '♔') {
-                        if (!checkForCheckBlack(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '' || values[index - 1] == '♙' || values[index - 1] == '♖' || values[index - 1] == '♘' || values[index - 1] == '♗' || values[index - 1] == '♕' || values[index - 1] == '♔') {
-                            if (!checkForCheckBlack(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '' || values[index - 9] == '♙' || values[index - 9] == '♖' || values[index - 9] == '♘' || values[index - 9] == '♗' || values[index - 9] == '♕' || values[index - 9] == '♔') {
-                            if (!checkForCheckBlack(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '' || values[index + 7] == '♙' || values[index + 7] == '♖' || values[index + 7] == '♘' || values[index + 7] == '♗' || values[index + 7] == '♕' || values[index + 7] == '♔') {
-                            if (!checkForCheckBlack(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '' || values[index + 1] == '♙' || values[index + 1] == '♖' || values[index + 1] == '♘' || values[index + 1] == '♗' || values[index + 1] == '♕' || values[index + 1] == '♔') {
-                            if (!checkForCheckBlack(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '' || values[index - 7] == '♙' || values[index - 7] == '♖' || values[index - 7] == '♘' || values[index - 7] == '♗' || values[index - 7] == '♕' || values[index - 7] == '♔') {
-                            if (!checkForCheckBlack(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '' || values[index + 9] == '♙' || values[index + 9] == '♖' || values[index + 9] == '♘' || values[index + 9] == '♗' || values[index + 9] == '♕' || values[index + 9] == '♔') {
-                            if (!checkForCheckBlack(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    blackKingMovement(moveArray, index);
                     break;
                 default:
                     break;
@@ -2009,50 +1525,42 @@ export default function App() {
             switch (values[index]) {
                 // White Pawn Movement
                 case '♙':
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && values[index - 7] != '♙' && values[index - 7] != '♖' && values[index - 7] != '♘' && values[index - 7] != '♗' && values[index - 7] != '♕' && values[index - 7] != '♔') {
-                                moveArray.push(index - 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (blackPieces(values[upArray[rightArray[index]]])) {
+                            moveArray.push(upArray[rightArray[index]]);
                         }
                     }
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && values[index - 9] != '♙' && values[index - 9] != '♖' && values[index - 9] != '♘' && values[index - 9] != '♗' && values[index - 9] != '♕' && values[index - 9] != '♔') {
-                                moveArray.push(index - 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (blackPieces(values[upArray[leftArray[index]]])) {
+                            moveArray.push(upArray[leftArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (values[index - 8] == '') {
-                            moveArray.push(index - 8);
-                            if (Math.floor(index / 8) == 6 && values[index - 16] == '') {
-                                moveArray.push(index - 16);
+                        if (values[upArray[index]] == '') {
+                            moveArray.push(upArray[index]);
+                            if (Math.floor(index / 8) == 6 && values[upArray[upArray[index]]] == '') {
+                                moveArray.push(upArray[upArray[index]]);
                             }
                         }
                     }
                     break;
                 // Black Pawn Movement
                 case '♟':
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && values[index + 7] != '♟' && values[index + 7] != '♜' && values[index + 7] != '♞' && values[index + 7] != '♝' && values[index + 7] != '♛' && values[index + 7] != '♚') {
-                                moveArray.push(index + 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (whitePieces(values[downArray[leftArray[index]]])) {
+                            moveArray.push(downArray[leftArray[index]]);
                         }
                     }
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && values[index + 9] != '♟' && values[index + 9] != '♜' && values[index + 9] != '♞' && values[index + 9] != '♝' && values[index + 9] != '♛' && values[index + 9] != '♚') {
-                                moveArray.push(index + 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (whitePieces(values[downArray[rightArray[index]]])) {
+                            moveArray.push(downArray[rightArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (values[index + 8] == '') {
-                            moveArray.push(index + 8);
-                            if (Math.floor(index / 8) == 1 && values[index + 16] == '') {
-                                moveArray.push(index + 16);
+                        if (values[downArray[index]] == '') {
+                            moveArray.push(downArray[index]);
+                            if (Math.floor(index / 8) == 1 && values[downArray[downArray[index]]] == '') {
+                                moveArray.push(downArray[downArray[index]]);
                             }
                         }
                     }
@@ -2060,44 +1568,44 @@ export default function App() {
                 // White Rook Movement
                 case '♖':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (8 * i)] == '♟' || values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♞' || values[index - (8 * i)] == '♝' || values[index - (8 * i)] == '♛' || values[index - (8 * i)] == '♚') {
-                                    moveArray.push(index - (8 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (8 * i)] == '♟' || values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♞' || values[index + (8 * i)] == '♝' || values[index + (8 * i)] == '♛' || values[index + (8 * i)] == '♚') {
-                                    moveArray.push(index + (8 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - i] == '♟' || values[index - i] == '♜' || values[index - i] == '♞' || values[index - i] == '♝' || values[index - i] == '♛' || values[index - i] == '♚') {
-                                    moveArray.push(index - i);
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + i] == '♟' || values[index + i] == '♜' || values[index + i] == '♞' || values[index + i] == '♝' || values[index + i] == '♛' || values[index + i] == '♚') {
-                                    moveArray.push(index + i);
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
@@ -2107,44 +1615,44 @@ export default function App() {
                 // Black Rook Movement
                 case '♜':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (8 * i)] == '♙' || values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♘' || values[index - (8 * i)] == '♗' || values[index - (8 * i)] == '♕' || values[index - (8 * i)] == '♔') {
-                                    moveArray.push(index - (8 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (8 * i)] == '♙' || values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♘' || values[index + (8 * i)] == '♗' || values[index + (8 * i)] == '♕' || values[index + (8 * i)] == '♔') {
-                                    moveArray.push(index + (8 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - i] == '♙' || values[index - i] == '♖' || values[index - i] == '♘' || values[index - i] == '♗' || values[index - i] == '♕' || values[index - i] == '♔') {
-                                    moveArray.push(index - i);
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + i] == '♙' || values[index + i] == '♖' || values[index + i] == '♘' || values[index + i] == '♗' || values[index + i] == '♕' || values[index + i] == '♔') {
-                                    moveArray.push(index + i);
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
@@ -2154,150 +1662,102 @@ export default function App() {
                 // White Knight Movement
                 case '♘':
                     if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (index >= 10) {
-                                    if (values[index - 10] != '♙' && values[index - 10] != '♖' && values[index - 10] != '♘' && values[index - 10] != '♗' && values[index - 10] != '♕' && values[index - 10] != '♔') {
-                                        moveArray.push(index - 10);
-                                    }
-                                }
-                                if (index <= 57) {
-                                    if (values[index + 6] != '♙' && values[index + 6] != '♖' && values[index + 6] != '♘' && values[index + 6] != '♗' && values[index + 6] != '♕' && values[index + 6] != '♔') {
-                                        moveArray.push(index + 6);
-                                    }
-                                }
-                            }
-                            if (index >= 17) {
-                                if (values[index - 17] != '♙' && values[index - 17] != '♖' && values[index - 17] != '♘' && values[index - 17] != '♗' && values[index - 17] != '♕' && values[index - 17] != '♔') {
-                                    moveArray.push(index - 17);
-                                }
-                            }
-                            if (index <= 48) {
-                                if (values[index + 15] != '♙' && values[index + 15] != '♖' && values[index + 15] != '♘' && values[index + 15] != '♗' && values[index + 15] != '♕' && values[index + 15] != '♔') {
-                                    moveArray.push(index + 15);
-                                }
-                            }
+                        if (values[upArray[leftArray[leftArray[index]]]] == '' || blackPieces(values[upArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[leftArray[leftArray[index]]]);
                         }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (index >= 6) {
-                                    if (values[index - 6] != '♙' && values[index - 6] != '♖' && values[index - 6] != '♘' && values[index - 6] != '♗' && values[index - 6] != '♕' && values[index - 6] != '♔') {
-                                        moveArray.push(index - 6);
-                                    }
-                                }
-                                if (index <= 53) {
-                                    if (values[index + 10] != '♙' && values[index + 10] != '♖' && values[index + 10] != '♘' && values[index + 10] != '♗' && values[index + 10] != '♕' && values[index + 10] != '♔') {
-                                        moveArray.push(index + 10);
-                                    }
-                                }
-                            }
-                            if (index >= 15) {
-                                if (values[index - 15] != '♙' && values[index - 15] != '♖' && values[index - 15] != '♘' && values[index - 15] != '♗' && values[index - 15] != '♕' && values[index - 15] != '♔') {
-                                    moveArray.push(index - 15);
-                                }
-                            }
-                            if (index <= 46) {
-                                if (values[index + 17] != '♙' && values[index + 17] != '♖' && values[index + 17] != '♘' && values[index + 17] != '♗' && values[index + 17] != '♕' && values[index + 17] != '♔') {
-                                    moveArray.push(index + 17);
-                                }
-                            }
+                        if (values[downArray[leftArray[leftArray[index]]]] == '' || blackPieces(values[downArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[leftArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[upArray[leftArray[index]]]] == '' || blackPieces(values[upArray[upArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[upArray[leftArray[index]]]);
+                        }
+                        if (values[downArray[downArray[leftArray[index]]]] == '' || blackPieces(values[downArray[downArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[downArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[rightArray[rightArray[index]]]] == '' || blackPieces(values[upArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[rightArray[rightArray[index]]]] == '' || blackPieces(values[downArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[upArray[upArray[rightArray[index]]]] == '' || blackPieces(values[upArray[upArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[upArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[downArray[rightArray[index]]]] == '' || blackPieces(values[downArray[downArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[downArray[rightArray[index]]]);
                         }
                     }
                     break;
                 // Black Knight Movement
                 case '♞':
                     if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (index >= 10) {
-                                    if (values[index - 10] != '♟' && values[index - 10] != '♜' && values[index - 10] != '♞' && values[index - 10] != '♝' && values[index - 10] != '♛' && values[index - 10] != '♚') {
-                                        moveArray.push(index - 10);
-                                    }
-                                }
-                                if (index <= 57) {
-                                    if (values[index + 6] != '♟' && values[index + 6] != '♜' && values[index + 6] != '♞' && values[index + 6] != '♝' && values[index + 6] != '♛' && values[index + 6] != '♚') {
-                                        moveArray.push(index + 6);
-                                    }
-                                }
-                            }
-                            if (index >= 17) {
-                                if (values[index - 17] != '♟' && values[index - 17] != '♜' && values[index - 17] != '♞' && values[index - 17] != '♝' && values[index - 17] != '♛' && values[index - 17] != '♚') {
-                                    moveArray.push(index - 17);
-                                }
-                            }
-                            if (index <= 48) {
-                                if (values[index + 15] != '♟' && values[index + 15] != '♜' && values[index + 15] != '♞' && values[index + 15] != '♝' && values[index + 15] != '♛' && values[index + 15] != '♚') {
-                                    moveArray.push(index + 15);
-                                }
-                            }
+                        if (values[upArray[leftArray[leftArray[index]]]] == '' || whitePieces(values[upArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[leftArray[leftArray[index]]]);
                         }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (index >= 6) {
-                                    if (values[index - 6] != '♟' && values[index - 6] != '♜' && values[index - 6] != '♞' && values[index - 6] != '♝' && values[index - 6] != '♛' && values[index - 6] != '♚') {
-                                        moveArray.push(index - 6);
-                                    }
-                                }
-                                if (index <= 53) {
-                                    if (values[index + 10] != '♟' && values[index + 10] != '♜' && values[index + 10] != '♞' && values[index + 10] != '♝' && values[index + 10] != '♛' && values[index + 10] != '♚') {
-                                        moveArray.push(index + 10);
-                                    }
-                                }
-                            }
-                            if (index >= 15) {
-                                if (values[index - 15] != '♟' && values[index - 15] != '♜' && values[index - 15] != '♞' && values[index - 15] != '♝' && values[index - 15] != '♛' && values[index - 15] != '♚') {
-                                    moveArray.push(index - 15);
-                                }
-                            }
-                            if (index <= 46) {
-                                if (values[index + 17] != '♟' && values[index + 17] != '♜' && values[index + 17] != '♞' && values[index + 17] != '♝' && values[index + 17] != '♛' && values[index + 17] != '♚') {
-                                    moveArray.push(index + 17);
-                                }
-                            }
+                        if (values[downArray[leftArray[leftArray[index]]]] == '' || whitePieces(values[downArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[leftArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[upArray[leftArray[index]]]] == '' || whitePieces(values[upArray[upArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[upArray[leftArray[index]]]);
+                        }
+                        if (values[downArray[downArray[leftArray[index]]]] == '' || whitePieces(values[downArray[downArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[downArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[rightArray[rightArray[index]]]] == '' || whitePieces(values[upArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[rightArray[rightArray[index]]]] == '' || whitePieces(values[downArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[upArray[upArray[rightArray[index]]]] == '' || whitePieces(values[upArray[upArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[upArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[downArray[rightArray[index]]]] == '' || whitePieces(values[downArray[downArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[downArray[rightArray[index]]]);
                         }
                     }
                     break;
                 // White Bishop Movement
                 case '♗':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♟' || values[index - (9 * i)] == '♜' || values[index - (9 * i)] == '♞' || values[index - (9 * i)] == '♝' || values[index - (9 * i)] == '♛' || values[index - (9 * i)] == '♚') {
-                                    moveArray.push(index - (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♟' || values[index + (9 * i)] == '♜' || values[index + (9 * i)] == '♞' || values[index + (9 * i)] == '♝' || values[index + (9 * i)] == '♛' || values[index + (9 * i)] == '♚') {
-                                    moveArray.push(index + (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♟' || values[index - (7 * i)] == '♜' || values[index - (7 * i)] == '♞' || values[index - (7 * i)] == '♝' || values[index - (7 * i)] == '♛' || values[index - (7 * i)] == '♚') {
-                                    moveArray.push(index - (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♟' || values[index + (7 * i)] == '♜' || values[index + (7 * i)] == '♞' || values[index + (7 * i)] == '♝' || values[index + (7 * i)] == '♛' || values[index + (7 * i)] == '♚') {
-                                    moveArray.push(index + (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
@@ -2307,44 +1767,44 @@ export default function App() {
                 // Black Bishop Movement
                 case '♝':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♙' || values[index - (9 * i)] == '♖' || values[index - (9 * i)] == '♘' || values[index - (9 * i)] == '♗' || values[index - (9 * i)] == '♕' || values[index - (9 * i)] == '♔') {
-                                    moveArray.push(index - (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♙' || values[index + (9 * i)] == '♖' || values[index + (9 * i)] == '♘' || values[index + (9 * i)] == '♗' || values[index + (9 * i)] == '♕' || values[index + (9 * i)] == '♔') {
-                                    moveArray.push(index + (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♙' || values[index - (7 * i)] == '♖' || values[index - (7 * i)] == '♘' || values[index - (7 * i)] == '♗' || values[index - (7 * i)] == '♕' || values[index - (7 * i)] == '♔') {
-                                    moveArray.push(index - (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♙' || values[index + (7 * i)] == '♖' || values[index + (7 * i)] == '♘' || values[index + (7 * i)] == '♗' || values[index + (7 * i)] == '♕' || values[index + (7 * i)] == '♔') {
-                                    moveArray.push(index + (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
@@ -2354,88 +1814,88 @@ export default function App() {
                 // White Queen Movement
                 case '♕':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (8 * i)] == '♟' || values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♞' || values[index - (8 * i)] == '♝' || values[index - (8 * i)] == '♛' || values[index - (8 * i)] == '♚') {
-                                    moveArray.push(index - (8 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (8 * i)] == '♟' || values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♞' || values[index + (8 * i)] == '♝' || values[index + (8 * i)] == '♛' || values[index + (8 * i)] == '♚') {
-                                    moveArray.push(index + (8 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - i] == '♟' || values[index - i] == '♜' || values[index - i] == '♞' || values[index - i] == '♝' || values[index - i] == '♛' || values[index - i] == '♚') {
-                                    moveArray.push(index - i);
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + i] == '♟' || values[index + i] == '♜' || values[index + i] == '♞' || values[index + i] == '♝' || values[index + i] == '♛' || values[index + i] == '♚') {
-                                    moveArray.push(index + i);
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♟' || values[index - (9 * i)] == '♜' || values[index - (9 * i)] == '♞' || values[index - (9 * i)] == '♝' || values[index - (9 * i)] == '♛' || values[index - (9 * i)] == '♚') {
-                                    moveArray.push(index - (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♟' || values[index + (9 * i)] == '♜' || values[index + (9 * i)] == '♞' || values[index + (9 * i)] == '♝' || values[index + (9 * i)] == '♛' || values[index + (9 * i)] == '♚') {
-                                    moveArray.push(index + (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♟' || values[index - (7 * i)] == '♜' || values[index - (7 * i)] == '♞' || values[index - (7 * i)] == '♝' || values[index - (7 * i)] == '♛' || values[index - (7 * i)] == '♚') {
-                                    moveArray.push(index - (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♟' || values[index + (7 * i)] == '♜' || values[index + (7 * i)] == '♞' || values[index + (7 * i)] == '♝' || values[index + (7 * i)] == '♛' || values[index + (7 * i)] == '♚') {
-                                    moveArray.push(index + (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
@@ -2445,88 +1905,88 @@ export default function App() {
                 // Black Queen Movement
                 case '♛':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (8 * i)] == '♙' || values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♘' || values[index - (8 * i)] == '♗' || values[index - (8 * i)] == '♕' || values[index - (8 * i)] == '♔') {
-                                    moveArray.push(index - (8 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (8 * i)] == '♙' || values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♘' || values[index + (8 * i)] == '♗' || values[index + (8 * i)] == '♕' || values[index + (8 * i)] == '♔') {
-                                    moveArray.push(index + (8 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - i] == '♙' || values[index - i] == '♖' || values[index - i] == '♘' || values[index - i] == '♗' || values[index - i] == '♕' || values[index - i] == '♔') {
-                                    moveArray.push(index - i);
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + i] == '♙' || values[index + i] == '♖' || values[index + i] == '♘' || values[index + i] == '♗' || values[index + i] == '♕' || values[index + i] == '♔') {
-                                    moveArray.push(index + i);
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♙' || values[index - (9 * i)] == '♖' || values[index - (9 * i)] == '♘' || values[index - (9 * i)] == '♗' || values[index - (9 * i)] == '♕' || values[index - (9 * i)] == '♔') {
-                                    moveArray.push(index - (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♙' || values[index + (9 * i)] == '♖' || values[index + (9 * i)] == '♘' || values[index + (9 * i)] == '♗' || values[index + (9 * i)] == '♕' || values[index + (9 * i)] == '♔') {
-                                    moveArray.push(index + (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♙' || values[index - (7 * i)] == '♖' || values[index - (7 * i)] == '♘' || values[index - (7 * i)] == '♗' || values[index - (7 * i)] == '♕' || values[index - (7 * i)] == '♔') {
-                                    moveArray.push(index - (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♙' || values[index + (7 * i)] == '♖' || values[index + (7 * i)] == '♘' || values[index + (7 * i)] == '♗' || values[index + (7 * i)] == '♕' || values[index + (7 * i)] == '♔') {
-                                    moveArray.push(index + (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
@@ -2535,97 +1995,11 @@ export default function App() {
                     break;
                 // White King Movement
                 case '♔':
-                    if (values[index - 8] == '' || values[index - 8] == '♟' || values[index - 8] == '♜' || values[index - 8] == '♞' || values[index - 8] == '♝' || values[index - 8] == '♛' || values[index - 8] == '♚') {
-                        if (!checkForCheckWhite(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '' || values[index + 8] == '♟' || values[index + 8] == '♜' || values[index + 8] == '♞' || values[index + 8] == '♝' || values[index + 8] == '♛' || values[index + 8] == '♚') {
-                        if (!checkForCheckWhite(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '' || values[index - 1] == '♟' || values[index - 1] == '♜' || values[index - 1] == '♞' || values[index - 1] == '♝' || values[index - 1] == '♛' || values[index - 1] == '♚') {
-                            if (!checkForCheckWhite(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '' || values[index - 9] == '♟' || values[index - 9] == '♜' || values[index - 9] == '♞' || values[index - 9] == '♝' || values[index - 9] == '♛' || values[index - 9] == '♚') {
-                            if (!checkForCheckWhite(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '' || values[index + 7] == '♟' || values[index + 7] == '♜' || values[index + 7] == '♞' || values[index + 7] == '♝' || values[index + 7] == '♛' || values[index + 7] == '♚') {
-                            if (!checkForCheckWhite(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '' || values[index + 1] == '♟' || values[index + 1] == '♜' || values[index + 1] == '♞' || values[index + 1] == '♝' || values[index + 1] == '♛' || values[index + 1] == '♚') {
-                            if (!checkForCheckWhite(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '' || values[index - 7] == '♟' || values[index - 7] == '♜' || values[index - 7] == '♞' || values[index - 7] == '♝' || values[index - 7] == '♛' || values[index - 7] == '♚') {
-                            if (!checkForCheckWhite(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '' || values[index + 9] == '♟' || values[index + 9] == '♜' || values[index + 9] == '♞' || values[index + 9] == '♝' || values[index + 9] == '♛' || values[index + 9] == '♚') {
-                            if (!checkForCheckWhite(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    whiteKingMovement(moveArray, index);
                     break;
                 // Black King Movement
                 case '♚':
-                    if (values[index - 8] == '' || values[index - 8] == '♙' || values[index - 8] == '♖' || values[index - 8] == '♘' || values[index - 8] == '♗' || values[index - 8] == '♕' || values[index - 8] == '♔') {
-                        if (!checkForCheckBlack(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '' || values[index + 8] == '♙' || values[index + 8] == '♖' || values[index + 8] == '♘' || values[index + 8] == '♗' || values[index + 8] == '♕' || values[index + 8] == '♔') {
-                        if (!checkForCheckBlack(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '' || values[index - 1] == '♙' || values[index - 1] == '♖' || values[index - 1] == '♘' || values[index - 1] == '♗' || values[index - 1] == '♕' || values[index - 1] == '♔') {
-                            if (!checkForCheckBlack(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '' || values[index - 9] == '♙' || values[index - 9] == '♖' || values[index - 9] == '♘' || values[index - 9] == '♗' || values[index - 9] == '♕' || values[index - 9] == '♔') {
-                            if (!checkForCheckBlack(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '' || values[index + 7] == '♙' || values[index + 7] == '♖' || values[index + 7] == '♘' || values[index + 7] == '♗' || values[index + 7] == '♕' || values[index + 7] == '♔') {
-                            if (!checkForCheckBlack(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '' || values[index + 1] == '♙' || values[index + 1] == '♖' || values[index + 1] == '♘' || values[index + 1] == '♗' || values[index + 1] == '♕' || values[index + 1] == '♔') {
-                            if (!checkForCheckBlack(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '' || values[index - 7] == '♙' || values[index - 7] == '♖' || values[index - 7] == '♘' || values[index - 7] == '♗' || values[index - 7] == '♕' || values[index - 7] == '♔') {
-                            if (!checkForCheckBlack(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '' || values[index + 9] == '♙' || values[index + 9] == '♖' || values[index + 9] == '♘' || values[index + 9] == '♗' || values[index + 9] == '♕' || values[index + 9] == '♔') {
-                            if (!checkForCheckBlack(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    blackKingMovement(moveArray, index);
                     break;
                 default:
                     break;
@@ -2642,59 +2016,17 @@ export default function App() {
         var blackQueens = [];
         values.forEach((value, index) => { if (value == '♛' && !blackQueens.some(val => index == val)) { blackQueens.push(index); } });
         var whiteBishops = [];
-        var aa = values.findIndex(value => value == '♗');
-        var bb = values.findLastIndex(value => value == '♗');
-        if (aa == bb && aa != -1) {
-            whiteBishops.push(aa);
-        } else if (aa != -1) {
-            whiteBishops.push(aa);
-            whiteBishops.push(bb);
-        }
+        checkForPiece('♗', whiteBishops);
         var blackBishops = [];
-        var cc = values.findIndex(value => value == '♝');
-        var dd = values.findLastIndex(value => value == '♝');
-        if (cc == dd && cc != -1) {
-            blackBishops.push(cc);
-        } else if (cc != -1) {
-            blackBishops.push(cc);
-            blackBishops.push(dd);
-        }
+        checkForPiece('♝', blackBishops);
         var whiteKnights = [];
-        var ee = values.findIndex(value => value == '♘');
-        var ff = values.findLastIndex(value => value == '♘');
-        if (ee == ff && ee != -1) {
-            whiteKnights.push(ee);
-        } else if (ee != -1) {
-            whiteKnights.push(ee);
-            whiteKnights.push(ff);
-        }
+        checkForPiece('♘', whiteKnights);
         var blackKnights = [];
-        var gg = values.findIndex(value => value == '♞');
-        var hh = values.findLastIndex(value => value == '♞');
-        if (gg == hh && gg != -1) {
-            blackKnights.push(gg);
-        } else if (gg != -1) {
-            blackKnights.push(gg);
-            blackKnights.push(hh);
-        }
+        checkForPiece('♞', blackKnights);
         var whiteRooks = [];
-        var ii = values.findIndex(value => value == '♖');
-        var jj = values.findLastIndex(value => value == '♖');
-        if (ii == jj && ii != -1) {
-            whiteRooks.push(ii);
-        } else if (ii != -1) {
-            whiteRooks.push(ii);
-            whiteRooks.push(jj);
-        }
+        checkForPiece('♖', whiteRooks);
         var blackRooks = [];
-        var kk = values.findIndex(value => value == '♜');
-        var ll = values.findLastIndex(value => value == '♜');
-        if (kk == ll && kk != -1) {
-            blackRooks.push(kk);
-        } else if (kk != -1) {
-            blackRooks.push(kk);
-            blackRooks.push(ll);
-        }
+        checkForPiece('♜', blackRooks);
         var whitePawns = [];
         values.forEach((value, index) => { if (value == '♙' && !whitePawns.some(val => index == val)) { whitePawns.push(index); } });
         var blackPawns = [];

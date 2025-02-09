@@ -13,7 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    max-width: 640px;
+    max-width: 1280px;
     margin: 0 auto;
     row-gap: 16px;
 }
@@ -24,7 +24,54 @@ body {
     grid-template-columns: repeat(8, 1fr);
 }
 
-.cell5black {
+.celll0,
+.celll2,
+.celll4,
+.celll6,
+.celll9,
+.celll11,
+.celll13,
+.celll15,
+.celll16,
+.celll18,
+.celll20,
+.celll22,
+.celll25,
+.celll27,
+.celll29,
+.celll31,
+.celll32,
+.celll34,
+.celll36,
+.celll38,
+.celll41,
+.celll43,
+.celll45,
+.celll47,
+.celll48,
+.celll50,
+.celll52,
+.celll54,
+.celll57,
+.celll59,
+.celll61,
+.celll63,
+.celll65,
+.celll67,
+.celll69,
+.celll71,
+.celll72,
+.celll74,
+.celll76,
+.celll78,
+.celll81,
+.celll83,
+.celll85,
+.celll87,
+.celll88,
+.celll90,
+.celll92,
+.celll94 {
     border: 1px solid rgb(255, 224, 171);
     font-size: min(48px, 10vw);
     vertical-align: middle;
@@ -34,7 +81,54 @@ body {
     font-family: Nishiki-Teki;
 }
 
-.cell5white {
+.celll1,
+.celll3,
+.celll5,
+.celll7,
+.celll8,
+.celll10,
+.celll12,
+.celll14,
+.celll17,
+.celll19,
+.celll21,
+.celll23,
+.celll24,
+.celll26,
+.celll28,
+.celll30,
+.celll33,
+.celll35,
+.celll37,
+.celll39,
+.celll40,
+.celll42,
+.celll44,
+.celll46,
+.celll49,
+.celll51,
+.celll53,
+.celll55,
+.celll56,
+.celll58,
+.celll60,
+.celll62,
+.celll64,
+.celll66,
+.celll68,
+.celll70,
+.celll73,
+.celll75,
+.celll77,
+.celll79,
+.celll80,
+.celll82,
+.celll84,
+.celll86,
+.celll89,
+.celll91,
+.celll93,
+.celll95 {
     border: 1px solid rgb(255, 224, 171);
     font-size: min(48px, 10vw);
     vertical-align: middle;
@@ -44,20 +138,958 @@ body {
     font-family: Nishiki-Teki;
 }
 
-    .cell5black:not(:disabled) {
+.celll0 {
+    clip-path: polygon(33% 0%, 100% 0%, 75% 100%, 0% 80%);
+    height: 62.5px;
+    width: 120px;
+    margin-left: 280px;
+}
+
+.celll1 {
+    clip-path: polygon(27% 0%, 100% 0%, 82% 100%, 0% 83%);
+    height: 75px;
+    width: 110px;
+    margin-left: -30px;
+}
+
+.celll2 {
+    clip-path: polygon(20% 0%, 100% 0%, 90% 100%, 0% 86%);
+    height: 87.5px;
+    width: 100px;
+    margin-left: -20px;
+}
+
+.celll3 {
+    clip-path: polygon(11% 0%, 100% 0%, 100% 100%, 0% 88%);
+    height: 100px;
+    width: 90px;
+    margin-left: -10px;
+}
+
+.celll4 {
+    clip-path: polygon(0% 0%, 89% 0%, 100% 88%, 0% 100%);
+    height: 100px;
+    width: 90px;
+}
+
+.celll5 {
+    clip-path: polygon(0% 0%, 80% 0%, 100% 86%, 10% 100%);
+    height: 87.5px;
+    width: 100px;
+    margin-left: -440px;
+}
+
+.celll6 {
+    clip-path: polygon(0% 0%, 73% 0%, 100% 83%, 18% 100%);
+    height: 75px;
+    width: 110px;
+    margin-left: -400px;
+}
+
+.celll7 {
+    clip-path: polygon(0% 0%, 67% 0%, 100% 80%, 25% 100%);
+    height: 62.5px;
+    width: 120px;
+    margin-left: -360px;
+}
+
+.celll8 {
+    clip-path: polygon(31% 0%, 100% 17%, 77% 100%, 0% 67%);
+    height: 75px;
+    width: 130px;
+    margin-top: -50px;
+    margin-left: 240px;
+}
+
+.celll9 {
+    clip-path: polygon(25% 0%, 100% 14%, 83% 100%, 0% 71%);
+    height: 87.5px;
+    width: 120px;
+    margin-top: -37.5px;
+    margin-left: -60px;
+}
+
+.celll10 {
+    clip-path: polygon(18% 0%, 100% 13%, 91% 100%, 0% 75%);
+    height: 100px;
+    width: 110px;
+    margin-top: -25px;
+    margin-left: -40px;
+}
+
+.celll11 {
+    clip-path: polygon(10% 0%, 100% 11%, 100% 100%, 0% 78%);
+    height: 112.5px;
+    width: 100px;
+    margin-top: -12.5px;
+    margin-left: -20px;
+}
+
+.celll12 {
+    clip-path: polygon(0% 11%, 90% 0%, 100% 78%, 0% 100%);
+    height: 112.5px;
+    width: 100px;
+    margin-top: -12.5px;
+}
+
+.celll13 {
+    clip-path: polygon(0% 13%, 82% 0%, 100% 75%, 9% 100%);
+    height: 100px;
+    width: 110px;
+    margin-top: -25px;
+    margin-left: -430px;
+}
+
+.celll14 {
+    clip-path: polygon(0% 14%, 75% 0%, 100% 71%, 17% 100%);
+    height: 87.5px;
+    width: 120px;
+    margin-top: -37.5px;
+    margin-left: -380px;
+}
+
+.celll15 {
+    clip-path: polygon(0% 17%, 69% 0%, 100% 67%, 23% 100%);
+    height: 75px;
+    width: 130px;
+    margin-top: -50px;
+    margin-left: -330px;
+}
+
+.celll16 {
+    clip-path: polygon(29% 0%, 100% 29%, 79% 100%, 0% 57%);
+    height: 87.5px;
+    width: 140px;
+    margin-top: -100px;
+    margin-left: 200px;
+}
+
+.celll17 {
+    clip-path: polygon(23% 0%, 100% 25%, 85% 100%, 0% 63%);
+    height: 100px;
+    width: 130px;
+    margin-top: -75px;
+    margin-left: -90px;
+}
+
+.celll18 {
+    clip-path: polygon(17% 0%, 100% 22%, 92% 100%, 0% 67%);
+    height: 112.5px;
+    width: 120px;
+    margin-top: -50px;
+    margin-left: -60px;
+}
+
+.celll19 {
+    clip-path: polygon(9% 0%, 100% 20%, 100% 100%, 0% 70%);
+    height: 125px;
+    width: 110px;
+    margin-top: -25px;
+    margin-left: -30px;
+}
+
+.celll20 {
+    clip-path: polygon(0% 20%, 91% 0%, 100% 70%, 0% 100%);
+    height: 125px;
+    width: 110px;
+    margin-top: -25px;
+}
+
+.celll21 {
+    clip-path: polygon(0% 22%, 83% 0%, 100% 67%, 8% 100%);
+    height: 112.5px;
+    width: 120px;
+    margin-top: -50px;
+    margin-left: -420px;
+}
+
+.celll22 {
+    clip-path: polygon(0% 25%, 77% 0%, 100% 63%, 15% 100%);
+    height: 100px;
+    width: 130px;
+    margin-top: -75px;
+    margin-left: -360px;
+}
+
+.celll23 {
+    clip-path: polygon(0% 29%, 71% 0%, 100% 57%, 21% 100%);
+    height: 87.5px;
+    width: 140px;
+    margin-top: -100px;
+    margin-left: -300px;
+}
+
+.celll24 {
+    clip-path: polygon(27% 0%, 100% 38%, 80% 100%, 0% 50%);
+    height: 100px;
+    width: 150px;
+    margin-top: -150px;
+    margin-left: 160px;
+}
+
+.celll25 {
+    clip-path: polygon(21% 0%, 100% 33%, 86% 100%, 0% 55%);
+    height: 112.5px;
+    width: 140px;
+    margin-top: -112.5px;
+    margin-left: -120px;
+}
+
+.celll26 {
+    clip-path: polygon(15% 0%, 100% 30%, 92% 100%, 0% 60%);
+    height: 125px;
+    width: 130px;
+    margin-top: -75px;
+    margin-left: -80px;
+}
+
+.celll27 {
+    clip-path: polygon(8% 0%, 100% 27%, 100% 100%, 0% 64%);
+    height: 137.5px;
+    width: 120px;
+    margin-top: -37.5px;
+    margin-left: -40px;
+}
+
+.celll28 {
+    clip-path: polygon(0% 27%, 92% 0%, 100% 64%, 0% 100%);
+    height: 137.5px;
+    width: 120px;
+    margin-top: -37.5px;
+}
+
+.celll29 {
+    clip-path: polygon(0% 30%, 85% 0%, 100% 60%, 8% 100%);
+    height: 125px;
+    width: 130px;
+    margin-top: -75px;
+    margin-left: -410px;
+}
+
+.celll30 {
+    clip-path: polygon(0% 33%, 79% 0%, 100% 56%, 14% 100%);
+    height: 112.5px;
+    width: 140px;
+    margin-top: -112.5px;
+    margin-left: -340px;
+}
+
+.celll31 {
+    clip-path: polygon(0% 38%, 73% 0%, 100% 50%, 20% 100%);
+    height: 100px;
+    width: 150px;
+    margin-top: -150px;
+    margin-left: -270px;
+}
+
+.celll32 {
+    clip-path: polygon(25% 0%, 100% 50%, 63% 100%, 0% 50%);
+    height: 100px;
+    width: 160px;
+    margin-top: -200px;
+    margin-left: 120px;
+}
+
+.celll33 {
+    clip-path: polygon(33% 0%, 100% 50%, 56% 100%, 0% 50%);
+    height: 100px;
+    width: 180px;
+    margin-top: -150px;
+    margin-left: -180px;
+}
+
+.celll34 {
+    clip-path: polygon(40% 0%, 100% 50%, 50% 100%, 0% 50%);
+    height: 100px;
+    width: 200px;
+    margin-top: -100px;
+    margin-left: -160px;
+}
+
+.celll35 {
+    clip-path: polygon(45% 0%, 100% 50%, 45% 100%, 0% 50%);
+    height: 100px;
+    width: 220px;
+    margin-top: -50px;
+    margin-left: -140px;
+}
+
+.celll36 {
+    clip-path: polygon(0% 50%, 55% 0%, 100% 50%, 55% 100%);
+    height: 100px;
+    width: 220px;
+    margin-top: -50px;
+}
+
+.celll37 {
+    clip-path: polygon(0% 50%, 60% 0%, 100% 50%, 50% 100%);
+    height: 100px;
+    width: 200px;
+    margin-top: -100px;
+    margin-left: -400px;
+}
+
+.celll38 {
+    clip-path: polygon(0% 50%, 67% 0%, 100% 50%, 44% 100%);
+    height: 100px;
+    width: 180px;
+    margin-top: -150px;
+    margin-left: -320px;
+}
+
+.celll39 {
+    clip-path: polygon(0% 50%, 75% 0%, 100% 50%, 38% 100%);
+    height: 100px;
+    width: 160px;
+    margin-top: -200px;
+    margin-left: -240px;
+}
+
+.celll40 {
+    clip-path: polygon(29% 0%, 100% 50%, 57% 100%, 0% 50%);
+    height: 100px;
+    width: 140px;
+    margin-top: -200px;
+    margin-left: 80px;
+}
+
+.celll41 {
+    clip-path: polygon(38% 0%, 100% 50%, 50% 100%, 0% 50%);
+    height: 100px;
+    width: 160px;
+    margin-top: -150px;
+    margin-left: -240px;
+}
+
+.celll42 {
+    clip-path: polygon(44% 0%, 100% 50%, 44% 100%, 0% 50%);
+    height: 100px;
+    width: 180px;
+    margin-top: -100px;
+    margin-left: -240px;
+}
+
+.celll43 {
+    clip-path: polygon(50% 0%, 100% 50%, 40% 100%, 0% 50%);
+    height: 100px;
+    width: 200px;
+    margin-top: -50px;
+    margin-left: -240px;
+}
+
+.celll44 {
+    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 60% 100%);
+    height: 100px;
+    width: 200px;
+    margin-top: -50px;
+    margin-left: 120px;
+}
+
+.celll45 {
+    clip-path: polygon(0% 50%, 56% 0%, 100% 50%, 56% 100%);
+    height: 100px;
+    width: 180px;
+    margin-top: -100px;
+    margin-left: -300px;
+}
+
+.celll46 {
+    clip-path: polygon(0% 50%, 63% 0%, 100% 50%, 50% 100%);
+    height: 100px;
+    width: 160px;
+    margin-top: -150px;
+    margin-left: -240px;
+}
+
+.celll47 {
+    clip-path: polygon(0% 50%, 71% 0%, 100% 50%, 43% 100%);
+    height: 100px;
+    width: 140px;
+    margin-top: -200px;
+    margin-left: -180px;
+}
+
+.celll48 {
+    clip-path: polygon(33% 0%, 100% 50%, 50% 100%, 0% 50%);
+    height: 100px;
+    width: 120px;
+    margin-top: -200px;
+    margin-left: 40px;
+}
+
+.celll49 {
+    clip-path: polygon(43% 0%, 100% 50%, 43% 100%, 0% 50%);
+    height: 100px;
+    width: 140px;
+    margin-top: -150px;
+    margin-left: -300px;
+}
+
+.celll50 {
+    clip-path: polygon(50% 0%, 100% 50%, 38% 100%, 0% 50%);
+    height: 100px;
+    width: 160px;
+    margin-top: -100px;
+    margin-left: -320px;
+}
+
+.celll51 {
+    clip-path: polygon(56% 0%, 100% 50%, 33% 100%, 0% 50%);
+    height: 100px;
+    width: 180px;
+    margin-top: -50px;
+    margin-left: -340px;
+}
+
+.celll52 {
+    clip-path: polygon(0% 50%, 44% 0%, 100% 50%, 67% 100%);
+    height: 100px;
+    width: 180px;
+    margin-top: -50px;
+    margin-left: 240px;
+}
+
+.celll53 {
+    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 63% 100%);
+    height: 100px;
+    width: 160px;
+    margin-top: -100px;
+    margin-left: -200px;
+}
+
+.celll54 {
+    clip-path: polygon(0% 50%, 57% 0%, 100% 50%, 57% 100%);
+    height: 100px;
+    width: 140px;
+    margin-top: -150px;
+    margin-left: -160px;
+}
+
+.celll55 {
+    clip-path: polygon(0% 50%, 67% 0%, 100% 50%, 50% 100%);
+    height: 100px;
+    width: 120px;
+    margin-top: -200px;
+    margin-left: -120px;
+}
+
+.celll56 {
+    clip-path: polygon(40% 0%, 100% 50%, 40% 100%, 0% 50%);
+    height: 100px;
+    width: 100px;
+    margin-top: -200px;
+}
+
+.celll57 {
+    clip-path: polygon(50% 0%, 100% 50%, 33% 100%, 0% 50%);
+    height: 100px;
+    width: 120px;
+    margin-top: -150px;
+    margin-left: -360px;
+}
+
+.celll58 {
+    clip-path: polygon(57% 0%, 100% 50%, 29% 100%, 0% 50%);
+    height: 100px;
+    width: 140px;
+    margin-top: -100px;
+    margin-left: -400px;
+}
+
+.celll59 {
+    clip-path: polygon(63% 0%, 100% 50%, 25% 100%, 0% 50%);
+    height: 100px;
+    width: 160px;
+    margin-top: -50px;
+    margin-left: -440px;
+}
+
+.celll60 {
+    clip-path: polygon(0% 50%, 38% 0%, 100% 50%, 75% 100%);
+    height: 100px;
+    width: 160px;
+    margin-top: -50px;
+    margin-left: 360px;
+}
+
+.celll61 {
+    clip-path: polygon(0% 50%, 43% 0%, 100% 50%, 71% 100%);
+    height: 100px;
+    width: 140px;
+    margin-top: -100px;
+    margin-left: -100px;
+}
+
+.celll62 {
+    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 67% 100%);
+    height: 100px;
+    width: 120px;
+    margin-top: -150px;
+    margin-left: -80px;
+}
+
+.celll63 {
+    clip-path: polygon(0% 50%, 60% 0%, 100% 50%, 60% 100%);
+    height: 100px;
+    width: 100px;
+    margin-top: -200px;
+    margin-left: -60px;
+}
+
+.celll64 {
+    clip-path: polygon(0% 50%, 80% 0%, 100% 63%, 27% 100%);
+    height: 100px;
+    width: 150px;
+    margin-top: -50px;
+    margin-left: 160px;
+}
+
+.celll65 {
+    clip-path: polygon(0% 44%, 86% 0%, 100% 67%, 21% 100%);
+    height: 112.5px;
+    width: 140px;
+    margin-top: -100px;
+    margin-left: -120px;
+}
+
+.celll66 {
+    clip-path: polygon(0% 40%, 92% 0%, 100% 70%, 15% 100%);
+    height: 125px;
+    width: 130px;
+    margin-top: -150px;
+    margin-left: -80px;
+}
+
+.celll67 {
+    clip-path: polygon(0% 36%, 100% 0%, 100% 73%, 8% 100%);
+    height: 137.5px;
+    width: 120px;
+    margin-top: -200px;
+    margin-left: -40px;
+}
+
+.celll68 {
+    clip-path: polygon(0% 0%, 100% 36%, 92% 100%, 0% 73%);
+    height: 137.5px;
+    width: 120px;
+    margin-top: -200px;
+}
+
+.celll69 {
+    clip-path: polygon(8% 0%, 100% 40%, 85% 100%, 0% 70%);
+    height: 125px;
+    width: 130px;
+    margin-top: -150px;
+    margin-left: -410px;
+}
+
+.celll70 {
+    clip-path: polygon(14% 0%, 100% 44%, 79% 100%, 0% 67%);
+    height: 112.5px;
+    width: 140px;
+    margin-top: -100px;
+    margin-left: -340px;
+}
+
+.celll71 {
+    clip-path: polygon(20% 0%, 100% 50%, 73% 100%, 0% 63%);
+    height: 100px;
+    width: 150px;
+    margin-top: -50px;
+    margin-left: -270px;
+}
+
+.celll72 {
+    clip-path: polygon(0% 43%, 79% 0%, 100% 71%, 29% 100%);
+    height: 87.5px;
+    width: 140px;
+    margin-top: -37.5px;
+    margin-left: 200px;
+}
+
+.celll73 {
+    clip-path: polygon(0% 38%, 85% 0%, 100% 75%, 23% 100%);
+    height: 100px;
+    width: 130px;
+    margin-top: -75px;
+    margin-left: -90px;
+}
+
+.celll74 {
+    clip-path: polygon(0% 33%, 92% 0%, 100% 78%, 17% 100%);
+    height: 112.5px;
+    width: 120px;
+    margin-top: -112.5px;
+    margin-left: -60px;
+}
+
+.celll75 {
+    clip-path: polygon(0% 30%, 100% 0%, 100% 80%, 9% 100%);
+    height: 125px;
+    width: 110px;
+    margin-top: -150px;
+    margin-left: -30px;
+}
+
+.celll76 {
+    clip-path: polygon(0% 0%, 100% 30%, 91% 100%, 0% 80%);
+    height: 125px;
+    width: 110px;
+    margin-top: -150px;
+}
+
+.celll77 {
+    clip-path: polygon(8% 0%, 100% 33%, 83% 100%, 0% 78%);
+    height: 112.5px;
+    width: 120px;
+    margin-top: -112.5px;
+    margin-left: -420px;
+}
+
+.celll78 {
+    clip-path: polygon(15% 0%, 100% 38%, 77% 100%, 0% 75%);
+    height: 100px;
+    width: 130px;
+    margin-top: -75px;
+    margin-left: -360px;
+}
+
+.celll79 {
+    clip-path: polygon(21% 0%, 100% 43%, 71% 100%, 0% 71%);
+    height: 87.5px;
+    width: 140px;
+    margin-top: -37.5px;
+    margin-left: -300px;
+}
+
+.celll80 {
+    clip-path: polygon(0% 33%, 77% 0%, 100% 83%, 31% 100%);
+    height: 75px;
+    width: 130px;
+    margin-top: -25px;
+    margin-left: 240px;
+}
+
+.celll81 {
+    clip-path: polygon(0% 29%, 83% 0%, 100% 86%, 25% 100%);
+    height: 87.5px;
+    width: 120px;
+    margin-top: -50px;
+    margin-left: -60px;
+}
+
+.celll82 {
+    clip-path: polygon(0% 25%, 91% 0%, 100% 88%, 18% 100%);
+    height: 100px;
+    width: 110px;
+    margin-top: -75px;
+    margin-left: -40px;
+}
+
+.celll83 {
+    clip-path: polygon(0% 22%, 100% 0%, 100% 89%, 10% 100%);
+    height: 112.5px;
+    width: 100px;
+    margin-top: -100px;
+    margin-left: -20px;
+}
+
+.celll84 {
+    clip-path: polygon(0% 0%, 100% 22%, 90% 100%, 0% 89%);
+    height: 112.5px;
+    width: 100px;
+    margin-top: -100px;
+}
+
+.celll85 {
+    clip-path: polygon(9% 0%, 100% 25%, 82% 100%, 0% 88%);
+    height: 100px;
+    width: 110px;
+    margin-top: -75px;
+    margin-left: -430px;
+}
+
+.celll86 {
+    clip-path: polygon(17% 0%, 100% 29%, 75% 100%, 0% 86%);
+    height: 87.5px;
+    width: 120px;
+    margin-top: -50px;
+    margin-left: -380px;
+}
+
+.celll87 {
+    clip-path: polygon(23% 0%, 100% 33%, 69% 100%, 0% 83%);
+    height: 75px;
+    width: 130px;
+    margin-top: -25px;
+    margin-left: -330px;
+}
+
+.celll88 {
+    clip-path: polygon(0% 20%, 75% 0%, 100% 100%, 33% 100%);
+    height: 62.5px;
+    width: 120px;
+    margin-top: -12.5px;
+    margin-left: 280px;
+}
+
+.celll89 {
+    clip-path: polygon(0% 17%, 82% 0%, 100% 100%, 27% 100%);
+    height: 75px;
+    width: 110px;
+    margin-top: -25px;
+    margin-left: -30px;
+}
+
+.celll90 {
+    clip-path: polygon(0% 14%, 90% 0%, 100% 100%, 20% 100%);
+    height: 87.5px;
+    width: 100px;
+    margin-top: -37.5px;
+    margin-left: -20px;
+}
+
+.celll91 {
+    clip-path: polygon(0% 13%, 100% 0%, 100% 100%, 11% 100%);
+    height: 100px;
+    width: 90px;
+    margin-top: -50px;
+    margin-left: -10px;
+}
+
+.celll92 {
+    clip-path: polygon(0% 0%, 100% 13%, 89% 100%, 0% 100%);
+    height: 100px;
+    width: 90px;
+    margin-top: -50px;
+}
+
+.celll93 {
+    clip-path: polygon(10% 0%, 100% 14%, 80% 100%, 0% 100%);
+    height: 87.5px;
+    width: 100px;
+    margin-top: -37.5px;
+    margin-left: -440px;
+}
+
+.celll94 {
+    clip-path: polygon(18% 0%, 100% 17%, 73% 100%, 0% 100%);
+    height: 75px;
+    width: 110px;
+    margin-top: -25px;
+    margin-left: -400px;
+}
+
+.celll95 {
+    clip-path: polygon(25% 0%, 100% 20%, 67% 100%, 0% 100%);
+    height: 62.5px;
+    width: 120px;
+    margin-top: -12.5px;
+    margin-left: -360px;
+}
+
+    .celll0:not(:disabled),
+    .celll2:not(:disabled),
+    .celll4:not(:disabled),
+    .celll6:not(:disabled),
+    .celll9:not(:disabled),
+    .celll11:not(:disabled),
+    .celll13:not(:disabled),
+    .celll15:not(:disabled),
+    .celll16:not(:disabled),
+    .celll18:not(:disabled),
+    .celll20:not(:disabled),
+    .celll22:not(:disabled),
+    .celll25:not(:disabled),
+    .celll27:not(:disabled),
+    .celll29:not(:disabled),
+    .celll31:not(:disabled),
+    .celll32:not(:disabled),
+    .celll34:not(:disabled),
+    .celll36:not(:disabled),
+    .celll38:not(:disabled),
+    .celll41:not(:disabled),
+    .celll43:not(:disabled),
+    .celll45:not(:disabled),
+    .celll47:not(:disabled),
+    .celll48:not(:disabled),
+    .celll50:not(:disabled),
+    .celll52:not(:disabled),
+    .celll54:not(:disabled),
+    .celll57:not(:disabled),
+    .celll59:not(:disabled),
+    .celll61:not(:disabled),
+    .celll63:not(:disabled),
+    .celll65:not(:disabled),
+    .celll67:not(:disabled),
+    .celll69:not(:disabled),
+    .celll71:not(:disabled),
+    .celll72:not(:disabled),
+    .celll74:not(:disabled),
+    .celll76:not(:disabled),
+    .celll78:not(:disabled),
+    .celll81:not(:disabled),
+    .celll83:not(:disabled),
+    .celll85:not(:disabled),
+    .celll87:not(:disabled),
+    .celll88:not(:disabled),
+    .celll90:not(:disabled),
+    .celll92:not(:disabled),
+    .celll94:not(:disabled) {
         cursor: pointer;
         background-color: #97b556;
     }
 
-    .cell5white:not(:disabled) {
+    .celll1:not(:disabled),
+    .celll3:not(:disabled),
+    .celll5:not(:disabled),
+    .celll7:not(:disabled),
+    .celll8:not(:disabled),
+    .celll10:not(:disabled),
+    .celll12:not(:disabled),
+    .celll14:not(:disabled),
+    .celll17:not(:disabled),
+    .celll19:not(:disabled),
+    .celll21:not(:disabled),
+    .celll23:not(:disabled),
+    .celll24:not(:disabled),
+    .celll26:not(:disabled),
+    .celll28:not(:disabled),
+    .celll30:not(:disabled),
+    .celll33:not(:disabled),
+    .celll35:not(:disabled),
+    .celll37:not(:disabled),
+    .celll39:not(:disabled),
+    .celll40:not(:disabled),
+    .celll42:not(:disabled),
+    .celll44:not(:disabled),
+    .celll46:not(:disabled),
+    .celll49:not(:disabled),
+    .celll51:not(:disabled),
+    .celll53:not(:disabled),
+    .celll55:not(:disabled),
+    .celll56:not(:disabled),
+    .celll58:not(:disabled),
+    .celll60:not(:disabled),
+    .celll62:not(:disabled),
+    .celll64:not(:disabled),
+    .celll66:not(:disabled),
+    .celll68:not(:disabled),
+    .celll70:not(:disabled),
+    .celll73:not(:disabled),
+    .celll75:not(:disabled),
+    .celll77:not(:disabled),
+    .celll79:not(:disabled),
+    .celll80:not(:disabled),
+    .celll82:not(:disabled),
+    .celll84:not(:disabled),
+    .celll86:not(:disabled),
+    .celll89:not(:disabled),
+    .celll91:not(:disabled),
+    .celll93:not(:disabled),
+    .celll95:not(:disabled) {
         cursor: pointer;
         background-color: #cbccd0;
     }
 
-        .cell5black:not(:disabled):hover {
+        .celll0:not(:disabled):hover,
+        .celll2:not(:disabled):hover,
+        .celll4:not(:disabled):hover,
+        .celll6:not(:disabled):hover,
+        .celll9:not(:disabled):hover,
+        .celll11:not(:disabled):hover,
+        .celll13:not(:disabled):hover,
+        .celll15:not(:disabled):hover,
+        .celll16:not(:disabled):hover,
+        .celll18:not(:disabled):hover,
+        .celll20:not(:disabled):hover,
+        .celll22:not(:disabled):hover,
+        .celll25:not(:disabled):hover,
+        .celll27:not(:disabled):hover,
+        .celll29:not(:disabled):hover,
+        .celll31:not(:disabled):hover,
+        .celll32:not(:disabled):hover,
+        .celll34:not(:disabled):hover,
+        .celll36:not(:disabled):hover,
+        .celll38:not(:disabled):hover,
+        .celll41:not(:disabled):hover,
+        .celll43:not(:disabled):hover,
+        .celll45:not(:disabled):hover,
+        .celll47:not(:disabled):hover,
+        .celll48:not(:disabled):hover,
+        .celll50:not(:disabled):hover,
+        .celll52:not(:disabled):hover,
+        .celll54:not(:disabled):hover,
+        .celll57:not(:disabled):hover,
+        .celll59:not(:disabled):hover,
+        .celll61:not(:disabled):hover,
+        .celll63:not(:disabled):hover,
+        .celll65:not(:disabled):hover,
+        .celll67:not(:disabled):hover,
+        .celll69:not(:disabled):hover,
+        .celll71:not(:disabled):hover,
+        .celll72:not(:disabled):hover,
+        .celll74:not(:disabled):hover,
+        .celll76:not(:disabled):hover,
+        .celll78:not(:disabled):hover,
+        .celll81:not(:disabled):hover,
+        .celll83:not(:disabled):hover,
+        .celll85:not(:disabled):hover,
+        .celll87:not(:disabled):hover,
+        .celll88:not(:disabled):hover,
+        .celll90:not(:disabled):hover,
+        .celll92:not(:disabled):hover,
+        .celll94:not(:disabled):hover {
             background-color: #97b576;
         }
 
-        .cell5white:not(:disabled):hover {
+        .celll1:not(:disabled):hover,
+        .celll3:not(:disabled):hover,
+        .celll5:not(:disabled):hover,
+        .celll7:not(:disabled):hover,
+        .celll8:not(:disabled):hover,
+        .celll10:not(:disabled):hover,
+        .celll12:not(:disabled):hover,
+        .celll14:not(:disabled):hover,
+        .celll17:not(:disabled):hover,
+        .celll19:not(:disabled):hover,
+        .celll21:not(:disabled):hover,
+        .celll23:not(:disabled):hover,
+        .celll24:not(:disabled):hover,
+        .celll26:not(:disabled):hover,
+        .celll28:not(:disabled):hover,
+        .celll30:not(:disabled):hover,
+        .celll33:not(:disabled):hover,
+        .celll35:not(:disabled):hover,
+        .celll37:not(:disabled):hover,
+        .celll39:not(:disabled):hover,
+        .celll40:not(:disabled):hover,
+        .celll42:not(:disabled):hover,
+        .celll44:not(:disabled):hover,
+        .celll46:not(:disabled):hover,
+        .celll49:not(:disabled):hover,
+        .celll51:not(:disabled):hover,
+        .celll53:not(:disabled):hover,
+        .celll55:not(:disabled):hover,
+        .celll56:not(:disabled):hover,
+        .celll58:not(:disabled):hover,
+        .celll60:not(:disabled):hover,
+        .celll62:not(:disabled):hover,
+        .celll64:not(:disabled):hover,
+        .celll66:not(:disabled):hover,
+        .celll68:not(:disabled):hover,
+        .celll70:not(:disabled):hover,
+        .celll73:not(:disabled):hover,
+        .celll75:not(:disabled):hover,
+        .celll77:not(:disabled):hover,
+        .celll79:not(:disabled):hover,
+        .celll80:not(:disabled):hover,
+        .celll82:not(:disabled):hover,
+        .celll84:not(:disabled):hover,
+        .celll86:not(:disabled):hover,
+        .celll89:not(:disabled):hover,
+        .celll91:not(:disabled):hover,
+        .celll93:not(:disabled):hover,
+        .celll95:not(:disabled):hover {
             background-color: #cbccb0;
         }

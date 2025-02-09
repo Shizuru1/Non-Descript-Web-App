@@ -24,7 +24,7 @@ export const StarRating = (props) => {
 
     return (
         <div>
-            StarRating: {hovarr.map((value, index) => (<Star key={index} filled={value} hoverRating={() => onHover(index)} setRating={onChange} persistRating={onUnhover} />))}
+            Star Rating: {hovarr.map((value, index) => (<Star key={index} filled={value} hoverRating={() => onHover(index)} setRating={onChange} persistRating={onUnhover} />))}
         </div>
     );
 };

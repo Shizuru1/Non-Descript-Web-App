@@ -19,7 +19,16 @@ function App() {
 
     return (
         <>
-            <header></header>
+            <header>
+                {state === "counter" && "Counters"}
+                {state === "star" && "Star Rating"}
+                {state === "ttt" && "Tic Tac Toe"}
+                {state === "3pttt" && "3-Player Tic Tac Toe"}
+                {state === "checkers" && "Checkers"}
+                {state === "chess" && "Chess"}
+                {state === "chess2" && "Broken Chess"}
+                {state === "3pchess" && "3-Player Chess"}
+            </header>
             <span>
                 <nav>
                     <div className="tag" onClick={() => setState("counter")}>Counters</div>
@@ -32,7 +41,7 @@ function App() {
                     <div className="tag" onClick={() => setState("3pchess")}>3-Player Chess</div>
                 </nav>
                 <main>
-                    {state === "counter" && <Counters amount={14} />}
+                    {state === "counter" && <Counters amount={9} />}
                     {state === "star" && <StarRating />}
                     {state === "ttt" && <TicTacToe />}
                     {state === "3pttt" && <ThreePTTT />}
@@ -41,9 +50,7 @@ function App() {
                     {state === "chess2" && <Chess2 />}
                     {state === "3pchess" && <ThreePChess /> }
                 </main>
-                <aside></aside>
             </span>
-            <footer></footer>
         </>
     );
 }

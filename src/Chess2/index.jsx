@@ -97,6 +97,61 @@ export default function App() {
         checkForMate();
     }, [repetitions]);
 
+    const upArray = [-1, -1, -1, -1, -1, -1, -1, -1,
+        0, 1, 2, 3, 4, 5, 6, 7,
+        8, 9, 10, 11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20, 21, 22, 23,
+        24, 25, 26, 27, 28, 29, 30, 31,
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55];
+
+    const downArray = [8, 9, 10, 11, 12, 13, 14, 15,
+        16, 17, 18, 19, 20, 21, 22, 23,
+        24, 25, 26, 27, 28, 29, 30, 31,
+        32, 33, 34, 35, 36, 37, 38, 39,
+        40, 41, 42, 43, 44, 45, 46, 47,
+        48, 49, 50, 51, 52, 53, 54, 55,
+        56, 57, 58, 59, 60, 61, 62, 63,
+        -1, -1, -1, -1, -1, -1, -1, -1];
+
+    const leftArray = [-1, 0, 1, 2, 3, 4, 5, 6,
+    -1, 8, 9, 10, 11, 12, 13, 14,
+    -1, 16, 17, 18, 19, 20, 21, 22,
+    -1, 24, 25, 26, 27, 28, 29, 30,
+    -1, 32, 33, 34, 35, 36, 37, 38,
+    -1, 40, 41, 42, 43, 44, 45, 46,
+    -1, 48, 49, 50, 51, 52, 53, 54,
+    -1, 56, 57, 58, 59, 60, 61, 62];
+
+    const rightArray = [1, 2, 3, 4, 5, 6, 7, -1,
+        9, 10, 11, 12, 13, 14, 15, -1,
+        17, 18, 19, 20, 21, 22, 23, -1,
+        25, 26, 27, 28, 29, 30, 31, -1,
+        33, 34, 35, 36, 37, 38, 39, -1,
+        41, 42, 43, 44, 45, 46, 47, -1,
+        49, 50, 51, 52, 53, 54, 55, -1,
+        57, 58, 59, 60, 61, 62, 63, -1];
+
+    const whitePieces = (piece) => {
+        return piece == '♙' || piece == '🨣' || piece == '♖' || piece == '♘' || piece == '🨶' || piece == '🨌' || piece == '♕';
+    }
+
+    const blackPieces = (piece) => {
+        return piece == '♟' || piece == '🨩' || piece == '♜' || piece == '♞' || piece == '🨼' || piece == '🨒' || piece == '♛';
+    }
+
+    const checkForPiece = (piece, array) => {
+        var aa = values.findIndex(value => value == piece);
+        var bb = values.findLastIndex(value => value == piece);
+        if (aa == bb && aa != -1) {
+            array.push(aa);
+        } else if (aa != -1) {
+            array.push(aa);
+            array.push(bb);
+        }
+    }
+
     const arrayModifier = (id, newVal) => {
         setValues(values => values.map((value, index) => (index == id ? newVal : value)));
     }
@@ -128,20 +183,19 @@ export default function App() {
 
     const checkForCheckWhite = (index) => {
         var blockera = false;
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (i == 1 && values[index - (8 * i)] == '♔') {
-                    continue;
-                }
-                if (values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♛') {
-                    if (values[index - (8 * i)] == '♛' && !blockera) {
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    if (values[i] == '♛' && !blockera) {
                         return true;
-                    } else if (values[index - (8 * i)] == '♜') {
+                    } else if (values[i] == '♜') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♔' && i == upArray[index]) {
+                    continue;
                 } else {
-                    if (values[index - (8 * i)] == '♚') {
+                    if (values[i] == '♚') {
                         break;
                     } else if (!blockera) {
                         blockera = true;
@@ -152,20 +206,19 @@ export default function App() {
             }
         }
         var blockerb = false;
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (i == 1 && values[index + (8 * i)] == '♔') {
-                    continue;
-                }
-                if (values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♛') {
-                    if (values[index + (8 * i)] == '♛' && !blockerb) {
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    if (values[i] == '♛' && !blockerb) {
                         return true;
-                    } else if (values[index + (8 * i)] == '♜') {
+                    } else if (values[i] == '♜') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♔' && i == downArray[index]) {
+                    continue;
                 } else {
-                    if (values[index + (8 * i)] == '♚') {
+                    if (values[i] == '♚') {
                         break;
                     } else if (!blockerb) {
                         blockerb = true;
@@ -176,20 +229,19 @@ export default function App() {
             }
         }
         var blockerc = false;
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (i == 1 && values[index - i] == '♔') {
-                    continue;
-                }
-                if (values[index - i] == '♜' || values[index - i] == '♛') {
-                    if (values[index - i] == '♛' && !blockerc) {
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    if (values[i] == '♛' && !blockerc) {
                         return true;
-                    } else if (values[index - i] == '♜') {
+                    } else if (values[i] == '♜') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♔' && i == leftArray[index]) {
+                    continue;
                 } else {
-                    if (values[index - i] == '♚') {
+                    if (values[i] == '♚') {
                         break;
                     } else if (!blockerc) {
                         blockerc = true;
@@ -200,20 +252,19 @@ export default function App() {
             }
         }
         var blockerd = false;
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (i == 1 && values[index + i] == '♔') {
-                    continue;
-                }
-                if (values[index + i] == '♜' || values[index + i] == '♛') {
-                    if (values[index + i] == '♛' && !blockerd) {
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♜' || values[i] == '♛') {
+                    if (values[i] == '♛' && !blockerd) {
                         return true;
-                    } else if (values[index + i] == '♜') {
+                    } else if (values[i] == '♜') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♔' && i == rightArray[index]) {
+                    continue;
                 } else {
-                    if (values[index + i] == '♚') {
+                    if (values[i] == '♚') {
                         break;
                     } else if (!blockerd) {
                         blockerd = true;
@@ -223,133 +274,112 @@ export default function App() {
                 }
             }
         }
-        if (index % 8 > 0) {
-            if (index % 8 > 1) {
-                if (values[index - 10] == '♞') {
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
                     return true;
-                }
-                if (values[index + 6] == '♞') {
-                    return true;
-                }
-            }
-            if (values[index - 17] == '♞') {
-                return true;
-            }
-            if (values[index + 15] == '♞') {
-                return true;
-            }
-        }
-        if (index % 8 < 7) {
-            if (index % 8 < 6) {
-                if (values[index - 6] == '♞') {
-                    return true;
-                }
-                if (values[index + 10] == '♞') {
-                    return true;
-                }
-            }
-            if (values[index - 15] == '♞') {
-                return true;
-            }
-            if (values[index + 17] == '♞') {
-                return true;
-            }
-        }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (i == 1 && values[index - (9 * i)] == '♔') {
+                } else if (values[i] == '♔' && i == upArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index - (9 * i)] == '🨼' || values[index - (9 * i)] == '🨒' || values[index - (9 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (i == 1 && values[index + (9 * i)] == '♔') {
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == downArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index + (9 * i)] == '🨼' || values[index + (9 * i)] == '🨒' || values[index + (9 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (i == 1 && values[index - (7 * i)] == '♔') {
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == upArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index - (7 * i)] == '🨼' || values[index - (7 * i)] == '🨒' || values[index - (7 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (i == 1 && values[index + (7 * i)] == '♔') {
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                    return true;
+                } else if (values[i] == '♔' && i == downArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index + (7 * i)] == '🨼' || values[index + (7 * i)] == '🨒' || values[index + (7 * i)] == '♛') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        if (values[index - 8] == '♚' || values[index - 8] == '🨒') {
+        if (values[upArray[index]] == '♚' || values[upArray[index]] == '🨒') {
             return true;
         }
-        if (values[index + 8] == '♚' || values[index + 8] == '🨒') {
+        if (values[downArray[index]] == '♚' || values[downArray[index]] == '🨒') {
             return true;
         }
-        if (index % 8 > 0) {
-            if (values[index - 1] == '♚' || values[index - 1] == '🨒') {
-                return true;
-            }
-            if (values[index - 9] == '♚' || values[index - 9] == '♟') {
-                return true;
-            }
-            if (values[index + 7] == '♚' || values[index + 7] == '🨩') {
-                return true;
-            }
+        if (values[leftArray[index]] == '♚' || values[leftArray[index]] == '🨒') {
+            return true;
         }
-        if (index % 8 < 7) {
-            if (values[index + 1] == '♚' || values[index + 1] == '🨒') {
-                return true;
-            }
-            if (values[index - 7] == '♚' || values[index - 7] == '♟') {
-                return true;
-            }
-            if (values[index + 9] == '♚' || values[index + 9] == '🨩') {
-                return true;
-            }
+        if (values[rightArray[index]] == '♚' || values[rightArray[index]] == '🨒') {
+            return true;
+        }
+        if (values[upArray[leftArray[index]]] == '♚' || values[upArray[leftArray[index]]] == '♟') {
+            return true;
+        }
+        if (values[upArray[rightArray[index]]] == '♚' || values[upArray[rightArray[index]]] == '♟') {
+            return true;
+        }
+        if (values[downArray[leftArray[index]]] == '♚' || values[downArray[leftArray[index]]] == '🨩') {
+            return true;
+        }
+        if (values[downArray[rightArray[index]]] == '♚' || values[downArray[rightArray[index]]] == '🨩') {
+            return true;
+        }
+        if (values[upArray[leftArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[leftArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[upArray[upArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[downArray[leftArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[upArray[rightArray[rightArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[rightArray[rightArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[upArray[upArray[rightArray[index]]]] == '♞') {
+            return true;
+        }
+        if (values[downArray[downArray[rightArray[index]]]] == '♞') {
+            return true;
         }
         return false;
     }
 
     const checkForCheckBlack = (index) => {
         var blockera = false;
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (i == 1 && values[index - (8 * i)] == '♚') {
-                    continue;
-                }
-                if (values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♕') {
-                    if (values[index - (8 * i)] == '♕' && !blockera) {
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    if (values[i] == '♕' && !blockera) {
                         return true;
-                    } else if (values[index - (8 * i)] == '♖') {
+                    } else if (values[i] == '♖') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♚' && i == upArray[index]) {
+                    continue;
                 } else {
-                    if (values[index - (8 * i)] == '♔') {
+                    if (values[i] == '♔') {
                         break;
                     } else if (!blockera) {
                         blockera = true;
@@ -360,20 +390,19 @@ export default function App() {
             }
         }
         var blockerb = false;
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (i == 1 && values[index + (8 * i)] == '♚') {
-                    continue;
-                }
-                if (values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♕') {
-                    if (values[index + (8 * i)] == '♕' && !blockerb) {
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    if (values[i] == '♕' && !blockerb) {
                         return true;
-                    } else if (values[index + (8 * i)] == '♖') {
+                    } else if (values[i] == '♖') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♚' && i == downArray[index]) {
+                    continue;
                 } else {
-                    if (values[index + (8 * i)] == '♔') {
+                    if (values[i] == '♔') {
                         break;
                     } else if (!blockerb) {
                         blockerb = true;
@@ -384,20 +413,19 @@ export default function App() {
             }
         }
         var blockerc = false;
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (i == 1 && values[index - i] == '♚') {
-                    continue;
-                }
-                if (values[index - i] == '♖' || values[index - i] == '♕') {
-                    if (values[index - i] == '♕' && !blockerc) {
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    if (values[i] == '♕' && !blockerc) {
                         return true;
-                    } else if (values[index - i] == '♖') {
+                    } else if (values[i] == '♖') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♚' && i == leftArray[index]) {
+                    continue;
                 } else {
-                    if (values[index - i] == '♔') {
+                    if (values[i] == '♔') {
                         break;
                     } else if (!blockerc) {
                         blockerc = true;
@@ -408,20 +436,19 @@ export default function App() {
             }
         }
         var blockerd = false;
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (i == 1 && values[index + i] == '♚') {
-                    continue;
-                }
-                if (values[index + i] == '♖' || values[index + i] == '♕') {
-                    if (values[index + i] == '♕' && !blockerd) {
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (values[i] == '♖' || values[i] == '♕') {
+                    if (values[i] == '♕' && !blockerd) {
                         return true;
-                    } else if (values[index + i] == '♖') {
+                    } else if (values[i] == '♖') {
                         return true;
                     }
                     break;
+                } else if (values[i] == '♚' && i == rightArray[index]) {
+                    continue;
                 } else {
-                    if (values[index + i] == '♔') {
+                    if (values[i] == '♔') {
                         break;
                     } else if (!blockerd) {
                         blockerd = true;
@@ -431,113 +458,93 @@ export default function App() {
                 }
             }
         }
-        if (index % 8 > 0) {
-            if (index % 8 > 1) {
-                if (values[index - 10] == '♘') {
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
                     return true;
-                }
-                if (values[index + 6] == '♘') {
-                    return true;
-                }
-            }
-            if (values[index - 17] == '♘') {
-                return true;
-            }
-            if (values[index + 15] == '♘') {
-                return true;
-            }
-        }
-        if (index % 8 < 7) {
-            if (index % 8 < 6) {
-                if (values[index - 6] == '♘') {
-                    return true;
-                }
-                if (values[index + 10] == '♘') {
-                    return true;
-                }
-            }
-            if (values[index - 15] == '♘') {
-                return true;
-            }
-            if (values[index + 17] == '♘') {
-                return true;
-            }
-        }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (i == 1 && values[index - (9 * i)] == '♚') {
+                } else if (values[i] == '♚' && i == upArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index - (9 * i)] == '🨶' || values[index - (9 * i)] == '🨌' || values[index - (9 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (i == 1 && values[index + (9 * i)] == '♚') {
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == downArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index + (9 * i)] == '🨶' || values[index + (9 * i)] == '🨌' || values[index + (9 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (i == 1 && values[index - (7 * i)] == '♚') {
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == upArray[rightArray[index]]) {
                     continue;
                 }
-                if (values[index - (7 * i)] == '🨶' || values[index - (7 * i)] == '🨌' || values[index - (7 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (i == 1 && values[index + (7 * i)] == '♚') {
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                    return true;
+                } else if (values[i] == '♚' && i == downArray[leftArray[index]]) {
                     continue;
                 }
-                if (values[index + (7 * i)] == '🨶' || values[index + (7 * i)] == '🨌' || values[index + (7 * i)] == '♕') {
-                    return true;
-                } else {
-                    break;
-                }
+                break;
             }
         }
-        if (values[index - 8] == '♔' || values[index - 8] == '🨌') {
+        if (values[upArray[index]] == '♔' || values[upArray[index]] == '🨌') {
             return true;
         }
-        if (values[index + 8] == '♔' || values[index + 8] == '🨌') {
+        if (values[downArray[index]] == '♔' || values[downArray[index]] == '🨌') {
             return true;
         }
-        if (index % 8 > 0) {
-            if (values[index - 1] == '♔' || values[index - 1] == '🨌') {
-                return true;
-            }
-            if (values[index - 9] == '♔' || values[index - 9] == '🨣') {
-                return true;
-            }
-            if (values[index + 7] == '♔' || values[index + 7] == '♙') {
-                return true;
-            }
+        if (values[leftArray[index]] == '♔' || values[leftArray[index]] == '🨌') {
+            return true;
         }
-        if (index % 8 < 7) {
-            if (values[index + 1] == '♔' || values[index + 1] == '🨌') {
-                return true;
-            }
-            if (values[index - 7] == '♔' || values[index - 7] == '🨣') {
-                return true;
-            }
-            if (values[index + 9] == '♔' || values[index + 9] == '♙') {
-                return true;
-            }
+        if (values[rightArray[index]] == '♔' || values[rightArray[index]] == '🨌') {
+            return true;
+        }
+        if (values[downArray[leftArray[index]]] == '♔' || values[downArray[leftArray[index]]] == '♙') {
+            return true;
+        }
+        if (values[downArray[rightArray[index]]] == '♔' || values[downArray[rightArray[index]]] == '♙') {
+            return true;
+        }
+        if (values[upArray[leftArray[index]]] == '♔' || values[upArray[leftArray[index]]] == '🨣') {
+            return true;
+        }
+        if (values[upArray[rightArray[index]]] == '♔' || values[upArray[rightArray[index]]] == '🨣') {
+            return true;
+        }
+        if (values[upArray[leftArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[leftArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[upArray[upArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[downArray[leftArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[upArray[rightArray[rightArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[rightArray[rightArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[upArray[upArray[rightArray[index]]]] == '♘') {
+            return true;
+        }
+        if (values[downArray[downArray[rightArray[index]]]] == '♘') {
+            return true;
         }
         return false;
     }
@@ -546,21 +553,21 @@ export default function App() {
         // check for black rooks, bishops and queens that will check white king if a white piece moves
         var discoverArray = [];
         var disca = '';
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (values[index - (8 * i)] != '♔' && values[index - (8 * i)] != '♚') {
-                    if (values[index - (8 * i)] == '♙' || values[index - (8 * i)] == '🨣' || values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♘' || values[index - (8 * i)] == '🨶' || values[index - (8 * i)] == '🨌' || values[index - (8 * i)] == '♕') {
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (whitePieces(values[i])) {
                         if (disca == '') {
                             disca = '♛';
-                            var aa = index - (8 * i);
-                            var ii = index - (8 * i);
+                            var aa = i;
+                            var ii = i;
                         } else if (disca == '♛' || disca == '♜') {
                             disca = '♜♜';
-                            var ii = index - (8 * i);
+                            var ii = i;
                         } else {
                             break;
                         }
-                    } else if (values[index - (8 * i)] == '♛') {
+                    } else if (values[i] == '♛') {
                         if (disca == '♛') {
                             disca = '♜♜';
                             discoverArray.push({ direction: 'up', piece: aa });
@@ -569,7 +576,7 @@ export default function App() {
                         } else {
                             break;
                         }
-                    } else if (values[index - (8 * i)] == '♜') {
+                    } else if (values[i] == '♜') {
                         if (disca == '♜♜') {
                             discoverArray.push({ direction: 'up', piece: ii });
                             break;
@@ -596,32 +603,32 @@ export default function App() {
             }
         }
         var discb = '';
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (values[index + (8 * i)] != '♔' && values[index + (8 * i)] != '♚') {
-                    if (values[index + (8 * i)] == '♙' || values[index + (8 * i)] == '🨣' || values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♘' || values[index + (8 * i)] == '🨶' || values[index + (8 * i)] == '🨌' || values[index + (8 * i)] == '♕') {
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (whitePieces(values[i])) {
                         if (discb == '') {
                             discb = '♛';
-                            var bb = index + (8 * i);
-                            var jj = index + (8 * i);
+                            var bb = i;
+                            var jj = i;
                         } else if (discb == '♛' || discb == '♜') {
                             discb = '♜♜';
-                            var jj = index + (8 * i);
+                            var jj = i;
                         } else {
                             break;
                         }
-                    } else if (values[index + (8 * i)] == '♛') {
+                    } else if (values[i] == '♛') {
                         if (discb == '♛') {
                             discb = '♜♜';
-                            discoverArray.push({ direction: 'up', piece: bb });
+                            discoverArray.push({ direction: 'down', piece: bb });
                         } else if (discb == '') {
                             discb = '♜';
                         } else {
                             break;
                         }
-                    } else if (values[index + (8 * i)] == '♜') {
+                    } else if (values[i] == '♜') {
                         if (discb == '♜♜') {
-                            discoverArray.push({ direction: 'up', piece: jj });
+                            discoverArray.push({ direction: 'down', piece: jj });
                             break;
                         } else if (discb == '') {
                             discb = '♜';
@@ -646,32 +653,32 @@ export default function App() {
             }
         }
         var discc = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (values[index - i] != '♔' && values[index - i] != '♚') {
-                    if (values[index - i] == '♙' || values[index - i] == '🨣' || values[index - i] == '♖' || values[index - i] == '♘' || values[index - i] == '🨶' || values[index - i] == '🨌' || values[index - i] == '♕') {
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (whitePieces(values[i])) {
                         if (discc == '') {
                             discc = '♛';
-                            var cc = index - i;
-                            var kk = index - i;
+                            var cc = i;
+                            var kk = i;
                         } else if (discc == '♛' || discc == '♜') {
                             discc = '♜♜';
-                            var kk = index - i;
+                            var kk = i;
                         } else {
                             break;
                         }
-                    } else if (values[index - i] == '♛') {
+                    } else if (values[i] == '♛') {
                         if (discc == '♛') {
                             discc = '♜♜';
-                            discoverArray.push({ direction: 'up', piece: cc });
+                            discoverArray.push({ direction: 'left', piece: cc });
                         } else if (discc == '') {
                             discc = '♜';
                         } else {
                             break;
                         }
-                    } else if (values[index - i] == '♜') {
+                    } else if (values[i] == '♜') {
                         if (discc == '♜♜') {
-                            discoverArray.push({ direction: 'up', piece: kk });
+                            discoverArray.push({ direction: 'left', piece: kk });
                             break;
                         } else if (discc == '') {
                             discc = '♜';
@@ -696,32 +703,32 @@ export default function App() {
             }
         }
         var discd = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (values[index + i] != '♔' && values[index + i] != '♚') {
-                    if (values[index + i] == '♙' || values[index + i] == '🨣' || values[index + i] == '♖' || values[index + i] == '♘' || values[index + i] == '🨶' || values[index + i] == '🨌' || values[index + i] == '♕') {
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (whitePieces(values[i])) {
                         if (discd == '') {
                             discd = '♛';
-                            var dd = index + i;
-                            var ll = index + i;
+                            var dd = i;
+                            var ll = i;
                         } else if (discd == '♛' || discd == '♜') {
                             discd = '♜♜';
-                            var ll = index + i;
+                            var ll = i;
                         } else {
                             break;
                         }
-                    } else if (values[index + i] == '♛') {
+                    } else if (values[i] == '♛') {
                         if (discd == '♛') {
                             discd = '♜♜';
-                            discoverArray.push({ direction: 'up', piece: dd });
+                            discoverArray.push({ direction: 'right', piece: dd });
                         } else if (discd == '') {
                             discd = '♜';
                         } else {
                             break;
                         }
-                    } else if (values[index + i] == '♜') {
+                    } else if (values[i] == '♜') {
                         if (discd == '♜♜') {
-                            discoverArray.push({ direction: 'up', piece: ll });
+                            discoverArray.push({ direction: 'right', piece: ll });
                             break;
                         } else if (discd == '') {
                             discd = '♜';
@@ -745,92 +752,76 @@ export default function App() {
                 }
             }
         }
-        var disce = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (values[index - (9 * i)] == '♙' || values[index - (9 * i)] == '🨣' || values[index - (9 * i)] == '♖' || values[index - (9 * i)] == '♘' || values[index - (9 * i)] == '🨶' || values[index - (9 * i)] == '🨌' || values[index - (9 * i)] == '♕') {
-                    if (disce.length > 0) {
-                        break;
-                    } else {
-                        disce = values[index - (9 * i)];
-                        var ee = index - (9 * i);
+        var disce = -1;
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (disce == -1) {
+                        disce = i;
                     }
-                } else if (disce.length > 0) {
-                    if (values[index - (9 * i)] == '🨼' || values[index - (9 * i)] == '🨒' || values[index - (9 * i)] == '♛') {
-                        discoverArray.push({ direction: 'up-left', piece: ee });
-                        break;
-                    } else {
+                    break;
+                } else if (disce > -1) {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'up-left', piece: disce });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discf = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (values[index + (9 * i)] == '♙' || values[index + (9 * i)] == '🨣' || values[index + (9 * i)] == '♖' || values[index + (9 * i)] == '♘' || values[index + (9 * i)] == '🨶' || values[index + (9 * i)] == '🨌' || values[index + (9 * i)] == '♕') {
-                    if (discf.length > 0) {
-                        break;
-                    } else {
-                        discf = values[index + (9 * i)];
-                        var ff = index + (9 * i);
+        var discf = -1;
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (discf == -1) {
+                        discf = i;
                     }
-                } else if (discf.length > 0) {
-                    if (values[index + (9 * i)] == '🨼' || values[index + (9 * i)] == '🨒' || values[index + (9 * i)] == '♛') {
-                        discoverArray.push({ direction: 'down-right', piece: ff });
-                        break;
-                    } else {
+                    break;
+                } else if (discf > -1) {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'down-right', piece: discf });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discg = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (values[index - (7 * i)] == '♙' || values[index - (7 * i)] == '🨣' || values[index - (7 * i)] == '♖' || values[index - (7 * i)] == '♘' || values[index - (7 * i)] == '🨶' || values[index - (7 * i)] == '🨌' || values[index - (7 * i)] == '♕') {
-                    if (discg.length > 0) {
-                        break;
-                    } else {
-                        discg = values[index - (7 * i)];
-                        var gg = index - (7 * i);
+        var discg = -1;
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (discg == -1) {
+                        discg = i;
                     }
-                } else if (discg.length > 0) {
-                    if (values[index - (7 * i)] == '🨼' || values[index - (7 * i)] == '🨒' || values[index - (7 * i)] == '♛') {
-                        discoverArray.push({ direction: 'up-right', piece: gg });
-                        break;
-                    } else {
+                    break;
+                } else if (discg > -1) {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'up-right', piece: discg });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var disch = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (values[index + (7 * i)] == '♙' || values[index + (7 * i)] == '🨣' || values[index + (7 * i)] == '♖' || values[index + (7 * i)] == '♘' || values[index + (7 * i)] == '🨶' || values[index + (7 * i)] == '🨌' || values[index + (7 * i)] == '♕') {
-                    if (disch.length > 0) {
-                        break;
-                    } else {
-                        disch = values[index + (7 * i)];
-                        var hh = index + (7 * i);
+        var disch = -1;
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (whitePieces(values[i])) {
+                    if (disch == -1) {
+                        disch = i;
                     }
-                } else if (disch.length > 0) {
-                    if (values[index + (7 * i)] == '🨼' || values[index + (7 * i)] == '🨒' || values[index + (7 * i)] == '♛') {
-                        discoverArray.push({ direction: 'down-left', piece: hh });
-                        break;
-                    } else {
+                    break;
+                } else if (disch > -1) {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        discoverArray.push({ direction: 'down-left', piece: disch });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
         return discoverArray;
@@ -840,21 +831,21 @@ export default function App() {
         // check for white rooks, bishops and queens that will check black king if a black piece moves
         var discoverArray = [];
         var disca = '';
-        for (let i = 1; i <= Math.floor(index / 8); i++) {
-            if (values[index - (8 * i)] != '') {
-                if (values[index - (8 * i)] != '♔' && values[index - (8 * i)] != '♚') {
-                    if (values[index - (8 * i)] == '♟' || values[index - (8 * i)] == '🨩' || values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♞' || values[index - (8 * i)] == '🨼' || values[index - (8 * i)] == '🨒' || values[index - (8 * i)] == '♛') {
+        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (blackPieces(values[i])) {
                         if (disca == '') {
                             disca = '♕';
-                            var aa = index - (8 * i);
-                            var ii = index - (8 * i);
+                            var aa = i;
+                            var ii = i;
                         } else if (disca == '♕' || disca == '♖') {
                             disca = '♖♖';
-                            var ii = index - (8 * i);
+                            var ii = i;
                         } else {
                             break;
                         }
-                    } else if (values[index - (8 * i)] == '♕') {
+                    } else if (values[i] == '♕') {
                         if (disca == '♕') {
                             disca = '♖♖';
                             discoverArray.push({ direction: 'up', piece: aa });
@@ -863,7 +854,7 @@ export default function App() {
                         } else {
                             break;
                         }
-                    } else if (values[index - (8 * i)] == '♖') {
+                    } else if (values[i] == '♖') {
                         if (disca == '♖♖') {
                             discoverArray.push({ direction: 'up', piece: ii });
                             break;
@@ -890,32 +881,32 @@ export default function App() {
             }
         }
         var discb = '';
-        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-            if (values[index + (8 * i)] != '') {
-                if (values[index + (8 * i)] != '♔' && values[index + (8 * i)] != '♚') {
-                    if (values[index + (8 * i)] == '♟' || values[index + (8 * i)] == '🨩' || values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♞' || values[index + (8 * i)] == '🨼' || values[index + (8 * i)] == '🨒' || values[index + (8 * i)] == '♛') {
+        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (blackPieces(values[i])) {
                         if (discb == '') {
                             discb = '♕';
-                            var bb = index + (8 * i);
-                            var jj = index + (8 * i);
+                            var bb = i;
+                            var jj = i;
                         } else if (discb == '♕' || discb == '♖') {
                             discb = '♖♖';
-                            var jj = index + (8 * i);
+                            var jj = i;
                         } else {
                             break;
                         }
-                    } else if (values[index + (8 * i)] == '♕') {
+                    } else if (values[i] == '♕') {
                         if (discb == '♕') {
                             discb = '♖♖';
-                            discoverArray.push({ direction: 'up', piece: bb });
+                            discoverArray.push({ direction: 'down', piece: bb });
                         } else if (discb == '') {
                             discb = '♖';
                         } else {
                             break;
                         }
-                    } else if (values[index + (8 * i)] == '♖') {
+                    } else if (values[i] == '♖') {
                         if (discb == '♖♖') {
-                            discoverArray.push({ direction: 'up', piece: jj });
+                            discoverArray.push({ direction: 'down', piece: jj });
                             break;
                         } else if (discb == '') {
                             discb = '♖';
@@ -940,32 +931,32 @@ export default function App() {
             }
         }
         var discc = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - i] != '') {
-                if (values[index - i] != '♔' && values[index - i] != '♚') {
-                    if (values[index - i] == '♟' || values[index - i] == '🨩' || values[index - i] == '♜' || values[index - i] == '♞' || values[index - i] == '🨼' || values[index - i] == '🨒' || values[index - i] == '♛') {
+        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (blackPieces(values[i])) {
                         if (discc == '') {
                             discc = '♕';
-                            var cc = index - i;
-                            var kk = index - i;
+                            var cc = i;
+                            var kk = i;
                         } else if (discc == '♕' || discc == '♖') {
                             discc = '♖♖';
-                            var kk = index - i;
+                            var kk = i;
                         } else {
                             break;
                         }
-                    } else if (values[index - i] == '♕') {
+                    } else if (values[i] == '♕') {
                         if (discc == '♕') {
                             discc = '♖♖';
-                            discoverArray.push({ direction: 'up', piece: cc });
+                            discoverArray.push({ direction: 'left', piece: cc });
                         } else if (discc == '') {
                             discc = '♖';
                         } else {
                             break;
                         }
-                    } else if (values[index - i] == '♖') {
+                    } else if (values[i] == '♖') {
                         if (discc == '♖♖') {
-                            discoverArray.push({ direction: 'up', piece: kk });
+                            discoverArray.push({ direction: 'left', piece: kk });
                             break;
                         } else if (discc == '') {
                             discc = '♖';
@@ -990,32 +981,32 @@ export default function App() {
             }
         }
         var discd = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + i] != '') {
-                if (values[index + i] != '♔' && values[index + i] != '♚') {
-                    if (values[index + i] == '♟' || values[index + i] == '🨩' || values[index + i] == '♜' || values[index + i] == '♞' || values[index + i] == '🨼' || values[index + i] == '🨒' || values[index + i] == '♛') {
+        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+            if (values[i] != '') {
+                if (values[i] != '♔' && values[i] != '♚') {
+                    if (blackPieces(values[i])) {
                         if (discd == '') {
                             discd = '♕';
-                            var dd = index + i;
-                            var ll = index + i;
+                            var dd = i;
+                            var ll = i;
                         } else if (discd == '♕' || discd == '♖') {
                             discd = '♖♖';
-                            var ll = index + i;
+                            var ll = i;
                         } else {
                             break;
                         }
-                    } else if (values[index + i] == '♕') {
+                    } else if (values[i] == '♕') {
                         if (discd == '♕') {
                             discd = '♖♖';
-                            discoverArray.push({ direction: 'up', piece: dd });
+                            discoverArray.push({ direction: 'right', piece: dd });
                         } else if (discd == '') {
                             discd = '♖';
                         } else {
                             break;
                         }
-                    } else if (values[index + i] == '♖') {
+                    } else if (values[i] == '♖') {
                         if (discd == '♖♖') {
-                            discoverArray.push({ direction: 'up', piece: ll });
+                            discoverArray.push({ direction: 'right', piece: ll });
                             break;
                         } else if (discd == '') {
                             discd = '♖';
@@ -1039,92 +1030,76 @@ export default function App() {
                 }
             }
         }
-        var disce = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index - (9 * i)] != '') {
-                if (values[index - (9 * i)] == '♟' || values[index - (9 * i)] == '🨩' || values[index - (9 * i)] == '♜' || values[index - (9 * i)] == '♞' || values[index - (9 * i)] == '🨼' || values[index - (9 * i)] == '🨒' || values[index - (9 * i)] == '♛') {
-                    if (disce.length > 0) {
-                        break;
-                    } else {
-                        disce = values[index - (9 * i)];
-                        var ee = index - (9 * i);
+        var disce = -1;
+        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (disce == -1) {
+                        disce = i;
                     }
-                } else if (disce.length > 0) {
-                    if (values[index - (9 * i)] == '🨶' || values[index - (9 * i)] == '🨌' || values[index - (9 * i)] == '♕') {
-                        discoverArray.push({ direction: 'up-left', piece: ee });
-                        break;
-                    } else {
+                    break;
+                } else if (disce > -1) {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'up-left', piece: disce });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discf = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index + (9 * i)] != '') {
-                if (values[index + (9 * i)] == '♟' || values[index + (9 * i)] == '🨩' || values[index + (9 * i)] == '♜' || values[index + (9 * i)] == '♞' || values[index + (9 * i)] == '🨼' || values[index + (9 * i)] == '🨒' || values[index + (9 * i)] == '♛') {
-                    if (discf.length > 0) {
-                        break;
-                    } else {
-                        discf = values[index + (9 * i)];
-                        var ff = index + (9 * i);
+        var discf = -1;
+        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (discf == -1) {
+                        discf = i;
                     }
-                } else if (discf.length > 0) {
-                    if (values[index + (9 * i)] == '🨶' || values[index + (9 * i)] == '🨌' || values[index + (9 * i)] == '♕') {
-                        discoverArray.push({ direction: 'down-right', piece: ff });
-                        break;
-                    } else {
+                    break;
+                } else if (discf > -1) {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'down-right', piece: discf });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var discg = '';
-        for (let i = 1; i < 8 - (index % 8); i++) {
-            if (values[index - (7 * i)] != '') {
-                if (values[index - (7 * i)] == '♟' || values[index - (7 * i)] == '🨩' || values[index - (7 * i)] == '♜' || values[index - (7 * i)] == '♞' || values[index - (7 * i)] == '🨼' || values[index - (7 * i)] == '🨒' || values[index - (7 * i)] == '♛') {
-                    if (discg.length > 0) {
-                        break;
-                    } else {
-                        discg = values[index - (7 * i)];
-                        var gg = index - (7 * i);
+        var discg = -1;
+        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (discg == -1) {
+                        discg = i;
                     }
-                } else if (discg.length > 0) {
-                    if (values[index - (7 * i)] == '🨶' || values[index - (7 * i)] == '🨌' || values[index - (7 * i)] == '♕') {
-                        discoverArray.push({ direction: 'up-right', piece: gg });
-                        break;
-                    } else {
+                    break;
+                } else if (discg > -1) {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'up-right', piece: discg });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
-        var disch = '';
-        for (let i = 1; i <= (index % 8); i++) {
-            if (values[index + (7 * i)] != '') {
-                if (values[index + (7 * i)] == '♟' || values[index + (7 * i)] == '🨩' || values[index + (7 * i)] == '♜' || values[index + (7 * i)] == '♞' || values[index + (7 * i)] == '🨼' || values[index + (7 * i)] == '🨒' || values[index + (7 * i)] == '♛') {
-                    if (disch.length > 0) {
-                        break;
-                    } else {
-                        disch = values[index + (7 * i)];
-                        var hh = index + (7 * i);
+        var disch = -1;
+        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+            if (values[i] != '') {
+                if (blackPieces(values[i])) {
+                    if (disch == -1) {
+                        disch = i;
                     }
-                } else if (disch.length > 0) {
-                    if (values[index + (7 * i)] == '🨶' || values[index + (7 * i)] == '🨌' || values[index + (7 * i)] == '♕') {
-                        discoverArray.push({ direction: 'down-left', piece: hh });
-                        break;
-                    } else {
+                    break;
+                } else if (disch > -1) {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        discoverArray.push({ direction: 'down-left', piece: disch });
                         break;
                     }
-                } else {
                     break;
                 }
+                break;
             }
         }
         return discoverArray;
@@ -1134,20 +1109,20 @@ export default function App() {
         var checkArray = [];
         if (colour == 'Black') {
             var blockera = false;
-            for (let i = 1; i <= Math.floor(index / 8); i++) {
-                if (values[index - (8 * i)] != '') {
+            for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                if (values[i] != '') {
                     if (blockera) {
-                        if (values[index - (8 * i)] == '♖') {
-                            checkArray.push({ index: index - (8 * i), piece: '♖' });
+                        if (values[i] == '♖') {
+                            checkArray.push({ index: i, piece: '♖' });
                         }
                     } else {
-                        if (values[index - (8 * i)] == '♖') {
+                        if (values[i] == '♖') {
                             blockera = true;
-                            checkArray.push({ index: index - (8 * i), piece: '♖' });
-                        } else if (values[index - (8 * i)] == '♕') {
+                            checkArray.push({ index: i, piece: '♖' });
+                        } else if (values[i] == '♕') {
                             blockera = true;
-                            checkArray.push({ index: index - (8 * i), piece: '♕' });
-                        } else if (values[index - (8 * i)] != '♔') {
+                            checkArray.push({ index: i, piece: '♕' });
+                        } else if (values[i] != '♔') {
                             blockera = true;
                         } else {
                             break;
@@ -1156,20 +1131,20 @@ export default function App() {
                 }
             }
             var blockerb = false;
-            for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                if (values[index + (8 * i)] != '') {
+            for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                if (values[i] != '') {
                     if (blockerb) {
-                        if (values[index + (8 * i)] == '♖') {
-                            checkArray.push({ index: index + (8 * i), piece: '♖' });
+                        if (values[i] == '♖') {
+                            checkArray.push({ index: i, piece: '♖' });
                         }
                     } else {
-                        if (values[index + (8 * i)] == '♖') {
+                        if (values[i] == '♖') {
                             blockerb = true;
-                            checkArray.push({ index: index + (8 * i), piece: '♖' });
-                        } else if (values[index + (8 * i)] == '♕') {
+                            checkArray.push({ index: i, piece: '♖' });
+                        } else if (values[i] == '♕') {
                             blockerb = true;
-                            checkArray.push({ index: index + (8 * i), piece: '♕' });
-                        } else if (values[index + (8 * i)] != '♔') {
+                            checkArray.push({ index: i, piece: '♕' });
+                        } else if (values[i] != '♔') {
                             blockerb = true;
                         } else {
                             break;
@@ -1178,20 +1153,20 @@ export default function App() {
                 }
             }
             var blockerc = false;
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - i] != '') {
+            for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                if (values[i] != '') {
                     if (blockerc) {
-                        if (values[index - i] == '♖') {
-                            checkArray.push({ index: index - i, piece: '♖' });
+                        if (values[i] == '♖') {
+                            checkArray.push({ index: i, piece: '♖' });
                         }
                     } else {
-                        if (values[index - i] == '♖') {
+                        if (values[i] == '♖') {
                             blockerc = true;
-                            checkArray.push({ index: index - i, piece: '♖' });
-                        } else if (values[index - i] == '♕') {
+                            checkArray.push({ index: i, piece: '♖' });
+                        } else if (values[i] == '♕') {
                             blockerc = true;
-                            checkArray.push({ index: index - i, piece: '♕' });
-                        } else if (values[index - i] != '♔') {
+                            checkArray.push({ index: i, piece: '♕' });
+                        } else if (values[i] != '♔') {
                             blockerc = true;
                         } else {
                             break;
@@ -1200,20 +1175,20 @@ export default function App() {
                 }
             }
             var blockerd = false;
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + i] != '') {
+            for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                if (values[i] != '') {
                     if (blockerd) {
-                        if (values[index + i] == '♖') {
-                            checkArray.push({ index: index + i, piece: '♖' });
+                        if (values[i] == '♖') {
+                            checkArray.push({ index: i, piece: '♖' });
                         }
                     } else {
-                        if (values[index + i] == '♖') {
+                        if (values[i] == '♖') {
                             blockerd = true;
-                            checkArray.push({ index: index + i, piece: '♖' });
-                        } else if (values[index + i] == '♕') {
+                            checkArray.push({ index: i, piece: '♖' });
+                        } else if (values[i] == '♕') {
                             blockerd = true;
-                            checkArray.push({ index: index + i, piece: '♕' });
-                        } else if (values[index + i] != '♔') {
+                            checkArray.push({ index: i, piece: '♕' });
+                        } else if (values[i] != '♔') {
                             blockerd = true;
                         } else {
                             break;
@@ -1221,118 +1196,106 @@ export default function App() {
                     }
                 }
             }
-            if (index % 8 > 0) {
-                if (index % 8 > 1) {
-                    if (values[index - 10] == '♘' || values[index - 10] == '♕') {
-                        checkArray.push({ index: index - 10, piece: values[index - 10] });
+            for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
+                        break;
                     }
-                    if (values[index + 6] == '♘' || values[index + 6] == '♕') {
-                        checkArray.push({ index: index + 6, piece: values[index + 6] });
-                    }
-                }
-                if (values[index - 17] == '♘' || values[index - 17] == '♕') {
-                    checkArray.push({ index: index - 17, piece: values[index - 17] });
-                }
-                if (values[index + 15] == '♘' || values[index + 15] == '♕') {
-                    checkArray.push({ index: index + 15, piece: values[index + 15] });
-                }
-                if (values[index + 7] == '♙' || values[index + 7] == '🨣') {
-                    checkArray.push({ index: index + 7, piece: values[index + 7] });
-                }
-                if (values[index - 9] == '🨣') {
-                    checkArray.push({ index: index - 9, piece: '🨣' });
-                }
-                if (values[index - 1] == '🨌') {
-                    checkArray.push({ index: index - 1, piece: '🨌' });
+                    break;
                 }
             }
-            if (index % 8 < 7) {
-                if (index % 8 < 6) {
-                    if (values[index - 6] == '♘' || values[index - 6] == '♕') {
-                        checkArray.push({ index: index - 6, piece: values[index - 6] });
-                    }
-                    if (values[index + 10] == '♘' || values[index + 10] == '♕') {
-                        checkArray.push({ index: index + 10, piece: values[index + 10] });
-                    }
-                }
-                if (values[index - 15] == '♘' || values[index - 15] == '♕') {
-                    checkArray.push({ index: index - 15, piece: values[index - 15] });
-                }
-                if (values[index + 17] == '♘' || values[index + 17] == '♕') {
-                    checkArray.push({ index: index + 17, piece: values[index + 17] });
-                }
-                if (values[index + 9] == '♙' || values[index + 9] == '🨣') {
-                    checkArray.push({ index: index + 9, piece: values[index + 9] });
-                }
-                if (values[index - 7] == '🨣') {
-                    checkArray.push({ index: index - 7, piece: '🨣' });
-                }
-                if (values[index + 1] == '🨌') {
-                    checkArray.push({ index: index + 1, piece: '🨌' });
-                }
-            }
-            if (values[index - 8] == '🨌') {
-                checkArray.push({ index: index - 8, piece: '🨌' });
-            }
-            if (values[index + 8] == '🨌') {
-                checkArray.push({ index: index + 8, piece: '🨌' });
-            }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - (9 * i)] != '') {
-                    if (values[index - (9 * i)] == '🨶' || values[index - (9 * i)] == '🨌' || values[index - (9 * i)] == '♕') {
-                        checkArray.push({ index: index - (9 * i), piece: values[index - (9 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + (9 * i)] != '') {
-                    if (values[index + (9 * i)] == '🨶' || values[index + (9 * i)] == '🨌' || values[index + (9 * i)] == '♕') {
-                        checkArray.push({ index: index + (9 * i), piece: values[index + (9 * i)] });
-                        break;
-                    } else {
+            for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index - (7 * i)] != '') {
-                    if (values[index - (7 * i)] == '🨶' || values[index - (7 * i)] == '🨌' || values[index - (7 * i)] == '♕') {
-                        checkArray.push({ index: index - (7 * i), piece: values[index - (7 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index + (7 * i)] != '') {
-                    if (values[index + (7 * i)] == '🨶' || values[index + (7 * i)] == '🨌' || values[index + (7 * i)] == '♕') {
-                        checkArray.push({ index: index + (7 * i), piece: values[index + (7 * i)] });
-                        break;
-                    } else {
-                        break;
-                    }
-                }
+            if (values[upArray[index]] == '🨌') {
+                checkArray.push({ index: upArray[index], piece: '🨌' });
+            }
+            if (values[downArray[index]] == '🨌') {
+                checkArray.push({ index: downArray[index], piece: '🨌' });
+            }
+            if (values[rightArray[index]] == '🨌') {
+                checkArray.push({ index: rightArray[index], piece: '🨌' });
+            }
+            if (values[leftArray[index]] == '🨌') {
+                checkArray.push({ index: leftArray[index], piece: '🨌' });
+            }
+            if (values[upArray[leftArray[index]]] == '🨣') {
+                checkArray.push({ index: upArray[leftArray[index]], piece: '🨣' });
+            }
+            if (values[upArray[rightArray[index]]] == '🨣') {
+                checkArray.push({ index: upArray[rightArray[index]], piece: '🨣' });
+            }
+            if (values[downArray[leftArray[index]]] == '♙' || values[downArray[leftArray[index]]] == '🨣') {
+                checkArray.push({ index: downArray[leftArray[index]], piece: values[downArray[leftArray[index]]] });
+            }
+            if (values[downArray[rightArray[index]]] == '♙' || values[downArray[rightArray[index]]] == '🨣') {
+                checkArray.push({ index: downArray[rightArray[index]], piece: values[downArray[rightArray[index]]] });
+            }
+            if (values[upArray[leftArray[leftArray[index]]]] == '♘' || values[upArray[leftArray[leftArray[index]]]] == '♕') {
+                checkArray.push({ index: upArray[leftArray[leftArray[index]]], piece: values[upArray[leftArray[leftArray[index]]]] });
+            }
+            if (values[downArray[leftArray[leftArray[index]]]] == '♘' || values[downArray[leftArray[leftArray[index]]]] == '♕') {
+                checkArray.push({ index: downArray[leftArray[leftArray[index]]], piece: values[downArray[leftArray[leftArray[index]]]] });
+            }
+            if (values[upArray[upArray[leftArray[index]]]] == '♘' || values[upArray[upArray[leftArray[index]]]] == '♕') {
+                checkArray.push({ index: upArray[upArray[leftArray[index]]], piece: values[upArray[upArray[leftArray[index]]]] });
+            }
+            if (values[downArray[downArray[leftArray[index]]]] == '♘' || values[downArray[downArray[leftArray[index]]]] == '♕') {
+                checkArray.push({ index: downArray[downArray[leftArray[index]]], piece: values[downArray[downArray[leftArray[index]]]] });
+            }
+            if (values[upArray[rightArray[rightArray[index]]]] == '♘' || values[upArray[rightArray[rightArray[index]]]] == '♕') {
+                checkArray.push({ index: upArray[rightArray[rightArray[index]]], piece: values[upArray[rightArray[rightArray[index]]]] });
+            }
+            if (values[downArray[rightArray[rightArray[index]]]] == '♘' || values[downArray[rightArray[rightArray[index]]]] == '♕') {
+                checkArray.push({ index: downArray[rightArray[rightArray[index]]], piece: values[downArray[rightArray[rightArray[index]]]] });
+            }
+            if (values[upArray[upArray[rightArray[index]]]] == '♘' || values[upArray[upArray[rightArray[index]]]] == '♕') {
+                checkArray.push({ index: upArray[upArray[rightArray[index]]], piece: values[upArray[upArray[rightArray[index]]]] });
+            }
+            if (values[downArray[downArray[rightArray[index]]]] == '♘' || values[downArray[downArray[rightArray[index]]]] == '♕') {
+                checkArray.push({ index: downArray[downArray[rightArray[index]]], piece: values[downArray[downArray[rightArray[index]]]] });
             }
         } else if (colour == 'White') {
             var blockera = false;
-            for (let i = 1; i <= Math.floor(index / 8); i++) {
-                if (values[index - (8 * i)] != '') {
+            for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                if (values[i] != '') {
                     if (blockera) {
-                        if (values[index - (8 * i)] == '♜') {
-                            checkArray.push({ index: index - (8 * i), piece: '♜' });
+                        if (values[i] == '♜') {
+                            checkArray.push({ index: i, piece: '♜' });
                         }
                     } else {
-                        if (values[index - (8 * i)] == '♜') {
+                        if (values[i] == '♜') {
                             blockera = true;
-                            checkArray.push({ index: index - (8 * i), piece: '♜' });
-                        } else if (values[index - (8 * i)] == '♛') {
+                            checkArray.push({ index: i, piece: '♜' });
+                        } else if (values[i] == '♛') {
                             blockera = true;
-                            checkArray.push({ index: index - (8 * i), piece: '♛' });
-                        } else if (values[index - (8 * i)] != '♚') {
+                            checkArray.push({ index: i, piece: '♛' });
+                        } else if (values[i] != '♚') {
                             blockera = true;
                         } else {
                             break;
@@ -1341,20 +1304,20 @@ export default function App() {
                 }
             }
             var blockerb = false;
-            for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                if (values[index + (8 * i)] != '') {
+            for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                if (values[i] != '') {
                     if (blockerb) {
-                        if (values[index + (8 * i)] == '♜') {
-                            checkArray.push({ index: index + (8 * i), piece: '♜' });
+                        if (values[i] == '♜') {
+                            checkArray.push({ index: i, piece: '♜' });
                         }
                     } else {
-                        if (values[index + (8 * i)] == '♜') {
+                        if (values[i] == '♜') {
                             blockerb = true;
-                            checkArray.push({ index: index + (8 * i), piece: '♜' });
-                        } else if (values[index + (8 * i)] == '♛') {
+                            checkArray.push({ index: i, piece: '♜' });
+                        } else if (values[i] == '♛') {
                             blockerb = true;
-                            checkArray.push({ index: index + (8 * i), piece: '♛' });
-                        } else if (values[index + (8 * i)] != '♚') {
+                            checkArray.push({ index: i, piece: '♛' });
+                        } else if (values[i] != '♚') {
                             blockerb = true;
                         } else {
                             break;
@@ -1363,20 +1326,20 @@ export default function App() {
                 }
             }
             var blockerc = false;
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - i] != '') {
+            for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                if (values[i] != '') {
                     if (blockerc) {
-                        if (values[index - i] == '♜') {
-                            checkArray.push({ index: index - i, piece: '♜' });
+                        if (values[i] == '♜') {
+                            checkArray.push({ index: i, piece: '♜' });
                         }
                     } else {
-                        if (values[index - i] == '♜') {
+                        if (values[i] == '♜') {
                             blockerc = true;
-                            checkArray.push({ index: index - i, piece: '♜' });
-                        } else if (values[index - i] == '♛') {
+                            checkArray.push({ index: i, piece: '♜' });
+                        } else if (values[i] == '♛') {
                             blockerc = true;
-                            checkArray.push({ index: index - i, piece: '♛' });
-                        } else if (values[index - i] != '♚') {
+                            checkArray.push({ index: i, piece: '♛' });
+                        } else if (values[i] != '♚') {
                             blockerc = true;
                         } else {
                             break;
@@ -1385,20 +1348,20 @@ export default function App() {
                 }
             }
             var blockerd = false;
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + i] != '') {
+            for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                if (values[i] != '') {
                     if (blockerd) {
-                        if (values[index + i] == '♜') {
-                            checkArray.push({ index: index + i, piece: '♜' });
+                        if (values[i] == '♜') {
+                            checkArray.push({ index: i, piece: '♜' });
                         }
                     } else {
-                        if (values[index + i] == '♜') {
+                        if (values[i] == '♜') {
                             blockerd = true;
-                            checkArray.push({ index: index + i, piece: '♜' });
-                        } else if (values[index + i] == '♛') {
+                            checkArray.push({ index: i, piece: '♜' });
+                        } else if (values[i] == '♛') {
                             blockerd = true;
-                            checkArray.push({ index: index + i, piece: '♛' });
-                        } else if (values[index + i] != '♚') {
+                            checkArray.push({ index: i, piece: '♛' });
+                        } else if (values[i] != '♚') {
                             blockerd = true;
                         } else {
                             break;
@@ -1406,104 +1369,178 @@ export default function App() {
                     }
                 }
             }
-            if (index % 8 > 0) {
-                if (index % 8 > 1) {
-                    if (values[index - 10] == '♞' || values[index - 10] == '♛') {
-                        checkArray.push({ index: index - 10, piece: values[index - 10] });
+            for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
+                        break;
                     }
-                    if (values[index + 6] == '♞' || values[index + 6] == '♛') {
-                        checkArray.push({ index: index + 6, piece: values[index + 6] });
-                    }
-                }
-                if (values[index - 17] == '♞' || values[index - 17] == '♛') {
-                    checkArray.push({ index: index - 17, piece: values[index - 17] });
-                }
-                if (values[index + 15] == '♞' || values[index + 15] == '♛') {
-                    checkArray.push({ index: index + 15, piece: values[index + 15] });
-                }
-                if (values[index + 7] == '♟' || values[index + 7] == '🨩') {
-                    checkArray.push({ index: index + 7, piece: values[index + 7] });
-                }
-                if (values[index - 9] == '🨩') {
-                    checkArray.push({ index: index - 9, piece: '🨩' });
-                }
-                if (values[index - 1] == '🨒') {
-                    checkArray.push({ index: index - 1, piece: '🨒' });
+                    break;
                 }
             }
-            if (index % 8 < 7) {
-                if (index % 8 < 6) {
-                    if (values[index - 6] == '♞' || values[index - 6] == '♛') {
-                        checkArray.push({ index: index - 6, piece: values[index - 6] });
-                    }
-                    if (values[index + 10] == '♞' || values[index + 10] == '♛') {
-                        checkArray.push({ index: index + 10, piece: values[index + 10] });
-                    }
-                }
-                if (values[index - 15] == '♞' || values[index - 15] == '♛') {
-                    checkArray.push({ index: index - 15, piece: values[index - 15] });
-                }
-                if (values[index + 17] == '♞' || values[index + 17] == '♛') {
-                    checkArray.push({ index: index + 17, piece: values[index + 17] });
-                }
-                if (values[index + 9] == '♟' || values[index + 9] == '🨩') {
-                    checkArray.push({ index: index + 9, piece: values[index + 9] });
-                }
-                if (values[index - 7] == '🨩') {
-                    checkArray.push({ index: index - 7, piece: '🨩' });
-                }
-                if (values[index + 1] == '🨒') {
-                    checkArray.push({ index: index + 1, piece: '🨒' });
-                }
-            }
-            if (values[index - 8] == '🨒') {
-                checkArray.push({ index: index - 8, piece: '🨒' });
-            }
-            if (values[index + 8] == '🨒') {
-                checkArray.push({ index: index + 8, piece: '🨒' });
-            }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index - (9 * i)] != '') {
-                    if (values[index - (9 * i)] == '🨼' || values[index - (9 * i)] == '🨒' || values[index - (9 * i)] == '♛') {
-                        checkArray.push({ index: index - (9 * i), piece: values[index - (9 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index + (9 * i)] != '') {
-                    if (values[index + (9 * i)] == '🨼' || values[index + (9 * i)] == '🨒' || values[index + (9 * i)] == '♛') {
-                        checkArray.push({ index: index + (9 * i), piece: values[index + (9 * i)] });
-                        break;
-                    } else {
+            for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i < 8 - (index % 8); i++) {
-                if (values[index - (7 * i)] != '') {
-                    if (values[index - (7 * i)] == '🨼' || values[index - (7 * i)] == '🨒' || values[index - (7 * i)] == '♛') {
-                        checkArray.push({ index: index - (7 * i), piece: values[index - (7 * i)] });
-                        break;
-                    } else {
+            for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                if (values[i] != '') {
+                    if (values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                        checkArray.push({ index: i, piece: values[i] });
                         break;
                     }
+                    break;
                 }
             }
-            for (let i = 1; i <= (index % 8); i++) {
-                if (values[index + (7 * i)] != '') {
-                    if (values[index + (7 * i)] == '🨼' || values[index + (7 * i)] == '🨒' || values[index + (7 * i)] == '♛') {
-                        checkArray.push({ index: index + (7 * i), piece: values[index + (7 * i)] });
-                        break;
-                    } else {
-                        break;
-                    }
-                }
+            if (values[upArray[index]] == '🨒') {
+                checkArray.push({ index: upArray[index], piece: '🨒' });
+            }
+            if (values[downArray[index]] == '🨒') {
+                checkArray.push({ index: downArray[index], piece: '🨒' });
+            }
+            if (values[rightArray[index]] == '🨒') {
+                checkArray.push({ index: rightArray[index], piece: '🨒' });
+            }
+            if (values[leftArray[index]] == '🨒') {
+                checkArray.push({ index: leftArray[index], piece: '🨒' });
+            }
+            if (values[downArray[leftArray[index]]] == '🨩') {
+                checkArray.push({ index: downArray[leftArray[index]], piece: '🨩' });
+            }
+            if (values[downArray[rightArray[index]]] == '🨩') {
+                checkArray.push({ index: downArray[rightArray[index]], piece: '🨩' });
+            }
+            if (values[upArray[leftArray[index]]] == '♟' || values[upArray[leftArray[index]]] == '🨩') {
+                checkArray.push({ index: upArray[leftArray[index]], piece: values[upArray[leftArray[index]]] });
+            }
+            if (values[upArray[rightArray[index]]] == '♟' || values[upArray[rightArray[index]]] == '🨩') {
+                checkArray.push({ index: upArray[rightArray[index]], piece: values[upArray[rightArray[index]]] });
+            }
+            if (values[upArray[leftArray[leftArray[index]]]] == '♞' || values[upArray[leftArray[leftArray[index]]]] == '♛') {
+                checkArray.push({ index: upArray[leftArray[leftArray[index]]], piece: values[upArray[leftArray[leftArray[index]]]] });
+            }
+            if (values[downArray[leftArray[leftArray[index]]]] == '♞' || values[downArray[leftArray[leftArray[index]]]] == '♛') {
+                checkArray.push({ index: downArray[leftArray[leftArray[index]]], piece: values[downArray[leftArray[leftArray[index]]]] });
+            }
+            if (values[upArray[upArray[leftArray[index]]]] == '♞' || values[upArray[upArray[leftArray[index]]]] == '♛') {
+                checkArray.push({ index: upArray[upArray[leftArray[index]]], piece: values[upArray[upArray[leftArray[index]]]] });
+            }
+            if (values[downArray[downArray[leftArray[index]]]] == '♞' || values[downArray[downArray[leftArray[index]]]] == '♛') {
+                checkArray.push({ index: downArray[downArray[leftArray[index]]], piece: values[downArray[downArray[leftArray[index]]]] });
+            }
+            if (values[upArray[rightArray[rightArray[index]]]] == '♞' || values[upArray[rightArray[rightArray[index]]]] == '♛') {
+                checkArray.push({ index: upArray[rightArray[rightArray[index]]], piece: values[upArray[rightArray[rightArray[index]]]] });
+            }
+            if (values[downArray[rightArray[rightArray[index]]]] == '♞' || values[downArray[rightArray[rightArray[index]]]] == '♛') {
+                checkArray.push({ index: downArray[rightArray[rightArray[index]]], piece: values[downArray[rightArray[rightArray[index]]]] });
+            }
+            if (values[upArray[upArray[rightArray[index]]]] == '♞' || values[upArray[upArray[rightArray[index]]]] == '♛') {
+                checkArray.push({ index: upArray[upArray[rightArray[index]]], piece: values[upArray[upArray[rightArray[index]]]] });
+            }
+            if (values[downArray[downArray[rightArray[index]]]] == '♞' || values[downArray[downArray[rightArray[index]]]] == '♛') {
+                checkArray.push({ index: downArray[downArray[rightArray[index]]], piece: values[downArray[downArray[rightArray[index]]]] });
             }
         }
         return checkArray;
+    }
+
+    const whiteKingMovement = (array, index) => {
+        if (values[upArray[index]] == '') {
+            if (!checkForCheckWhite(upArray[index])) {
+                array.push(upArray[index]);
+            }
+        }
+        if (values[downArray[index]] == '') {
+            if (!checkForCheckWhite(downArray[index])) {
+                array.push(downArray[index]);
+            }
+        }
+        if (values[leftArray[index]] == '') {
+            if (!checkForCheckWhite(leftArray[index])) {
+                array.push(leftArray[index]);
+            }
+        }
+        if (values[rightArray[index]] == '') {
+            if (!checkForCheckWhite(rightArray[index])) {
+                array.push(rightArray[index]);
+            }
+        }
+        if (values[upArray[leftArray[index]]] == '') {
+            if (!checkForCheckWhite(upArray[leftArray[index]])) {
+                array.push(upArray[leftArray[index]]);
+            }
+        }
+        if (values[downArray[leftArray[index]]] == '') {
+            if (!checkForCheckWhite(downArray[leftArray[index]])) {
+                array.push(downArray[leftArray[index]]);
+            }
+        }
+        if (values[upArray[rightArray[index]]] == '') {
+            if (!checkForCheckWhite(upArray[rightArray[index]])) {
+                array.push(upArray[rightArray[index]]);
+            }
+        }
+        if (values[downArray[rightArray[index]]] == '') {
+            if (!checkForCheckWhite(downArray[rightArray[index]])) {
+                array.push(downArray[rightArray[index]]);
+            }
+        }
+    }
+
+    const blackKingMovement = (array, index) => {
+        if (values[upArray[index]] == '') {
+            if (!checkForCheckBlack(upArray[index])) {
+                array.push(upArray[index]);
+            }
+        }
+        if (values[downArray[index]] == '') {
+            if (!checkForCheckBlack(downArray[index])) {
+                array.push(downArray[index]);
+            }
+        }
+        if (values[leftArray[index]] == '') {
+            if (!checkForCheckBlack(leftArray[index])) {
+                array.push(leftArray[index]);
+            }
+        }
+        if (values[rightArray[index]] == '') {
+            if (!checkForCheckBlack(rightArray[index])) {
+                array.push(rightArray[index]);
+            }
+        }
+        if (values[upArray[leftArray[index]]] == '') {
+            if (!checkForCheckBlack(upArray[leftArray[index]])) {
+                array.push(upArray[leftArray[index]]);
+            }
+        }
+        if (values[downArray[leftArray[index]]] == '') {
+            if (!checkForCheckBlack(downArray[leftArray[index]])) {
+                array.push(downArray[leftArray[index]]);
+            }
+        }
+        if (values[upArray[rightArray[index]]] == '') {
+            if (!checkForCheckBlack(upArray[rightArray[index]])) {
+                array.push(upArray[rightArray[index]]);
+            }
+        }
+        if (values[downArray[rightArray[index]]] == '') {
+            if (!checkForCheckBlack(downArray[rightArray[index]])) {
+                array.push(downArray[rightArray[index]]);
+            }
+        }
     }
 
     const checkForMovement = (index) => {
@@ -1555,97 +1592,12 @@ export default function App() {
             switch (values[index]) {
                 // White King Movement
                 case '♔':
-                    if (values[index - 8] == '') {
-                        if (!checkForCheckWhite(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '') {
-                        if (!checkForCheckWhite(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '') {
-                            if (!checkForCheckWhite(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '') {
-                            if (!checkForCheckWhite(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '') {
-                            if (!checkForCheckWhite(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '') {
-                            if (!checkForCheckWhite(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '') {
-                            if (!checkForCheckWhite(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '') {
-                            if (!checkForCheckWhite(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    whiteKingMovement(moveArray, index);
                     break;
                 // Black King Movement
                 case '♚':
-                    if (values[index - 8] == '') {
-                        if (!checkForCheckBlack(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '') {
-                        if (!checkForCheckBlack(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '') {
-                            if (!checkForCheckBlack(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '') {
-                            if (!checkForCheckBlack(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '') {
-                            if (!checkForCheckBlack(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '') {
-                            if (!checkForCheckBlack(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '') {
-                            if (!checkForCheckBlack(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '') {
-                            if (!checkForCheckBlack(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    blackKingMovement(moveArray, index);
+                    break;
                 default:
                     break;
             }
@@ -1653,52 +1605,6 @@ export default function App() {
             var uncheckArray = [];
             switch (checkArr[0].piece) {
                 case '♕':
-                    if (Math.floor(checkArr[0].index / 8) == Math.floor(checkIndex / 8)) {
-                        // same rank
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i--) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i++) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 8 == checkIndex % 8) {
-                        // same file
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 8) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 8) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 9 == checkIndex % 9) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 9) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 9) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 7 == checkIndex % 7) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 7) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 7) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else {
-                        uncheckArray.push(checkArr[0].index);
-                    }
-                    break;
                 case '♛':
                     if (Math.floor(checkArr[0].index / 8) == Math.floor(checkIndex / 8)) {
                         // same rank
@@ -1747,28 +1653,6 @@ export default function App() {
                     }
                     break;
                 case '🨶':
-                    if (checkArr[0].index % 9 == checkIndex % 9) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 9) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 9) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 7 == checkIndex % 7) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 7) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 7) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    }
-                    break;
                 case '🨼':
                     if (checkArr[0].index % 9 == checkIndex % 9) {
                         if (checkArr[0].index > checkIndex) {
@@ -1793,30 +1677,6 @@ export default function App() {
                     }
                     break;
                 case '🨌':
-                    if (checkArr[0].index % 9 == checkIndex % 9) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 9) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 9) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else if (checkArr[0].index % 7 == checkIndex % 7) {
-                        if (checkArr[0].index > checkIndex) {
-                            for (let i = checkArr[0].index; i > checkIndex; i -= 7) {
-                                uncheckArray.push(i);
-                            }
-                        } else if (checkArr[0].index < checkIndex) {
-                            for (let i = checkArr[0].index; i < checkIndex; i += 7) {
-                                uncheckArray.push(i);
-                            }
-                        }
-                    } else {
-                        uncheckArray.push(checkArr[0].index);
-                    }
-                    break;
                 case '🨒':
                     if (checkArr[0].index % 9 == checkIndex % 9) {
                         if (checkArr[0].index > checkIndex) {
@@ -1850,10 +1710,10 @@ export default function App() {
                             for (let i = checkArr[0].index; i > checkIndex; i--) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                 } else if (values[i] == '') {
                                     uncheckArray.push(i);
@@ -1868,10 +1728,10 @@ export default function App() {
                             for (let i = checkArr[0].index; i < checkIndex; i++) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                 } else if (values[i] == '') {
                                     uncheckArray.push(i);
@@ -1889,10 +1749,10 @@ export default function App() {
                             for (let i = checkArr[0].index; i > checkIndex; i -= 8) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                 } else if (values[i] == '') {
                                     uncheckArray.push(i);
@@ -1907,10 +1767,10 @@ export default function App() {
                             for (let i = checkArr[0].index; i < checkIndex; i += 8) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                 } else if (values[i] == '') {
                                     uncheckArray.push(i);
@@ -1931,9 +1791,9 @@ export default function App() {
                             for (let i = checkArr[0].index; i > checkIndex; i--) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
                                 } else if (values[i] == '') {
@@ -1949,9 +1809,9 @@ export default function App() {
                             for (let i = checkArr[0].index; i < checkIndex; i++) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
                                 } else if (values[i] == '') {
@@ -1970,9 +1830,9 @@ export default function App() {
                             for (let i = checkArr[0].index; i > checkIndex; i -= 8) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
                                 } else if (values[i] == '') {
@@ -1988,9 +1848,9 @@ export default function App() {
                             for (let i = checkArr[0].index; i < checkIndex; i += 8) {
                                 if (i == checkArr[0].index) {
                                     uncheckArray.push(i);
-                                } else if (values[i] == '♙' || values[i] == '🨣' || values[i] == '♖' || values[i] == '♘' || values[i] == '🨶' || values[i] == '🨌' || values[i] == '♕') {
+                                } else if (whitePieces(values[i])) {
                                     blocker = true;
-                                } else if (values[i] == '♟' || values[i] == '🨩' || values[i] == '♜' || values[i] == '♞' || values[i] == '🨼' || values[i] == '🨒' || values[i] == '♛') {
+                                } else if (blackPieces(values[i])) {
                                     blocker = true;
                                     uncheckArray.push(i);
                                 } else if (values[i] == '') {
@@ -2005,20 +1865,10 @@ export default function App() {
                     }
                     break;
                 case '♘':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '♞':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '🨣':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '🨩':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '♙':
-                    uncheckArray.push(checkArr[0].index);
-                    break;
                 case '♟':
                     uncheckArray.push(checkArr[0].index);
                     break;
@@ -2028,151 +1878,93 @@ export default function App() {
             switch (values[index]) {
                 // White Soldier Movement
                 case '♙':
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && uncheckArray.some(val => (index - 7 == val))) {
-                                moveArray.push(index - 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (uncheckArray.some(val => (upArray[rightArray[index]] == val)) && values[upArray[rightArray[index]]] != '') {
+                            moveArray.push(upArray[rightArray[index]]);
                         }
                     }
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && uncheckArray.some(val => (index - 9 == val))) {
-                                moveArray.push(index - 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (uncheckArray.some(val => (upArray[leftArray[index]] == val)) && values[upArray[leftArray[index]]] != '') {
+                            moveArray.push(upArray[leftArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '' && uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (uncheckArray.some(val => (i == val)) && values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
                     }
                     break;
                 // Black Soldier Movement
                 case '♟':
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && uncheckArray.some(val => (index + 7 == val))) {
-                                moveArray.push(index + 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (uncheckArray.some(val => (downArray[leftArray[index]] == val)) && values[downArray[leftArray[index]]] != '') {
+                            moveArray.push(downArray[leftArray[index]]);
                         }
                     }
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && uncheckArray.some(val => (index + 9 == val))) {
-                                moveArray.push(index + 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (uncheckArray.some(val => (downArray[rightArray[index]] == val)) && values[downArray[rightArray[index]]] != '') {
+                            moveArray.push(downArray[rightArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '' && uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (uncheckArray.some(val => (i == val)) && values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
                     }
                     break;
-                // White General Movement
+                // General Movement
                 case '🨣':
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && uncheckArray.some(val => (index - 7 == val))) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && uncheckArray.some(val => (index + 9 == val))) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && uncheckArray.some(val => (index - 9 == val))) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && uncheckArray.some(val => (index + 7 == val))) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '' && uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '' && uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    break;
-                // Black General Movement
                 case '🨩':
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && uncheckArray.some(val => (index - 9 == val))) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && uncheckArray.some(val => (index + 7 == val))) {
-                                moveArray.push(index + 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (uncheckArray.some(val => (upArray[rightArray[index]] == val)) && values[upArray[rightArray[index]]] != '') {
+                            moveArray.push(upArray[rightArray[index]]);
                         }
                     }
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && uncheckArray.some(val => (index - 7 == val))) {
-                                moveArray.push(index - 7);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (uncheckArray.some(val => (upArray[leftArray[index]] == val)) && values[upArray[leftArray[index]]] != '') {
+                            moveArray.push(upArray[leftArray[index]]);
                         }
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && uncheckArray.some(val => (index + 9 == val))) {
-                                moveArray.push(index + 9);
-                            }
+                    }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (uncheckArray.some(val => (downArray[leftArray[index]] == val)) && values[downArray[leftArray[index]]] != '') {
+                            moveArray.push(downArray[leftArray[index]]);
+                        }
+                    }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (uncheckArray.some(val => (downArray[rightArray[index]] == val)) && values[downArray[rightArray[index]]] != '') {
+                            moveArray.push(downArray[rightArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '' && uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (uncheckArray.some(val => (i == val)) && values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '' && uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (uncheckArray.some(val => (i == val)) && values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
                     }
                     break;
@@ -2180,58 +1972,58 @@ export default function App() {
                 case '♖':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
                         var blockera = false;
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - (8 * i)] != '' && values[index - (8 * i)] != '♔' && !blockera) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♔' && !blockera) {
                                 blockera = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                         var blockerb = false;
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + (8 * i)] != '' && values[index + (8 * i)] != '♔' && !blockerb) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♔' && !blockerb) {
                                 blockerb = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
                         var blockerc = false;
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - i] != '' && values[index - i] != '♔' && !blockerc) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♔' && !blockerc) {
                                 blockerc = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                         var blockerd = false;
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + i] != '' && values[index + i] != '♔' && !blockerd) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♔' && !blockerd) {
                                 blockerd = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                     }
                     break;
@@ -2239,223 +2031,63 @@ export default function App() {
                 case '♜':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
                         var blockera = false;
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - (8 * i)] != '' && values[index - (8 * i)] != '♚' && !blockera) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♚' && !blockera) {
                                 blockera = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                         var blockerb = false;
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + (8 * i)] != '' && values[index + (8 * i)] != '♚' && !blockerb) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♚' && !blockerb) {
                                 blockerb = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
                         var blockerc = false;
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - i] != '' && values[index - i] != '♚' && !blockerc) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♚' && !blockerc) {
                                 blockerc = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                         var blockerd = false;
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + i] != '' && values[index + i] != '♚' && !blockerd) {
+                            } else if (values[i] == '') {
+                                continue;
+                            } else if (values[i] != '' && values[i] != '♚' && !blockerd) {
                                 blockerd = true;
                                 continue;
-                            } else {
-                                break;
                             }
+                            break;
                         }
                     }
                     break;
-                // White Knight Movement
+                // Knight Movement
                 case '♘':
-                    if (discDir == '') {
-                        values.forEach((value, ind) => {
-                            if (ind % 8 == index % 8) {
-                                return;
-                            }
-                            if (Math.floor(ind / 8) == Math.floor(index / 8)) {
-                                return;
-                            }
-                            if (ind % 7 == index % 7 && ind % 8 > index % 8 && Math.floor(ind / 8) < Math.floor(index / 8)) {
-                                return;
-                            }
-                            if (ind % 7 == index % 7 && ind % 8 < index % 8 && Math.floor(ind / 8) > Math.floor(index / 8)) {
-                                return;
-                            }
-                            if (ind % 9 == index % 9 && ind % 8 < index % 8 && Math.floor(ind / 8) < Math.floor(index / 8)) {
-                                return;
-                            }
-                            if (ind % 9 == index % 9 && ind % 8 > index % 8 && Math.floor(ind / 8) > Math.floor(index / 8)) {
-                                return;
-                            }
-                            switch (index % 8) {
-                                case 0:
-                                    switch (ind) {
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 1:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 6:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 7:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-                        });
-                    }
-                    break;
-                // Black Knight Movement
                 case '♞':
                     if (discDir == '') {
                         values.forEach((value, ind) => {
@@ -2477,594 +2109,189 @@ export default function App() {
                             if (ind % 9 == index % 9 && ind % 8 > index % 8 && Math.floor(ind / 8) > Math.floor(index / 8)) {
                                 return;
                             }
-                            switch (index % 8) {
-                                case 0:
-                                    switch (ind) {
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 1:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 6:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 7:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '' && uncheckArray.some(val => (ind == val))) {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
+                            switch (ind) {
+                                case upArray[leftArray[leftArray[index]]]:
+                                case downArray[leftArray[leftArray[index]]]:
+                                case upArray[upArray[leftArray[index]]]:
+                                case downArray[downArray[leftArray[index]]]:
+                                case upArray[rightArray[rightArray[index]]]:
+                                case downArray[rightArray[rightArray[index]]]:
+                                case upArray[upArray[rightArray[index]]]:
+                                case downArray[downArray[rightArray[index]]]:
+                                    if (uncheckArray.some(val => (ind == val))) {
+                                        moveArray.push(ind);
                                     }
                                     break;
                                 default:
+                                    if (uncheckArray.some(val => (ind == val)) && value == '') {
+                                        moveArray.push(ind);
+                                    }
                                     break;
                             }
                         });
                     }
                     break;
-                // White Bodyguard Movement
+                // Bodyguard Movement
                 case '🨶':
-                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up' || discDir == '') {
-                        if (uncheckArray.some(val => (checkIndex - 8 == val))) {
-                            moveArray.push(checkIndex - 8);
-                        }
-                    }
-                    if (discDir == 'down' || discDir == '') {
-                        if (uncheckArray.some(val => (checkIndex + 8 == val))) {
-                            moveArray.push(checkIndex + 8);
-                        }
-                    }
-                    if (discDir == 'left' || discDir == '') {
-                        if (checkIndex % 8 >= 1) {
-                            if (uncheckArray.some(val => (checkIndex - 1 == val))) {
-                                moveArray.push(checkIndex - 1);
-                            }
-                        }
-                    }
-                    if (discDir == 'right' || discDir == '') {
-                        if (checkIndex % 8 <= 6) {
-                            if (uncheckArray.some(val => (checkIndex + 1 == val))) {
-                                moveArray.push(checkIndex + 1);
-                            }
-                        }
-                    }
-                    if (discDir == 'up-left' || discDir == '') {
-                        if (checkIndex % 8 >= 1) {
-                            if (uncheckArray.some(val => (checkIndex - 9 == val))) {
-                                moveArray.push(checkIndex - 9);
-                            }
-                        }
-                    }
-                    if (discDir == 'down-right' || discDir == '') {
-                        if (checkIndex % 8 <= 6) {
-                            if (uncheckArray.some(val => (checkIndex + 9 == val))) {
-                                moveArray.push(checkIndex + 9);
-                            }
-                        }
-                    }
-                    if (discDir == 'up-right' || discDir == '') {
-                        if (checkIndex % 8 <= 6) {
-                            if (uncheckArray.some(val => (checkIndex - 7 == val))) {
-                                moveArray.push(checkIndex - 7);
-                            }
-                        }
-                    }
-                    if (discDir == 'down-left' || discDir == '') {
-                        if (checkIndex % 8 >= 1) {
-                            if (uncheckArray.some(val => (checkIndex + 7 == val))) {
-                                moveArray.push(checkIndex + 7);
-                            }
-                        }
-                    }
-                    break;
-                // Black Bodyguard Movement
                 case '🨼':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'up' || discDir == '') {
-                        if (uncheckArray.some(val => (checkIndex - 8 == val))) {
-                            moveArray.push(checkIndex - 8);
+                        if (uncheckArray.some(val => (upArray[checkIndex] == val))) {
+                            moveArray.push(upArray[checkIndex]);
                         }
                     }
                     if (discDir == 'down' || discDir == '') {
-                        if (uncheckArray.some(val => (checkIndex + 8 == val))) {
-                            moveArray.push(checkIndex + 8);
+                        if (uncheckArray.some(val => (downArray[checkIndex] == val))) {
+                            moveArray.push(downArray[checkIndex]);
                         }
                     }
                     if (discDir == 'left' || discDir == '') {
-                        if (checkIndex % 8 >= 1) {
-                            if (uncheckArray.some(val => (checkIndex - 1 == val))) {
-                                moveArray.push(checkIndex - 1);
-                            }
+                        if (uncheckArray.some(val => (leftArray[checkIndex] == val))) {
+                            moveArray.push(leftArray[checkIndex]);
                         }
                     }
                     if (discDir == 'right' || discDir == '') {
-                        if (checkIndex % 8 <= 6) {
-                            if (uncheckArray.some(val => (checkIndex + 1 == val))) {
-                                moveArray.push(checkIndex + 1);
-                            }
+                        if (uncheckArray.some(val => (rightArray[checkIndex] == val))) {
+                            moveArray.push(rightArray[checkIndex]);
                         }
                     }
                     if (discDir == 'up-left' || discDir == '') {
-                        if (checkIndex % 8 >= 1) {
-                            if (uncheckArray.some(val => (checkIndex - 9 == val))) {
-                                moveArray.push(checkIndex - 9);
-                            }
+                        if (uncheckArray.some(val => (upArray[leftArray[checkIndex]] == val))) {
+                            moveArray.push(upArray[leftArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'down-right' || discDir == '') {
-                        if (checkIndex % 8 <= 6) {
-                            if (uncheckArray.some(val => (checkIndex + 9 == val))) {
-                                moveArray.push(checkIndex + 9);
-                            }
+                        if (uncheckArray.some(val => (downArray[rightArray[checkIndex]] == val))) {
+                            moveArray.push(downArray[rightArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'up-right' || discDir == '') {
-                        if (checkIndex % 8 <= 6) {
-                            if (uncheckArray.some(val => (checkIndex - 7 == val))) {
-                                moveArray.push(checkIndex - 7);
-                            }
+                        if (uncheckArray.some(val => (upArray[rightArray[checkIndex]] == val))) {
+                            moveArray.push(upArray[rightArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'down-left' || discDir == '') {
-                        if (checkIndex % 8 >= 1) {
-                            if (uncheckArray.some(val => (checkIndex + 7 == val))) {
-                                moveArray.push(checkIndex + 7);
-                            }
+                        if (uncheckArray.some(val => (downArray[leftArray[checkIndex]] == val))) {
+                            moveArray.push(downArray[leftArray[checkIndex]]);
                         }
                     }
                     break;
-                // White Advisor Movement
+                // Advisor Movement
                 case '🨌':
-                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (uncheckArray.some(val => (index - 8 == val))) {
-                            moveArray.push(index - 8);
-                        }
-                        if (uncheckArray.some(val => (index + 8 == val))) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        if (index % 8 >= 1) {
-                            if (uncheckArray.some(val => (index - 1 == val))) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (index % 8 <= 6) {
-                            if (uncheckArray.some(val => (index + 1 == val))) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                    }
-                    break;
-                // Black Advisor Movement
                 case '🨒':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
                                 continue;
-                            } else {
-                                break;
+                            } else if (values[i] == '') {
+                                continue;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (uncheckArray.some(val => (index - 8 == val))) {
-                            moveArray.push(index - 8);
+                        if (uncheckArray.some(val => (upArray[index] == val))) {
+                            moveArray.push(upArray[index]);
                         }
-                        if (uncheckArray.some(val => (index + 8 == val))) {
-                            moveArray.push(index + 8);
+                        if (uncheckArray.some(val => (downArray[index] == val))) {
+                            moveArray.push(downArray[index]);
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        if (index % 8 >= 1) {
-                            if (uncheckArray.some(val => (index - 1 == val))) {
-                                moveArray.push(index - 1);
-                            }
+                        if (uncheckArray.some(val => (leftArray[index] == val))) {
+                            moveArray.push(leftArray[index]);
                         }
-                        if (index % 8 <= 6) {
-                            if (uncheckArray.some(val => (index + 1 == val))) {
-                                moveArray.push(index + 1);
-                            }
+                        if (uncheckArray.some(val => (rightArray[index] == val))) {
+                            moveArray.push(rightArray[index]);
                         }
                     }
                     break;
-                // White Queen Movement
+                // Queen Movement
                 case '♕':
-                    if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
-                                continue;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                    if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (uncheckArray.some(val => (index - 10 == val))) {
-                                    moveArray.push(index - 10);
-                                }
-                                if (uncheckArray.some(val => (index + 6 == val))) {
-                                    moveArray.push(index + 6);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 17 == val))) {
-                                moveArray.push(index - 17);
-                            }
-                            if (uncheckArray.some(val => (index + 15 == val))) {
-                                moveArray.push(index + 15);
-                            }
-                        }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (uncheckArray.some(val => (index - 6 == val))) {
-                                    moveArray.push(index - 6);
-                                }
-                                if (uncheckArray.some(val => (index + 10 == val))) {
-                                    moveArray.push(index + 10);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 15 == val))) {
-                                moveArray.push(index - 15);
-                            }
-                            if (uncheckArray.some(val => (index + 17 == val))) {
-                                moveArray.push(index + 17);
-                            }
-                        }
-                    }
-                    break;
-                // Black Queen Movement
                 case '♛':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index - (8 * i) == val))) {
-                                moveArray.push(index - (8 * i));
-                            } else if (values[index - (8 * i)] == '') {
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (uncheckArray.some(val => (index + (8 * i) == val))) {
-                                moveArray.push(index + (8 * i));
-                            } else if (values[index + (8 * i)] == '') {
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -3072,19 +2299,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - i == val))) {
-                                moveArray.push(index - i);
-                            } else if (values[index - i] == '') {
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + i == val))) {
-                                moveArray.push(index + i);
-                            } else if (values[index + i] == '') {
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -3092,19 +2319,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (9 * i) == val))) {
-                                moveArray.push(index - (9 * i));
-                            } else if (values[index - (9 * i)] == '') {
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (9 * i) == val))) {
-                                moveArray.push(index + (9 * i));
-                            } else if (values[index + (9 * i)] == '') {
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -3112,19 +2339,19 @@ export default function App() {
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (uncheckArray.some(val => (index - (7 * i) == val))) {
-                                moveArray.push(index - (7 * i));
-                            } else if (values[index - (7 * i)] == '') {
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (uncheckArray.some(val => (index + (7 * i) == val))) {
-                                moveArray.push(index + (7 * i));
-                            } else if (values[index + (7 * i)] == '') {
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (uncheckArray.some(val => (i == val))) {
+                                moveArray.push(i);
+                            } else if (values[i] == '') {
                                 continue;
                             } else {
                                 break;
@@ -3132,133 +2359,39 @@ export default function App() {
                         }
                     }
                     if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (uncheckArray.some(val => (index - 10 == val))) {
-                                    moveArray.push(index - 10);
-                                }
-                                if (uncheckArray.some(val => (index + 6 == val))) {
-                                    moveArray.push(index + 6);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 17 == val))) {
-                                moveArray.push(index - 17);
-                            }
-                            if (uncheckArray.some(val => (index + 15 == val))) {
-                                moveArray.push(index + 15);
-                            }
+                        if (uncheckArray.some(val => (upArray[leftArray[leftArray[index]]] == val))) {
+                            moveArray.push(upArray[leftArray[leftArray[index]]]);
                         }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (uncheckArray.some(val => (index - 6 == val))) {
-                                    moveArray.push(index - 6);
-                                }
-                                if (uncheckArray.some(val => (index + 10 == val))) {
-                                    moveArray.push(index + 10);
-                                }
-                            }
-                            if (uncheckArray.some(val => (index - 15 == val))) {
-                                moveArray.push(index - 15);
-                            }
-                            if (uncheckArray.some(val => (index + 17 == val))) {
-                                moveArray.push(index + 17);
-                            }
+                        if (uncheckArray.some(val => (downArray[leftArray[leftArray[index]]] == val))) {
+                            moveArray.push(downArray[leftArray[leftArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (upArray[upArray[leftArray[index]]] == val))) {
+                            moveArray.push(upArray[upArray[leftArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (downArray[downArray[leftArray[index]]] == val))) {
+                            moveArray.push(downArray[downArray[leftArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (upArray[rightArray[rightArray[index]]] == val))) {
+                            moveArray.push(upArray[rightArray[rightArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (downArray[rightArray[rightArray[index]]] == val))) {
+                            moveArray.push(downArray[rightArray[rightArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (upArray[upArray[rightArray[index]]] == val))) {
+                            moveArray.push(upArray[upArray[rightArray[index]]]);
+                        }
+                        if (uncheckArray.some(val => (downArray[downArray[rightArray[index]]] == val))) {
+                            moveArray.push(downArray[downArray[rightArray[index]]]);
                         }
                     }
                     break;
                 // White King Movement
                 case '♔':
-                    if (values[index - 8] == '') {
-                        if (!checkForCheckWhite(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '') {
-                        if (!checkForCheckWhite(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '') {
-                            if (!checkForCheckWhite(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '') {
-                            if (!checkForCheckWhite(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '') {
-                            if (!checkForCheckWhite(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '') {
-                            if (!checkForCheckWhite(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '') {
-                            if (!checkForCheckWhite(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '') {
-                            if (!checkForCheckWhite(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    whiteKingMovement(moveArray, index);
                     break;
                 // Black King Movement
                 case '♚':
-                    if (values[index - 8] == '') {
-                        if (!checkForCheckBlack(index - 8)) {
-                            moveArray.push(index - 8);
-                        }
-                    }
-                    if (values[index + 8] == '') {
-                        if (!checkForCheckBlack(index + 8)) {
-                            moveArray.push(index + 8);
-                        }
-                    }
-                    if (index % 8 > 0) {
-                        if (values[index - 1] == '') {
-                            if (!checkForCheckBlack(index - 1)) {
-                                moveArray.push(index - 1);
-                            }
-                        }
-                        if (values[index - 9] == '') {
-                            if (!checkForCheckBlack(index - 9)) {
-                                moveArray.push(index - 9);
-                            }
-                        }
-                        if (values[index + 7] == '') {
-                            if (!checkForCheckBlack(index + 7)) {
-                                moveArray.push(index + 7);
-                            }
-                        }
-                    }
-                    if (index % 8 < 7) {
-                        if (values[index + 1] == '') {
-                            if (!checkForCheckBlack(index + 1)) {
-                                moveArray.push(index + 1);
-                            }
-                        }
-                        if (values[index - 7] == '') {
-                            if (!checkForCheckBlack(index - 7)) {
-                                moveArray.push(index - 7);
-                            }
-                        }
-                        if (values[index + 9] == '') {
-                            if (!checkForCheckBlack(index + 9)) {
-                                moveArray.push(index + 9);
-                            }
-                        }
-                    }
+                    blackKingMovement(moveArray, index);
                     break;
                 default:
                     break;
@@ -3267,24 +2400,20 @@ export default function App() {
             switch (values[index]) {
                 // White Soldier Movement
                 case '♙':
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && values[index - 7] != '♙' && values[index - 7] != '🨣' && values[index - 7] != '♖' && values[index - 7] != '♘' && values[index - 7] != '🨶' && values[index - 7] != '🨌' && values[index - 7] != '♕' && values[index - 7] != '♔') {
-                                moveArray.push(index - 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (blackPieces(values[upArray[rightArray[index]]])) {
+                            moveArray.push(upArray[rightArray[index]]);
                         }
                     }
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && values[index - 9] != '♙' && values[index - 9] != '🨣' && values[index - 9] != '♖' && values[index - 9] != '♘' && values[index - 9] != '🨶' && values[index - 9] != '🨌' && values[index - 9] != '♕' && values[index - 9] != '♔') {
-                                moveArray.push(index - 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (blackPieces(values[upArray[leftArray[index]]])) {
+                            moveArray.push(upArray[leftArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
                                 break;
                             }
@@ -3293,24 +2422,20 @@ export default function App() {
                     break;
                 // Black Soldier Movement
                 case '♟':
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && values[index + 7] != '♟' && values[index + 7] != '🨩' && values[index + 7] != '♜' && values[index + 7] != '♞' && values[index + 7] != '🨼' && values[index + 7] != '🨒' && values[index + 7] != '♛' && values[index + 7] != '♚') {
-                                moveArray.push(index + 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (whitePieces(values[downArray[leftArray[index]]])) {
+                            moveArray.push(downArray[leftArray[index]]);
                         }
                     }
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && values[index + 9] != '♟' && values[index + 9] != '🨩' && values[index + 9] != '♜' && values[index + 9] != '♞' && values[index + 9] != '🨼' && values[index + 9] != '🨒' && values[index + 9] != '♛' && values[index + 9] != '♚') {
-                                moveArray.push(index + 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (whitePieces(values[downArray[rightArray[index]]])) {
+                            moveArray.push(downArray[rightArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
                                 break;
                             }
@@ -3319,41 +2444,33 @@ export default function App() {
                     break;
                 // White General Movement
                 case '🨣':
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && values[index - 7] != '♙' && values[index - 7] != '🨣' && values[index - 7] != '♖' && values[index - 7] != '♘' && values[index - 7] != '🨶' && values[index - 7] != '🨌' && values[index - 7] != '♕' && values[index - 7] != '♔') {
-                                moveArray.push(index - 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (blackPieces(values[upArray[rightArray[index]]])) {
+                            moveArray.push(upArray[rightArray[index]]);
                         }
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && values[index + 9] != '♙' && values[index + 9] != '🨣' && values[index + 9] != '♖' && values[index + 9] != '♘' && values[index + 9] != '🨶' && values[index + 9] != '🨌' && values[index + 9] != '♕' && values[index + 9] != '♔') {
-                                moveArray.push(index + 9);
-                            }
+                        if (blackPieces(values[downArray[leftArray[index]]])) {
+                            moveArray.push(downArray[leftArray[index]]);
                         }
                     }
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && values[index - 9] != '♙' && values[index - 9] != '🨣' && values[index - 9] != '♖' && values[index - 9] != '♘' && values[index - 9] != '🨶' && values[index - 9] != '🨌' && values[index - 9] != '♕' && values[index - 9] != '♔') {
-                                moveArray.push(index - 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (blackPieces(values[upArray[leftArray[index]]])) {
+                            moveArray.push(upArray[leftArray[index]]);
                         }
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && values[index + 7] != '♙' && values[index + 7] != '🨣' && values[index + 7] != '♖' && values[index + 7] != '♘' && values[index + 7] != '🨶' && values[index + 7] != '🨌' && values[index + 7] != '♕' && values[index + 7] != '♔') {
-                                moveArray.push(index + 7);
-                            }
+                        if (blackPieces(values[downArray[rightArray[index]]])) {
+                            moveArray.push(downArray[rightArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
                                 break;
                             }
@@ -3362,41 +2479,33 @@ export default function App() {
                     break;
                 // Black General Movement
                 case '🨩':
-                    if (index % 8 < 7) {
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index - 7] != '' && values[index - 7] != '♟' && values[index - 7] != '🨩' && values[index - 7] != '♜' && values[index - 7] != '♞' && values[index - 7] != '🨼' && values[index - 7] != '🨒' && values[index - 7] != '♛' && values[index - 7] != '♚') {
-                                moveArray.push(index - 7);
-                            }
+                    if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
+                        if (whitePieces(values[upArray[rightArray[index]]])) {
+                            moveArray.push(upArray[rightArray[index]]);
                         }
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index + 9] != '' && values[index + 9] != '♟' && values[index + 9] != '🨩' && values[index + 9] != '♜' && values[index + 9] != '♞' && values[index + 9] != '🨼' && values[index + 9] != '🨒' && values[index + 9] != '♛' && values[index + 9] != '♚') {
-                                moveArray.push(index + 9);
-                            }
+                        if (whitePieces(values[downArray[leftArray[index]]])) {
+                            moveArray.push(downArray[leftArray[index]]);
                         }
                     }
-                    if (index % 8 > 0) {
-                        if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                            if (values[index - 9] != '' && values[index - 9] != '♟' && values[index - 9] != '🨩' && values[index - 9] != '♜' && values[index - 9] != '♞' && values[index - 9] != '🨼' && values[index - 9] != '🨒' && values[index - 9] != '♛' && values[index - 9] != '♚') {
-                                moveArray.push(index - 9);
-                            }
+                    if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
+                        if (whitePieces(values[upArray[leftArray[index]]])) {
+                            moveArray.push(upArray[leftArray[index]]);
                         }
-                        if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                            if (values[index + 7] != '' && values[index + 7] != '♟' && values[index + 7] != '🨩' && values[index + 7] != '♜' && values[index + 7] != '♞' && values[index + 7] != '🨼' && values[index + 7] != '🨒' && values[index + 7] != '♛' && values[index + 7] != '♚') {
-                                moveArray.push(index + 7);
-                            }
+                        if (whitePieces(values[downArray[rightArray[index]]])) {
+                            moveArray.push(downArray[rightArray[index]]);
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
                                 break;
                             }
@@ -3407,70 +2516,66 @@ export default function App() {
                 case '♖':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
                         var blockera = false;
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - (8 * i)] != '' && values[index - (8 * i)] != '♔' && !blockera) {
+                            } else if (values[i] != '' && values[i] != '♔' && !blockera) {
                                 blockera = true;
-                                moveArray.push(index - (8 * i));
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - (8 * i)] != '♔') {
-                                moveArray.push(index - (8 * i));
-                                break;
-                            } else {
+                            } else if (values[i] != '♔') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                         var blockerb = false;
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + (8 * i)] != '' && values[index + (8 * i)] != '♔' && !blockerb) {
+                            } else if (values[i] != '' && values[i] != '♔' && !blockerb) {
                                 blockerb = true;
-                                moveArray.push(index + (8 * i));
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + (8 * i)] != '♔') {
-                                moveArray.push(index + (8 * i));
-                                break;
-                            } else {
+                            } else if (values[i] != '♔') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
                         var blockerc = false;
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - i] != '' && values[index - i] != '♔' && !blockerc) {
+                            } else if (values[i] != '' && values[i] != '♔' && !blockerc) {
                                 blockerc = true;
-                                moveArray.push(index - i);
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - i] != '♔') {
-                                moveArray.push(index - i);
-                                break;
-                            } else {
+                            } else if (values[i] != '♔') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                         var blockerd = false;
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + i] != '' && values[index + i] != '♔' && !blockerd) {
+                            } else if (values[i] != '' && values[i] != '♔' && !blockerd) {
                                 blockerd = true;
-                                moveArray.push(index + i);
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + i] != '♔') {
-                                moveArray.push(index + i);
-                                break;
-                            } else {
+                            } else if (values[i] != '♔') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                     }
                     break;
@@ -3478,70 +2583,66 @@ export default function App() {
                 case '♜':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
                         var blockera = false;
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - (8 * i)] != '' && values[index - (8 * i)] != '♚' && !blockera) {
+                            } else if (values[i] != '' && values[i] != '♚' && !blockera) {
                                 blockera = true;
-                                moveArray.push(index - (8 * i));
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - (8 * i)] != '♚') {
-                                moveArray.push(index - (8 * i));
-                                break;
-                            } else {
+                            } else if (values[i] != '♚') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                         var blockerb = false;
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + (8 * i)] != '' && values[index + (8 * i)] != '♚' && !blockerb) {
+                            } else if (values[i] != '' && values[i] != '♚' && !blockerb) {
                                 blockerb = true;
-                                moveArray.push(index + (8 * i));
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + (8 * i)] != '♚') {
-                                moveArray.push(index + (8 * i));
-                                break;
-                            } else {
+                            } else if (values[i] != '♚') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
                         var blockerc = false;
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - i] != '' && values[index - i] != '♚' && !blockerc) {
+                            } else if (values[i] != '' && values[i] != '♚' && !blockerc) {
                                 blockerc = true;
-                                moveArray.push(index - i);
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index - i] != '♚') {
-                                moveArray.push(index - i);
-                                break;
-                            } else {
+                            } else if (values[i] != '♚') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                         var blockerd = false;
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + i] != '' && values[index + i] != '♚' && !blockerd) {
+                            } else if (values[i] != '' && values[i] != '♚' && !blockerd) {
                                 blockerd = true;
-                                moveArray.push(index + i);
+                                moveArray.push(i);
                                 continue;
-                            } else if (values[index + i] != '♚') {
-                                moveArray.push(index + i);
-                                break;
-                            } else {
+                            } else if (values[i] != '♚') {
+                                moveArray.push(i);
                                 break;
                             }
+                            break;
                         }
                     }
                     break;
@@ -3567,140 +2668,23 @@ export default function App() {
                             if (ind % 9 == index % 9 && ind % 8 > index % 8 && Math.floor(ind / 8) > Math.floor(index / 8)) {
                                 return;
                             }
-                            switch (index % 8) {
-                                case 0:
-                                    switch (ind) {
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 1:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 6:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 7:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (value != '♙' && value != '🨣' && value != '♖' && value != '♘' && value != '🨶' && value != '🨌' && value != '♕' && value != '♔') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
+                            switch (ind) {
+                                case upArray[leftArray[leftArray[index]]]:
+                                case downArray[leftArray[leftArray[index]]]:
+                                case upArray[upArray[leftArray[index]]]:
+                                case downArray[downArray[leftArray[index]]]:
+                                case upArray[rightArray[rightArray[index]]]:
+                                case downArray[rightArray[rightArray[index]]]:
+                                case upArray[upArray[rightArray[index]]]:
+                                case downArray[downArray[rightArray[index]]]:
+                                    if (value == '' || blackPieces(value)) {
+                                        moveArray.push(ind);
                                     }
                                     break;
                                 default:
+                                    if (value == '') {
+                                        moveArray.push(ind);
+                                    }
                                     break;
                             }
                         });
@@ -3728,140 +2712,23 @@ export default function App() {
                             if (ind % 9 == index % 9 && ind % 8 > index % 8 && Math.floor(ind / 8) > Math.floor(index / 8)) {
                                 return;
                             }
-                            switch (index % 8) {
-                                case 0:
-                                    switch (ind) {
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 1:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 2:
-                                case 3:
-                                case 4:
-                                case 5:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 6:
-                                        case index + 10:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 6:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 15:
-                                        case index + 17:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                    }
-                                    break;
-                                case 7:
-                                    switch (ind) {
-                                        case index - 17:
-                                        case index + 15:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        case index - 10:
-                                        case index + 6:
-                                            if (value != '♟' && value != '🨩' && value != '♜' && value != '♞' && value != '🨼' && value != '🨒' && value != '♛' && value != '♚') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
-                                        default:
-                                            if (value == '') {
-                                                moveArray.push(ind);
-                                            }
-                                            break;
+                            switch (ind) {
+                                case upArray[leftArray[leftArray[index]]]:
+                                case downArray[leftArray[leftArray[index]]]:
+                                case upArray[upArray[leftArray[index]]]:
+                                case downArray[downArray[leftArray[index]]]:
+                                case upArray[rightArray[rightArray[index]]]:
+                                case downArray[rightArray[rightArray[index]]]:
+                                case upArray[upArray[rightArray[index]]]:
+                                case downArray[downArray[rightArray[index]]]:
+                                    if (value == '' || whitePieces(value)) {
+                                        moveArray.push(ind);
                                     }
                                     break;
                                 default:
+                                    if (value == '') {
+                                        moveArray.push(ind);
+                                    }
                                     break;
                             }
                         });
@@ -3870,662 +2737,534 @@ export default function App() {
                 // White Bodyguard Movement
                 case '🨶':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♟' || values[index - (9 * i)] == '🨩' || values[index - (9 * i)] == '♜' || values[index - (9 * i)] == '♞' || values[index - (9 * i)] == '🨼' || values[index - (9 * i)] == '🨒' || values[index - (9 * i)] == '♛' || values[index - (9 * i)] == '♚') {
-                                    moveArray.push(index - (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♟' || values[index + (9 * i)] == '🨩' || values[index + (9 * i)] == '♜' || values[index + (9 * i)] == '♞' || values[index + (9 * i)] == '🨼' || values[index + (9 * i)] == '🨒' || values[index + (9 * i)] == '♛' || values[index + (9 * i)] == '♚') {
-                                    moveArray.push(index + (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♟' || values[index - (7 * i)] == '🨩' || values[index - (7 * i)] == '♜' || values[index - (7 * i)] == '♞' || values[index - (7 * i)] == '🨼' || values[index - (7 * i)] == '🨒' || values[index - (7 * i)] == '♛' || values[index - (7 * i)] == '♚') {
-                                    moveArray.push(index - (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♟' || values[index + (7 * i)] == '🨩' || values[index + (7 * i)] == '♜' || values[index + (7 * i)] == '♞' || values[index + (7 * i)] == '🨼' || values[index + (7 * i)] == '🨒' || values[index + (7 * i)] == '♛' || values[index + (7 * i)] == '♚') {
-                                    moveArray.push(index + (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up' || discDir == '') {
-                        if (checkIndex >= 8) {
-                            if (values[checkIndex - 8] != '♙' && values[checkIndex - 8] != '🨣' && values[checkIndex - 8] != '♖' && values[checkIndex - 8] != '♘' && values[checkIndex - 8] != '🨶' && values[checkIndex - 8] != '🨌' && values[checkIndex - 8] != '♕') {
-                                moveArray.push(values[checkIndex - 8]);
-                            }
+                        if (values[upArray[checkIndex]] == '' || blackPieces(values[upArray[checkIndex]])) {
+                            moveArray.push(upArray[checkIndex]);
                         }
                     }
                     if (discDir == 'down' || discDir == '') {
-                        if (checkIndex <= 55) {
-                            if (values[checkIndex + 8] != '♙' && values[checkIndex + 8] != '🨣' && values[checkIndex + 8] != '♖' && values[checkIndex + 8] != '♘' && values[checkIndex + 8] != '🨶' && values[checkIndex + 8] != '🨌' && values[checkIndex + 8] != '♕') {
-                                moveArray.push(values[checkIndex + 8]);
-                            }
+                        if (values[downArray[checkIndex]] == '' || blackPieces(values[downArray[checkIndex]])) {
+                            moveArray.push(downArray[checkIndex]);
                         }
                     }
                     if (discDir == 'left' || discDir == '') {
-                        if (checkIndex >= 1) {
-                            if (checkIndex % 8 >= 1) {
-                                if (values[checkIndex - 1] != '♙' && values[checkIndex - 1] != '🨣' && values[checkIndex - 1] != '♖' && values[checkIndex - 1] != '♘' && values[checkIndex - 1] != '🨶' && values[checkIndex - 1] != '🨌' && values[checkIndex - 1] != '♕') {
-                                    moveArray.push(values[checkIndex - 1]);
-                                }
-                            }
+                        if (values[leftArray[checkIndex]] == '' || blackPieces(values[leftArray[checkIndex]])) {
+                            moveArray.push(leftArray[checkIndex]);
                         }
                     }
                     if (discDir == 'right' || discDir == '') {
-                        if (checkIndex <= 62) {
-                            if (checkIndex % 8 <= 6) {
-                                if (values[checkIndex + 1] != '♙' && values[checkIndex + 1] != '🨣' && values[checkIndex + 1] != '♖' && values[checkIndex + 1] != '♘' && values[checkIndex + 1] != '🨶' && values[checkIndex + 1] != '🨌' && values[checkIndex + 1] != '♕') {
-                                    moveArray.push(values[checkIndex + 1]);
-                                }
-                            }
+                        if (values[rightArray[checkIndex]] == '' || blackPieces(values[rightArray[checkIndex]])) {
+                            moveArray.push(rightArray[checkIndex]);
                         }
                     }
                     if (discDir == 'up-left' || discDir == '') {
-                        if (checkIndex >= 9) {
-                            if (checkIndex % 8 >= 1) {
-                                if (values[checkIndex - 9] != '♙' && values[checkIndex - 9] != '🨣' && values[checkIndex - 9] != '♖' && values[checkIndex - 9] != '♘' && values[checkIndex - 9] != '🨶' && values[checkIndex - 9] != '🨌' && values[checkIndex - 9] != '♕') {
-                                    moveArray.push(values[checkIndex - 9]);
-                                }
-                            }
+                        if (values[upArray[leftArray[checkIndex]]] == '' || blackPieces(values[upArray[leftArray[checkIndex]]])) {
+                            moveArray.push(upArray[leftArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'down-right' || discDir == '') {
-                        if (checkIndex <= 54) {
-                            if (checkIndex % 8 <= 6) {
-                                if (values[checkIndex + 9] != '♙' && values[checkIndex + 9] != '🨣' && values[checkIndex + 9] != '♖' && values[checkIndex + 9] != '♘' && values[checkIndex + 9] != '🨶' && values[checkIndex + 9] != '🨌' && values[checkIndex + 9] != '♕') {
-                                    moveArray.push(values[checkIndex + 9]);
-                                }
-                            }
+                        if (values[downArray[rightArray[checkIndex]]] == '' || blackPieces(values[downArray[rightArray[checkIndex]]])) {
+                            moveArray.push(downArray[rightArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'up-right' || discDir == '') {
-                        if (checkIndex >= 7) {
-                            if (checkIndex % 8 <= 6) {
-                                if (values[checkIndex - 7] != '♙' && values[checkIndex - 7] != '🨣' && values[checkIndex - 7] != '♖' && values[checkIndex - 7] != '♘' && values[checkIndex - 7] != '🨶' && values[checkIndex - 7] != '🨌' && values[checkIndex - 7] != '♕') {
-                                    moveArray.push(values[checkIndex - 7]);
-                                }
-                            }
+                        if (values[upArray[rightArray[checkIndex]]] == '' || blackPieces(values[upArray[rightArray[checkIndex]]])) {
+                            moveArray.push(upArray[rightArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'down-left' || discDir == '') {
-                        if (checkIndex <= 56) {
-                            if (checkIndex % 8 >= 1) {
-                                if (values[checkIndex + 7] != '♙' && values[checkIndex + 7] != '🨣' && values[checkIndex + 7] != '♖' && values[checkIndex + 7] != '♘' && values[checkIndex + 7] != '🨶' && values[checkIndex + 7] != '🨌' && values[checkIndex + 7] != '♕') {
-                                    moveArray.push(values[checkIndex + 7]);
-                                }
-                            }
+                        if (values[downArray[leftArray[checkIndex]]] == '' || blackPieces(values[downArray[leftArray[checkIndex]]])) {
+                            moveArray.push(downArray[leftArray[checkIndex]]);
                         }
                     }
                     break;
                 // Black Bodyguard Movement
                 case '🨼':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♙' || values[index - (9 * i)] == '🨣' || values[index - (9 * i)] == '♖' || values[index - (9 * i)] == '♘' || values[index - (9 * i)] == '🨶' || values[index - (9 * i)] == '🨌' || values[index - (9 * i)] == '♕' || values[index - (9 * i)] == '♔') {
-                                    moveArray.push(index - (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♙' || values[index + (9 * i)] == '🨣' || values[index + (9 * i)] == '♖' || values[index + (9 * i)] == '♘' || values[index + (9 * i)] == '🨶' || values[index + (9 * i)] == '🨌' || values[index + (9 * i)] == '♕' || values[index + (9 * i)] == '♔') {
-                                    moveArray.push(index + (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♙' || values[index - (7 * i)] == '🨣' || values[index - (7 * i)] == '♖' || values[index - (7 * i)] == '♘' || values[index - (7 * i)] == '🨌' || values[index - (7 * i)] == '🨶' || values[index - (7 * i)] == '♕' || values[index - (7 * i)] == '♔') {
-                                    moveArray.push(index - (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♙' || values[index + (7 * i)] == '🨣' || values[index + (7 * i)] == '♖' || values[index + (7 * i)] == '♘' || values[index + (7 * i)] == '🨌' || values[index + (7 * i)] == '🨶' || values[index + (7 * i)] == '♕' || values[index + (7 * i)] == '♔') {
-                                    moveArray.push(index + (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up' || discDir == '') {
-                        if (checkIndex >= 8) {
-                            if (values[checkIndex - 8] != '♟' && values[checkIndex - 8] != '🨩' && values[checkIndex - 8] != '♜' && values[checkIndex - 8] != '♞' && values[checkIndex - 8] != '🨼' && values[checkIndex - 8] != '🨒' && values[checkIndex - 8] != '♛') {
-                                moveArray.push(values[checkIndex - 8]);
-                            }
+                        if (values[upArray[checkIndex]] == '' || whitePieces(values[upArray[checkIndex]])) {
+                            moveArray.push(upArray[checkIndex]);
                         }
                     }
                     if (discDir == 'down' || discDir == '') {
-                        if (checkIndex <= 55) {
-                            if (values[checkIndex + 8] != '♟' && values[checkIndex + 8] != '🨩' && values[checkIndex + 8] != '♜' && values[checkIndex + 8] != '♞' && values[checkIndex + 8] != '🨼' && values[checkIndex + 8] != '🨒' && values[checkIndex + 8] != '♛') {
-                                moveArray.push(values[checkIndex + 8]);
-                            }
+                        if (values[downArray[checkIndex]] == '' || whitePieces(values[downArray[checkIndex]])) {
+                            moveArray.push(downArray[checkIndex]);
                         }
                     }
                     if (discDir == 'left' || discDir == '') {
-                        if (checkIndex >= 1) {
-                            if (checkIndex % 8 >= 1) {
-                                if (values[checkIndex - 1] != '♟' && values[checkIndex - 1] != '🨩' && values[checkIndex - 1] != '♜' && values[checkIndex - 1] != '♞' && values[checkIndex - 1] != '🨼' && values[checkIndex - 1] != '🨒' && values[checkIndex - 1] != '♛') {
-                                    moveArray.push(values[checkIndex - 1]);
-                                }
-                            }
+                        if (values[leftArray[checkIndex]] == '' || whitePieces(values[leftArray[checkIndex]])) {
+                            moveArray.push(leftArray[checkIndex]);
                         }
                     }
                     if (discDir == 'right' || discDir == '') {
-                        if (checkIndex <= 62) {
-                            if (checkIndex % 8 <= 6) {
-                                if (values[checkIndex + 1] != '♟' && values[checkIndex + 1] != '🨩' && values[checkIndex + 1] != '♜' && values[checkIndex + 1] != '♞' && values[checkIndex + 1] != '🨼' && values[checkIndex + 1] != '🨒' && values[checkIndex + 1] != '♛') {
-                                    moveArray.push(values[checkIndex + 1]);
-                                }
-                            }
+                        if (values[rightArray[checkIndex]] == '' || whitePieces(values[rightArray[checkIndex]])) {
+                            moveArray.push(rightArray[checkIndex]);
                         }
                     }
                     if (discDir == 'up-left' || discDir == '') {
-                        if (checkIndex >= 9) {
-                            if (checkIndex % 8 >= 1) {
-                                if (values[checkIndex - 9] != '♟' && values[checkIndex - 9] != '🨩' && values[checkIndex - 9] != '♜' && values[checkIndex - 9] != '♞' && values[checkIndex - 9] != '🨼' && values[checkIndex - 9] != '🨒' && values[checkIndex - 9] != '♛') {
-                                    moveArray.push(values[checkIndex - 9]);
-                                }
-                            }
+                        if (values[upArray[leftArray[checkIndex]]] == '' || whitePieces(values[upArray[leftArray[checkIndex]]])) {
+                            moveArray.push(upArray[leftArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'down-right' || discDir == '') {
-                        if (checkIndex <= 54) {
-                            if (checkIndex % 8 <= 6) {
-                                if (values[checkIndex + 9] != '♟' && values[checkIndex + 9] != '🨩' && values[checkIndex + 9] != '♜' && values[checkIndex + 9] != '♞' && values[checkIndex + 9] != '🨼' && values[checkIndex + 9] != '🨒' && values[checkIndex + 9] != '♛') {
-                                    moveArray.push(values[checkIndex + 9]);
-                                }
-                            }
+                        if (values[downArray[rightArray[checkIndex]]] == '' || whitePieces(values[downArray[rightArray[checkIndex]]])) {
+                            moveArray.push(downArray[rightArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'up-right' || discDir == '') {
-                        if (checkIndex >= 7) {
-                            if (checkIndex % 8 <= 6) {
-                                if (values[checkIndex - 7] != '♟' && values[checkIndex - 7] != '🨩' && values[checkIndex - 7] != '♜' && values[checkIndex - 7] != '♞' && values[checkIndex - 7] != '🨼' && values[checkIndex - 7] != '🨒' && values[checkIndex - 7] != '♛') {
-                                    moveArray.push(values[checkIndex - 7]);
-                                }
-                            }
+                        if (values[upArray[rightArray[checkIndex]]] == '' || whitePieces(values[upArray[rightArray[checkIndex]]])) {
+                            moveArray.push(upArray[rightArray[checkIndex]]);
                         }
                     }
                     if (discDir == 'down-left' || discDir == '') {
-                        if (checkIndex <= 56) {
-                            if (checkIndex % 8 >= 1) {
-                                if (values[checkIndex + 7] != '♟' && values[checkIndex + 7] != '🨩' && values[checkIndex + 7] != '♜' && values[checkIndex + 7] != '♞' && values[checkIndex + 7] != '🨼' && values[checkIndex + 7] != '🨒' && values[checkIndex + 7] != '♛') {
-                                    moveArray.push(values[checkIndex + 7]);
-                                }
-                            }
+                        if (values[downArray[leftArray[checkIndex]]] == '' || whitePieces(values[downArray[leftArray[checkIndex]]])) {
+                            moveArray.push(downArray[leftArray[checkIndex]]);
                         }
                     }
                     break;
                 // White Advisor Movement
                 case '🨌':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♟' || values[index - (9 * i)] == '🨩' || values[index - (9 * i)] == '♜' || values[index - (9 * i)] == '♞' || values[index - (9 * i)] == '🨼' || values[index - (9 * i)] == '🨒' || values[index - (9 * i)] == '♛' || values[index - (9 * i)] == '♚') {
-                                    moveArray.push(index - (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♟' || values[index + (9 * i)] == '🨩' || values[index + (9 * i)] == '♜' || values[index + (9 * i)] == '♞' || values[index + (9 * i)] == '🨼' || values[index + (9 * i)] == '🨒' || values[index + (9 * i)] == '♛' || values[index + (9 * i)] == '♚') {
-                                    moveArray.push(index + (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♟' || values[index - (7 * i)] == '🨩' || values[index - (7 * i)] == '♜' || values[index - (7 * i)] == '♞' || values[index - (7 * i)] == '🨼' || values[index - (7 * i)] == '🨒' || values[index - (7 * i)] == '♛' || values[index - (7 * i)] == '♚') {
-                                    moveArray.push(index - (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♟' || values[index + (7 * i)] == '🨩' || values[index + (7 * i)] == '♜' || values[index + (7 * i)] == '♞' || values[index + (7 * i)] == '🨼' || values[index + (7 * i)] == '🨒' || values[index + (7 * i)] == '♛' || values[index + (7 * i)] == '♚') {
-                                    moveArray.push(index + (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (index >= 8) {
-                            if (values[index - 8] != '♙' && values[index - 8] != '🨣' && values[index - 8] != '♖' && values[index - 8] != '♘' && values[index - 8] != '🨶' && values[index - 8] != '🨌' && values[index - 8] != '♕' && values[index - 8] != '♔') {
-                                moveArray.push(index - 8);
-                            }
+                        if (values[upArray[index]] == '' || blackPieces(values[upArray[index]])) {
+                            moveArray.push(upArray[index]);
                         }
-                        if (index <= 55) {
-                            if (values[index + 8] != '♙' && values[index + 8] != '🨣' && values[index + 8] != '♖' && values[index + 8] != '♘' && values[index + 8] != '🨶' && values[index + 8] != '🨌' && values[index + 8] != '♕' && values[index + 8] != '♔') {
-                                moveArray.push(index + 8);
-                            }
+                        if (values[downArray[index]] == '' || blackPieces(values[downArray[index]])) {
+                            moveArray.push(downArray[index]);
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        if (index >= 1) {
-                            if (index % 8 >= 1) {
-                                if (values[index - 1] != '♙' && values[index - 1] != '🨣' && values[index - 1] != '♖' && values[index - 1] != '♘' && values[index - 1] != '🨶' && values[index - 1] != '🨌' && values[index - 1] != '♕' && values[index - 1] != '♔') {
-                                    moveArray.push(index - 1);
-                                }
-                            }
+                        if (values[leftArray[index]] == '' || blackPieces(values[leftArray[index]])) {
+                            moveArray.push(leftArray[index]);
                         }
-                        if (index <= 62) {
-                            if (index % 8 <= 6) {
-                                if (values[index + 1] != '♙' && values[index + 1] != '🨣' && values[index + 1] != '♖' && values[index + 1] != '♘' && values[index + 1] != '🨶' && values[index + 1] != '🨌' && values[index + 1] != '♕' && values[index + 1] != '♔') {
-                                    moveArray.push(index + 1);
-                                }
-                            }
+                        if (values[rightArray[index]] == '' || blackPieces(values[rightArray[index]])) {
+                            moveArray.push(rightArray[index]);
                         }
                     }
                     break;
                 // Black Advisor Movement
                 case '🨒':
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♙' || values[index - (9 * i)] == '🨣' || values[index - (9 * i)] == '♖' || values[index - (9 * i)] == '♘' || values[index - (9 * i)] == '🨶' || values[index - (9 * i)] == '🨌' || values[index - (9 * i)] == '♕' || values[index - (9 * i)] == '♔') {
-                                    moveArray.push(index - (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♙' || values[index + (9 * i)] == '🨣' || values[index + (9 * i)] == '♖' || values[index + (9 * i)] == '♘' || values[index + (9 * i)] == '🨶' || values[index + (9 * i)] == '🨌' || values[index + (9 * i)] == '♕' || values[index + (9 * i)] == '♔') {
-                                    moveArray.push(index + (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♙' || values[index - (7 * i)] == '🨣' || values[index - (7 * i)] == '♖' || values[index - (7 * i)] == '♘' || values[index - (7 * i)] == '🨶' || values[index - (7 * i)] == '🨌' || values[index - (7 * i)] == '♕' || values[index - (7 * i)] == '♔') {
-                                    moveArray.push(index - (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♙' || values[index + (7 * i)] == '🨣' || values[index + (7 * i)] == '♖' || values[index + (7 * i)] == '♘' || values[index + (7 * i)] == '🨶' || values[index + (7 * i)] == '🨌' || values[index + (7 * i)] == '♕' || values[index + (7 * i)] == '♔') {
-                                    moveArray.push(index + (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        if (index >= 8) {
-                            if (values[index - 8] != '♟' && values[index - 8] != '🨩' && values[index - 8] != '♜' && values[index - 8] != '♞' && values[index - 8] != '🨼' && values[index - 8] != '🨒' && values[index - 8] != '♛' && values[index - 8] != '♚') {
-                                moveArray.push(index - 8);
-                            }
+                        if (values[upArray[index]] == '' || whitePieces(values[upArray[index]])) {
+                            moveArray.push(upArray[index]);
                         }
-                        if (index <= 55) {
-                            if (values[index + 8] != '♟' && values[index + 8] != '🨩' && values[index + 8] != '♜' && values[index + 8] != '♞' && values[index + 8] != '🨼' && values[index + 8] != '🨒' && values[index + 8] != '♛' && values[index + 8] != '♚') {
-                                moveArray.push(index + 8);
-                            }
+                        if (values[downArray[index]] == '' || whitePieces(values[downArray[index]])) {
+                            moveArray.push(downArray[index]);
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        if (index >= 1) {
-                            if (index % 8 >= 1) {
-                                if (values[index - 1] != '♟' && values[index - 1] != '🨩' && values[index - 1] != '♜' && values[index - 1] != '♞' && values[index - 1] != '🨼' && values[index - 1] != '🨒' && values[index - 1] != '♛' && values[index - 1] != '♚') {
-                                    moveArray.push(index - 1);
-                                }
-                            }
+                        if (values[leftArray[index]] == '' || whitePieces(values[leftArray[index]])) {
+                            moveArray.push(leftArray[index]);
                         }
-                        if (index <= 62) {
-                            if (index % 8 <= 6) {
-                                if (values[index + 1] != '♟' && values[index + 1] != '🨩' && values[index + 1] != '♜' && values[index + 1] != '♞' && values[index + 1] != '🨼' && values[index + 1] != '🨒' && values[index + 1] != '♛' && values[index + 1] != '♚') {
-                                    moveArray.push(index + 1);
-                                }
-                            }
+                        if (values[rightArray[index]] == '' || whitePieces(values[rightArray[index]])) {
+                            moveArray.push(rightArray[index]);
                         }
                     }
                     break;
                 // White Queen Movement
                 case '♕':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (8 * i)] == '♟' || values[index - (8 * i)] == '🨩' || values[index - (8 * i)] == '♜' || values[index - (8 * i)] == '♞' || values[index - (8 * i)] == '🨼' || values[index - (8 * i)] == '🨒' || values[index - (8 * i)] == '♛' || values[index - (8 * i)] == '♚') {
-                                    moveArray.push(index - (8 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (8 * i)] == '♟' || values[index + (8 * i)] == '🨩' || values[index + (8 * i)] == '♜' || values[index + (8 * i)] == '♞' || values[index + (8 * i)] == '🨼' || values[index + (8 * i)] == '🨒' || values[index + (8 * i)] == '♛' || values[index + (8 * i)] == '♚') {
-                                    moveArray.push(index + (8 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - i] == '♟' || values[index - i] == '🨩' || values[index - i] == '♜' || values[index - i] == '♞' || values[index - i] == '🨼' || values[index - i] == '🨒' || values[index - i] == '♛' || values[index - i] == '♚') {
-                                    moveArray.push(index - i);
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + i] == '♟' || values[index + i] == '🨩' || values[index + i] == '♜' || values[index + i] == '♞' || values[index + i] == '🨼' || values[index + i] == '🨒' || values[index + i] == '♛' || values[index + i] == '♚') {
-                                    moveArray.push(index + i);
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♟' || values[index - (9 * i)] == '🨩' || values[index - (9 * i)] == '♜' || values[index - (9 * i)] == '♞' || values[index - (9 * i)] == '🨼' || values[index - (9 * i)] == '🨒' || values[index - (9 * i)] == '♛' || values[index - (9 * i)] == '♚') {
-                                    moveArray.push(index - (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♟' || values[index + (9 * i)] == '🨩' || values[index + (9 * i)] == '♜' || values[index + (9 * i)] == '♞' || values[index + (9 * i)] == '🨼' || values[index + (9 * i)] == '🨒' || values[index + (9 * i)] == '♛' || values[index + (9 * i)] == '♚') {
-                                    moveArray.push(index + (9 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♟' || values[index - (7 * i)] == '🨩' || values[index - (7 * i)] == '♜' || values[index - (7 * i)] == '♞' || values[index - (7 * i)] == '🨼' || values[index - (7 * i)] == '🨒' || values[index - (7 * i)] == '♛' || values[index - (7 * i)] == '♚') {
-                                    moveArray.push(index - (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♟' || values[index + (7 * i)] == '🨩' || values[index + (7 * i)] == '♜' || values[index + (7 * i)] == '♞' || values[index + (7 * i)] == '🨼' || values[index + (7 * i)] == '🨒' || values[index + (7 * i)] == '♛' || values[index + (7 * i)] == '♚') {
-                                    moveArray.push(index + (7 * i));
+                                if (blackPieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (index >= 10) {
-                                    if (values[index - 10] != '♙' && values[index - 10] != '🨣' && values[index - 10] != '♖' && values[index - 10] != '♘' && values[index - 10] != '🨶' && values[index - 10] != '🨌' && values[index - 10] != '♕' && values[index - 10] != '♔') {
-                                        moveArray.push(index - 10);
-                                    }
-                                }
-                                if (index <= 57) {
-                                    if (values[index + 6] != '♙' && values[index + 6] != '🨣' && values[index + 6] != '♖' && values[index + 6] != '♘' && values[index + 6] != '🨶' && values[index + 6] != '🨌' && values[index + 6] != '♕' && values[index + 6] != '♔') {
-                                        moveArray.push(index + 6);
-                                    }
-                                }
-                            }
-                            if (index >= 17) {
-                                if (values[index - 17] != '♙' && values[index - 17] != '🨣' && values[index - 17] != '♖' && values[index - 17] != '♘' && values[index - 17] != '🨶' && values[index - 17] != '🨌' && values[index - 17] != '♕' && values[index - 17] != '♔') {
-                                    moveArray.push(index - 17);
-                                }
-                            }
-                            if (index <= 48) {
-                                if (values[index + 15] != '♙' && values[index + 15] != '🨣' && values[index + 15] != '♖' && values[index + 15] != '♘' && values[index + 15] != '🨶' && values[index + 15] != '🨌' && values[index + 15] != '♕' && values[index + 15] != '♔') {
-                                    moveArray.push(index + 15);
-                                }
-                            }
+                        if (values[upArray[leftArray[leftArray[index]]]] == '' || blackPieces(values[upArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[leftArray[leftArray[index]]]);
                         }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (index >= 6) {
-                                    if (values[index - 6] != '♙' && values[index - 6] != '🨣' && values[index - 6] != '♖' && values[index - 6] != '♘' && values[index - 6] != '🨶' && values[index - 6] != '🨌' && values[index - 6] != '♕' && values[index - 6] != '♔') {
-                                        moveArray.push(index - 6);
-                                    }
-                                }
-                                if (index <= 53) {
-                                    if (values[index + 10] != '♙' && values[index + 10] != '🨣' && values[index + 10] != '♖' && values[index + 10] != '♘' && values[index + 10] != '🨶' && values[index + 10] != '🨌' && values[index + 10] != '♕' && values[index + 10] != '♔') {
-                                        moveArray.push(index + 10);
-                                    }
-                                }
-                            }
-                            if (index >= 15) {
-                                if (values[index - 15] != '♙' && values[index - 15] != '🨣' && values[index - 15] != '♖' && values[index - 15] != '♘' && values[index - 15] != '🨶' && values[index - 15] != '🨌' && values[index - 15] != '♕' && values[index - 15] != '♔') {
-                                    moveArray.push(index - 15);
-                                }
-                            }
-                            if (index <= 46) {
-                                if (values[index + 17] != '♙' && values[index + 17] != '🨣' && values[index + 17] != '♖' && values[index + 17] != '♘' && values[index + 17] != '🨶' && values[index + 17] != '🨌' && values[index + 17] != '♕' && values[index + 17] != '♔') {
-                                    moveArray.push(index + 17);
-                                }
-                            }
+                        if (values[downArray[leftArray[leftArray[index]]]] == '' || blackPieces(values[downArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[leftArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[upArray[leftArray[index]]]] == '' || blackPieces(values[upArray[upArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[upArray[leftArray[index]]]);
+                        }
+                        if (values[downArray[downArray[leftArray[index]]]] == '' || blackPieces(values[downArray[downArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[downArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[rightArray[rightArray[index]]]] == '' || blackPieces(values[upArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[rightArray[rightArray[index]]]] == '' || blackPieces(values[downArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[upArray[upArray[rightArray[index]]]] == '' || blackPieces(values[upArray[upArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[upArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[downArray[rightArray[index]]]] == '' || blackPieces(values[downArray[downArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[downArray[rightArray[index]]]);
                         }
                     }
                     break;
                 // Black Queen Movement
                 case '♛':
                     if (discDir == 'up' || discDir == 'down' || discDir == '') {
-                        for (let i = 1; i <= Math.floor(index / 8); i++) {
-                            if (values[index - (8 * i)] == '') {
-                                moveArray.push(index - (8 * i));
+                        for (let i = upArray[index]; i > -1; i = upArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (8 * i)] == '♙' || values[index - (8 * i)] == '🨣' || values[index - (8 * i)] == '♖' || values[index - (8 * i)] == '♘' || values[index - (8 * i)] == '🨶' || values[index - (8 * i)] == '🨌' || values[index - (8 * i)] == '♕' || values[index - (8 * i)] == '♔') {
-                                    moveArray.push(index - (8 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - Math.floor(index / 8); i++) {
-                            if (values[index + (8 * i)] == '') {
-                                moveArray.push(index + (8 * i));
+                        for (let i = downArray[index]; i > -1; i = downArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (8 * i)] == '♙' || values[index + (8 * i)] == '🨣' || values[index + (8 * i)] == '♖' || values[index + (8 * i)] == '♘' || values[index + (8 * i)] == '🨶' || values[index + (8 * i)] == '🨌' || values[index + (8 * i)] == '♕' || values[index + (8 * i)] == '♔') {
-                                    moveArray.push(index + (8 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'left' || discDir == 'right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - i] == '') {
-                                moveArray.push(index - i);
+                        for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - i] == '♙' || values[index - i] == '🨣' || values[index - i] == '♖' || values[index - i] == '♘' || values[index - i] == '🨶' || values[index - i] == '🨌' || values[index - i] == '♕' || values[index - i] == '♔') {
-                                    moveArray.push(index - i);
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + i] == '') {
-                                moveArray.push(index + i);
+                        for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + i] == '♙' || values[index + i] == '🨣' || values[index + i] == '♖' || values[index + i] == '♘' || values[index + i] == '🨶' || values[index + i] == '🨌' || values[index + i] == '♕' || values[index + i] == '♔') {
-                                    moveArray.push(index + i);
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-left' || discDir == 'down-right' || discDir == '') {
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index - (9 * i)] == '') {
-                                moveArray.push(index - (9 * i));
+                        for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (9 * i)] == '♙' || values[index - (9 * i)] == '🨣' || values[index - (9 * i)] == '♖' || values[index - (9 * i)] == '♘' || values[index - (9 * i)] == '🨶' || values[index - (9 * i)] == '🨌' || values[index - (9 * i)] == '♕' || values[index - (9 * i)] == '♔') {
-                                    moveArray.push(index - (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index + (9 * i)] == '') {
-                                moveArray.push(index + (9 * i));
+                        for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (9 * i)] == '♙' || values[index + (9 * i)] == '🨣' || values[index + (9 * i)] == '♖' || values[index + (9 * i)] == '♘' || values[index + (9 * i)] == '🨶' || values[index + (9 * i)] == '🨌' || values[index + (9 * i)] == '♕' || values[index + (9 * i)] == '♔') {
-                                    moveArray.push(index + (9 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == 'up-right' || discDir == 'down-left' || discDir == '') {
-                        for (let i = 1; i < 8 - (index % 8); i++) {
-                            if (values[index - (7 * i)] == '') {
-                                moveArray.push(index - (7 * i));
+                        for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index - (7 * i)] == '♙' || values[index - (7 * i)] == '🨣' || values[index - (7 * i)] == '♖' || values[index - (7 * i)] == '♘' || values[index - (7 * i)] == '🨶' || values[index - (7 * i)] == '🨌' || values[index - (7 * i)] == '♕' || values[index - (7 * i)] == '♔') {
-                                    moveArray.push(index - (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
-                        for (let i = 1; i <= (index % 8); i++) {
-                            if (values[index + (7 * i)] == '') {
-                                moveArray.push(index + (7 * i));
+                        for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
+                            if (values[i] == '') {
+                                moveArray.push(i);
                             } else {
-                                if (values[index + (7 * i)] == '♙' || values[index + (7 * i)] == '🨣' || values[index + (7 * i)] == '♖' || values[index + (7 * i)] == '♘' || values[index + (7 * i)] == '🨶' || values[index + (7 * i)] == '🨌' || values[index + (7 * i)] == '♕' || values[index + (7 * i)] == '♔') {
-                                    moveArray.push(index + (7 * i));
+                                if (whitePieces(values[i])) {
+                                    moveArray.push(i);
                                 }
                                 break;
                             }
                         }
                     }
                     if (discDir == '') {
-                        if (index % 8 > 0) {
-                            if (index % 8 > 1) {
-                                if (index >= 10) {
-                                    if (values[index - 10] != '♟' && values[index - 10] != '🨩' && values[index - 10] != '♜' && values[index - 10] != '♞' && values[index - 10] != '🨼' && values[index - 10] != '🨒' && values[index - 10] != '♛' && values[index - 10] != '♚') {
-                                        moveArray.push(index - 10);
-                                    }
-                                }
-                                if (index <= 57) {
-                                    if (values[index + 6] != '♟' && values[index + 6] != '🨩' && values[index + 6] != '♜' && values[index + 6] != '♞' && values[index + 6] != '🨼' && values[index + 6] != '🨒' && values[index + 6] != '♛' && values[index + 6] != '♚') {
-                                        moveArray.push(index + 6);
-                                    }
-                                }
-                            }
-                            if (index >= 17) {
-                                if (values[index - 17] != '♟' && values[index - 17] != '🨩' && values[index - 17] != '♜' && values[index - 17] != '♞' && values[index - 17] != '🨼' && values[index - 17] != '🨒' && values[index - 17] != '♛' && values[index - 17] != '♚') {
-                                    moveArray.push(index - 17);
-                                }
-                            }
-                            if (index <= 48) {
-                                if (values[index + 15] != '♟' && values[index + 15] != '🨩' && values[index + 15] != '♜' && values[index + 15] != '♞' && values[index + 15] != '🨼' && values[index + 15] != '🨒' && values[index + 15] != '♛' && values[index + 15] != '♚') {
-                                    moveArray.push(index + 15);
-                                }
-                            }
+                        if (values[upArray[leftArray[leftArray[index]]]] == '' || whitePieces(values[upArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[leftArray[leftArray[index]]]);
                         }
-                        if (index % 8 < 7) {
-                            if (index % 8 < 6) {
-                                if (index >= 6) {
-                                    if (values[index - 6] != '♟' && values[index - 6] != '🨩' && values[index - 6] != '♜' && values[index - 6] != '♞' && values[index - 6] != '🨼' && values[index - 6] != '🨒' && values[index - 6] != '♛' && values[index - 6] != '♚') {
-                                        moveArray.push(index - 6);
-                                    }
-                                }
-                                if (index <= 53) {
-                                    if (values[index + 10] != '♟' && values[index + 10] != '🨩' && values[index + 10] != '♜' && values[index + 10] != '♞' && values[index + 10] != '🨼' && values[index + 10] != '🨒' && values[index + 10] != '♛' && values[index + 10] != '♚') {
-                                        moveArray.push(index + 10);
-                                    }
-                                }
-                            }
-                            if (index >= 15) {
-                                if (values[index - 15] != '♟' && values[index - 15] != '🨩' && values[index - 15] != '♜' && values[index - 15] != '♞' && values[index - 15] != '🨼' && values[index - 15] != '🨒' && values[index - 15] != '♛' && values[index - 15] != '♚') {
-                                    moveArray.push(index - 15);
-                                }
-                            }
-                            if (index <= 46) {
-                                if (values[index + 17] != '♟' && values[index + 17] != '🨩' && values[index + 17] != '♜' && values[index + 17] != '♞' && values[index + 17] != '🨼' && values[index + 17] != '🨒' && values[index + 17] != '♛' && values[index + 17] != '♚') {
-                                    moveArray.push(index + 17);
-                                }
-                            }
+                        if (values[downArray[leftArray[leftArray[index]]]] == '' || whitePieces(values[downArray[leftArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[leftArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[upArray[leftArray[index]]]] == '' || whitePieces(values[upArray[upArray[leftArray[index]]]])) {
+                            moveArray.push(upArray[upArray[leftArray[index]]]);
+                        }
+                        if (values[downArray[downArray[leftArray[index]]]] == '' || whitePieces(values[downArray[downArray[leftArray[index]]]])) {
+                            moveArray.push(downArray[downArray[leftArray[index]]]);
+                        }
+                        if (values[upArray[rightArray[rightArray[index]]]] == '' || whitePieces(values[upArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[rightArray[rightArray[index]]]] == '' || whitePieces(values[downArray[rightArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[rightArray[rightArray[index]]]);
+                        }
+                        if (values[upArray[upArray[rightArray[index]]]] == '' || whitePieces(values[upArray[upArray[rightArray[index]]]])) {
+                            moveArray.push(upArray[upArray[rightArray[index]]]);
+                        }
+                        if (values[downArray[downArray[rightArray[index]]]] == '' || whitePieces(values[downArray[downArray[rightArray[index]]]])) {
+                            moveArray.push(downArray[downArray[rightArray[index]]]);
                         }
                     }
                     break;
@@ -4533,33 +3272,17 @@ export default function App() {
                 case '♔':
                     values.forEach((value, ind) => {
                         switch (ind) {
-                            case index - 8:
-                            case index + 8:
-                                if (value == '♟' || value == '🨩' || value == '♜' || value == '♞' || value == '🨼' || value == '🨒' || value == '♛' || value == '♚') {
+                            case upArray[index]:
+                            case downArray[index]:
+                            case leftArray[index]:
+                            case rightArray[index]:
+                            case upArray[leftArray[index]]:
+                            case downArray[leftArray[index]]:
+                            case upArray[rightArray[index]]:
+                            case downArray[rightArray[index]]:
+                                if (blackPieces(value)) {
                                     if (!checkForCheckWhite(ind)) {
                                         moveArray.push(ind);
-                                    }
-                                }
-                                break;
-                            case index - 1:
-                            case index - 9:
-                            case index + 7:
-                                if (index % 8 > 0) {
-                                    if (value == '♟' || value == '🨩' || value == '♜' || value == '♞' || value == '🨼' || value == '🨒' || value == '♛' || value == '♚') {
-                                        if (!checkForCheckWhite(ind)) {
-                                            moveArray.push(ind);
-                                        }
-                                    }
-                                }
-                                break;
-                            case index + 1:
-                            case index - 7:
-                            case index + 9:
-                                if (index % 8 < 7) {
-                                    if (value == '♟' || value == '🨩' || value == '♜' || value == '♞' || value == '🨼' || value == '🨒' || value == '♛' || value == '♚') {
-                                        if (!checkForCheckWhite(ind)) {
-                                            moveArray.push(ind);
-                                        }
                                     }
                                 }
                                 break;
@@ -4577,33 +3300,17 @@ export default function App() {
                 case '♚':
                     values.forEach((value, ind) => {
                         switch (ind) {
-                            case index - 8:
-                            case index + 8:
-                                if (value == '♙' || value == '🨣' || value == '♖' || value == '♘' || value == '🨶' || value == '🨌' || value == '♕' || value == '♔') {
+                            case upArray[index]:
+                            case downArray[index]:
+                            case leftArray[index]:
+                            case rightArray[index]:
+                            case upArray[leftArray[index]]:
+                            case downArray[leftArray[index]]:
+                            case upArray[rightArray[index]]:
+                            case downArray[rightArray[index]]:
+                                if (whitePieces(value)) {
                                     if (!checkForCheckBlack(ind)) {
                                         moveArray.push(ind);
-                                    }
-                                }
-                                break;
-                            case index - 1:
-                            case index - 9:
-                            case index + 7:
-                                if (index % 8 > 0) {
-                                    if (value == '♙' || value == '🨣' || value == '♖' || value == '♘' || value == '🨶' || value == '🨌' || value == '♕' || value == '♔') {
-                                        if (!checkForCheckBlack(ind)) {
-                                            moveArray.push(ind);
-                                        }
-                                    }
-                                }
-                                break;
-                            case index + 1:
-                            case index - 7:
-                            case index + 9:
-                                if (index % 8 < 7) {
-                                    if (value == '♙' || value == '🨣' || value == '♖' || value == '♘' || value == '🨶' || value == '🨌' || value == '♕' || value == '♔') {
-                                        if (!checkForCheckBlack(ind)) {
-                                            moveArray.push(ind);
-                                        }
                                     }
                                 }
                                 break;
@@ -4636,41 +3343,13 @@ export default function App() {
         var whiteAdvisor = values.findIndex(value => value == '🨌');
         var blackAdvisor = values.findIndex(value => value == '🨒');
         var whiteKnights = [];
-        var aa = values.findIndex(value => value == '♘');
-        var bb = values.findLastIndex(value => value == '♘');
-        if (aa == bb && aa != -1) {
-            whiteKnights.push(aa);
-        } else if (aa != -1) {
-            whiteKnights.push(aa);
-            whiteKnights.push(bb);
-        }
+        checkForPiece('♘', whiteKnights);
         var blackKnights = [];
-        var cc = values.findIndex(value => value == '♞');
-        var dd = values.findLastIndex(value => value == '♞');
-        if (cc == dd && cc != -1) {
-            blackKnights.push(cc);
-        } else if (cc != -1) {
-            blackKnights.push(cc);
-            blackKnights.push(dd);
-        }
+        checkForPiece('♞', blackKnights);
         var whiteMages = [];
-        var ee = values.findIndex(value => value == '♖');
-        var ff = values.findLastIndex(value => value == '♖');
-        if (ee == ff && ee != -1) {
-            whiteMages.push(ee);
-        } else if (ee != -1) {
-            whiteMages.push(ee);
-            whiteMages.push(ff);
-        }
+        checkForPiece('♖', whiteMages);
         var blackMages = [];
-        var gg = values.findIndex(value => value == '♜');
-        var hh = values.findLastIndex(value => value == '♜');
-        if (gg == hh && gg != -1) {
-            blackMages.push(gg);
-        } else if (gg != -1) {
-            blackMages.push(gg);
-            blackMages.push(hh);
-        }
+        checkForPiece('♜', blackMages);
         var whiteGenerals = [];
         values.forEach((value, index) => { if (value == '🨣' && !whiteGenerals.some(val => index == val)) { whiteGenerals.push(index); } });
         var blackGenerals = [];
