@@ -8,6 +8,7 @@ import Checkers from "./Checkers";
 import Chess from "./Chess";
 import Chess2 from "./Chess2";
 import ThreePChess from "./3PChess";
+import Raumschach from "./Raumschach";
 
 import "./styles.css";
 import "bulma/css/bulma.min.css";
@@ -15,7 +16,7 @@ import "bulma/css/bulma.min.css";
 // App
 function App() {
     // Controls whether you see the Counter, Star Rating, or Tic Tac Toe components
-    const [state, setState] = useState("counter"); // ['counter', 'star', 'ttt', '3pttt', 'checkers', 'chess', 'chess2', '3pchess']
+    const [state, setState] = useState("counter"); // ['counter', 'star', 'ttt', '3pttt', 'checkers', 'chess', 'chess2', '3pchess', raumschach]
 
     return (
         <>
@@ -28,6 +29,7 @@ function App() {
                 {state === "chess" && "Chess"}
                 {state === "chess2" && "Broken Chess"}
                 {state === "3pchess" && "3-Player Chess"}
+                {state === "raumschach" && "3D Chess"}
             </header>
             <span>
                 <nav>
@@ -39,6 +41,7 @@ function App() {
                     <div className="tag" onClick={() => setState("chess")}>Chess</div>
                     <div className="tag" onClick={() => setState("chess2")}>Broken Chess</div>
                     <div className="tag" onClick={() => setState("3pchess")}>3-Player Chess</div>
+                    <div className="tag" onClick={() => setState("raumschach")}>3D Chess</div>
                 </nav>
                 <main>
                     {state === "counter" && <Counters amount={9} />}
@@ -48,7 +51,8 @@ function App() {
                     {state === "checkers" && <Checkers />}
                     {state === "chess" && <Chess />}
                     {state === "chess2" && <Chess2 />}
-                    {state === "3pchess" && <ThreePChess /> }
+                    {state === "3pchess" && <ThreePChess />}
+                    {state === "raumschach" && <Raumschach/>}
                 </main>
             </span>
         </>

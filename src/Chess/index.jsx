@@ -497,6 +497,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (disca == -1) {
                         disca = i;
+                        continue;
                     }
                     break;
                 } else if (disca > -1) {
@@ -515,6 +516,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (discb == -1) {
                         discb = i;
+                        continue;
                     }
                     break;
                 } else if (discb > -1) {
@@ -533,6 +535,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (discc == -1) {
                         discc = i;
+                        continue;
                     }
                     break;
                 } else if (discc > -1) {
@@ -551,6 +554,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (discd == -1) {
                         discd = i;
+                        continue;
                     }
                     break;
                 } else if (discd > -1) {
@@ -569,6 +573,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (disce == -1) {
                         disce = i;
+                        continue;
                     }
                     break;
                 } else if (disce > -1) {
@@ -587,6 +592,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (discf == -1) {
                         discf = i;
+                        continue;
                     }
                     break;
                 } else if (discf > -1) {
@@ -605,6 +611,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (discg == -1) {
                         discg = i;
+                        continue;
                     }
                     break;
                 } else if (discg > -1) {
@@ -623,6 +630,7 @@ export default function App() {
                 if (whitePieces(values[i])) {
                     if (disch == -1) {
                         disch = i;
+                        continue;
                     }
                     break;
                 } else if (disch > -1) {
@@ -647,6 +655,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (disca == -1) {
                         disca = i;
+                        continue;
                     }
                     break;
                 } else if (disca > -1) {
@@ -665,6 +674,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (discb == -1) {
                         discb = i;
+                        continue;
                     }
                     break;
                 } else if (discb > -1) {
@@ -683,6 +693,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (discc == -1) {
                         discc = i;
+                        continue;
                     }
                     break;
                 } else if (discc > -1) {
@@ -701,6 +712,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (discd == -1) {
                         discd = i;
+                        continue;
                     }
                     break;
                 } else if (discd > -1) {
@@ -719,6 +731,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (disce == -1) {
                         disce = i;
+                        continue;
                     }
                     break;
                 } else if (disce > -1) {
@@ -737,6 +750,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (discf == -1) {
                         discf = i;
+                        continue;
                     }
                     break;
                 } else if (discf > -1) {
@@ -755,6 +769,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (discg == -1) {
                         discg = i;
+                        continue;
                     }
                     break;
                 } else if (discg > -1) {
@@ -773,6 +788,7 @@ export default function App() {
                 if (blackPieces(values[i])) {
                     if (disch == -1) {
                         disch = i;
+                        continue;
                     }
                     break;
                 } else if (disch > -1) {
