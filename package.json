@@ -7,6 +7,7 @@
   "homepage": "https://shizuru1.github.io/Non-Descript-Web-App",
   "scripts": {
     "start": "webpack serve",
+    "build": "webpack",
     "predeploy": "yarn run build",
     "deploy": "gh-pages -d build"
   },
