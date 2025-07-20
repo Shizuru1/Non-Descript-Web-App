@@ -4,8 +4,11 @@
   "main": "src/app.jsx",
   "license": "MIT",
   "private": true,
+  "homepage": "https://shizuru1.github.io/Non-Descript-Web-App",
   "scripts": {
-    "start": "webpack serve"
+    "start": "webpack serve",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -20,6 +23,7 @@
     "babel-loader": "^9.1.3",
     "css-loader": "^6.8.1",
     "eslint": "^9.2.0",
+    "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^2.7.6",
     "style-loader": "^3.3.3",
