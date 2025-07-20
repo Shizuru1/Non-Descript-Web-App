@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+
+# Build files
+dist/
+build/
+*.log
+
+# Editor files
+.vscode/
+.vs/
+.idea/
+
+# macOS
+.DS_Store
+
+# Webpack development server files
+webpack-*
+
+# Dependency directories
+.pnpm-store/
+yarn-error.log
