@@ -222,14 +222,16 @@ body {
 
     .cellf {
         margin-left: 32.5875px;
+        margin-top: -24.5px;
     }
 
     .cellg {
         margin-left: -136.9px;
+        margin-top: -24.5px;
     }
 
     .cellh {
         margin-left: -149px;
-        margin-top: -60.425px;
+        margin-top: -22px;
     }
 }
