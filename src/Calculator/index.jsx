@@ -304,6 +304,8 @@ const binaryRealAdd = (aa, bb, base) => {
         while (result.endsWith('0')) {
             if (result.length > 1) {
                 result = result.slice(0, result.length - 1);
+            } else {
+                break;
             }
         }
         if (result.endsWith('.')) {
@@ -760,6 +762,8 @@ const binaryRealSubtract = (aa, bb, base) => {
         while (result.endsWith('0')) {
             if (result.length > 1) {
                 result = result.slice(0, result.length - 1);
+            } else {
+                break;
             }
         }
         if (result.endsWith('.')) {
@@ -860,39 +864,48 @@ const binaryRealMultiply = (aa, bb, base) => {
             }
         }
         for (let i = 0; i < resultArr.length; i++) {
+            while (resultArr[i].endsWith('0')) {
+                if (resultArr[i].length > 1) {
+                    resultArr[i] = resultArr[i].slice(0, resultArr[i].length - 1);
+                } else {
+                    break;
+                }
+            }
             result = binaryRealAdd(result.split('').reverse(), resultArr[i].split(''), base);
         }
         if (result.length > 17) {
-            if (valsa.findIndex(val => val == result.split('')[17]) >= (base / 2)) {
-                result = result.slice(0, 17);
-                var replc = [];
-                var lenLen = result.length;
-                for (let i = 0; i < lenLen; i++) {
-                    if (result.endsWith('.')) {
-                        continue;
-                    }
-                    if (base < 13) {
-                        if (result.endsWith(valsa[base - 1])) {
-                            replc.splice(0, 0, '0');
-                        } else {
-                            replc.splice(0, 0, valsa[valsa.findIndex(val => val == result.split('')[result.length - 1]) + 1]);
-                            result = result.slice(0, result.length - 1);
-                            break;
+            if (result.includes('.')) {
+                if (valsa.findIndex(val => val == result.split('')[17]) >= (base / 2)) {
+                    result = result.slice(0, 17);
+                    var replc = [];
+                    var lenLen = result.length;
+                    for (let i = 0; i < lenLen; i++) {
+                        if (result.endsWith('.')) {
+                            continue;
                         }
-                    } else {
-                        if (result.endsWith(valsb[base - 1])) {
-                            replc.splice(0, 0, '0');
+                        if (base < 13) {
+                            if (result.endsWith(valsa[base - 1])) {
+                                replc.splice(0, 0, '0');
+                            } else {
+                                replc.splice(0, 0, valsa[valsa.findIndex(val => val == result.split('')[result.length - 1]) + 1]);
+                                result = result.slice(0, result.length - 1);
+                                break;
+                            }
                         } else {
-                            replc.splice(0, 0, valsb[valsb.findIndex(val => val == result.split('')[result.length - 1]) + 1]);
-                            result = result.slice(0, result.length - 1);
-                            break;
+                            if (result.endsWith(valsb[base - 1])) {
+                                replc.splice(0, 0, '0');
+                            } else {
+                                replc.splice(0, 0, valsb[valsb.findIndex(val => val == result.split('')[result.length - 1]) + 1]);
+                                result = result.slice(0, result.length - 1);
+                                break;
+                            }
                         }
+                        result = result.slice(0, result.length - 1);
                     }
-                    result = result.slice(0, result.length - 1);
+                    result = result += replc.join('');
+                } else {
+                    result = result.slice(0, 17);
                 }
-                result = result += replc.join('');
-            } else {
-                result = result.slice(0, 17);
             }
         }
         while (result.startsWith('0')) {
