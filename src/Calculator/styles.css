@@ -1,0 +1,86 @@
+body {
+    font-family: sans-serif;
+}
+
+.app7 {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 480px;
+    margin: 0 auto;
+    row-gap: 11px;
+}
+
+.board7 {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+}
+
+.ans {
+    background-color: #999;
+    border: 1px solid #666;
+    font-size: min(48px, 10vw);
+    text-align: right;
+    padding-right: 3%;
+    height: min(81.6px, 16vw);
+}
+
+.ops {
+    background-color: #ffb968;
+    border: 1px solid #cc8635;
+    text-align: center;
+    padding-right: 3%;
+    height: min(72px, 15vw);
+}
+
+        .ops:not(:disabled):hover {
+            background-color: #fab463;
+        }
+
+.eqs {
+    background-color: #ffa33a;
+    border: 1px solid #666;
+    text-align: center;
+    padding-right: 3%;
+    height: min(72px, 15vw);
+}
+
+        .eqs:not(:disabled):hover {
+            background-color: #fa9e35;
+        }
+
+.cell7 {
+    background-color: #ccc;
+    border: 1px solid #999;
+    height: min(72px, 15vw);
+    align-self: center;
+    text-align: center;
+}
+
+        .cell7:not(:disabled):hover {
+            background-color: #c7c7c7;
+        }
+
+.ans,
+.ops,
+.eqs,
+.cell7 {
+    color: #000;
+    font-weight: bold;
+    vertical-align: middle;
+    border-radius: 12.5px;
+    width: 100%;
+}
+
+.ops,
+.eqs,
+.cell7 {
+    font-size: min(43.2px, 9vw);
+}
+
+    .ops:not(:disabled), .eqs:not(:disabled), .cell7:not(:disabled) {
+        cursor: pointer;
+    }

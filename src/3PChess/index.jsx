@@ -1277,7 +1277,7 @@ export default function App() {
                 case '♙':
                     (whitePawnArray[index])[1].forEach((value, ind) => {
                         if (value > -1) {
-                            if (pawnDisc == ind) {
+                            if (pawnDisc != ind) {
                                 if (blackPieces(values[value]) || bichromePieces(values[value])) {
                                     moveArray.push(value);
                                 }
@@ -1298,7 +1298,7 @@ export default function App() {
                 case '♟':
                     (blackPawnArray[index])[1].forEach((value, ind) => {
                         if (value > -1) {
-                            if (pawnDisc == ind) {
+                            if (pawnDisc != ind) {
                                 if (whitePieces(values[value]) || bichromePieces(values[value])) {
                                     moveArray.push(value);
                                 }
@@ -1319,7 +1319,7 @@ export default function App() {
                 case '🨅':
                     (bichromePawnArray[index])[1].forEach((value, ind) => {
                         if (value > -1) {
-                            if (pawnDisc == ind) {
+                            if (pawnDisc != ind) {
                                 if (whitePieces(values[value]) || blackPieces(values[value])) {
                                     moveArray.push(value);
                                 }

@@ -87,7 +87,7 @@ main {
   width: 90%;
   min-height: 92%;
   height: fit-content;
-  overflow-x: hidden;
+  overflow: auto;
   position: absolute;
   left: 10%;
   top: 8%;
