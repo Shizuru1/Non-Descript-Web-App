@@ -4,7 +4,7 @@ export function Star({ filled, hoverRating, setRating, persistRating }) {
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            className={["star-icon", filled ? "star-icon-filled" : ""].join(" ")}
+            className={["star-icon", filled == 2 ? "star-icon-hover" : (filled == 1 ? "star-icon-filled" : "")].join(" ")}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

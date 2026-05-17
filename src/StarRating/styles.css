@@ -1,5 +1,5 @@
-body {
-    font-family: sans-serif;
+.star-rating {
+    display: inline-flex;
 }
 
 .star-icon {
@@ -12,3 +12,21 @@ body {
 .star-icon-filled {
     fill: yellow;
 }
+
+.star-icon-hover {
+    fill: goldenrod;
+}
+
+.text-rating {
+    position: relative;
+    top: 2px;
+    height: 27px;
+    background-color: powderblue;
+    border-color: lightsteelblue;
+    border-radius: 5px;
+    margin-right: 9px;
+}
+
+    .text-rating:focus {
+        outline: 2px solid blueviolet;
+    }

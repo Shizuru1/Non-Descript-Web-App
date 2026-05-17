@@ -1,39 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import "./styles.css";
 
 const Cell = (props) => {
-    const { value, win, setPlayer, setArray } = props;
+    const { value, state, setArray, setHistory } = props;
 
     const handleClick = () => {
-        setPlayer();
         setArray();
+        setHistory();
     }
 
-    return <button className="cell" onClick={handleClick} disabled={(value != '') || (win != '')}>{value}</button>;
+    return <button className="cell" onClick={handleClick} disabled={(value != '') || (state.length > 1)}>{value}</button>;
 };
 
-export default function App() {
-    const [player, setPlayer] = useState('O'); // whose turn
-    const [win, setWin] = useState(''); // win state
-    const [values, setValues] = useState(new Array(9).fill('')); // board state
+export function TTTSidebar(props) {
+    const { reset, history } = props;
+
+    return (
+        <div>
+            <div>
+                <button className="resetButton" onClick={reset}>Reset</button>
+            </div>
+            <br />
+            <div>Move History:</div>
+            <div className="moveHistory">{history}</div>
+        </div>
+    );
+}
+
+export default function Tictac(props) {
+    const { state, setState, values, setValues, setHistory } = props;
+
+    const loadPage = useRef(true); // don't activate useEffect on first load
 
     useEffect(() => {
-        checkForWin();
+        if (loadPage.current) {
+            loadPage.current = false;
+            return;
+        }
+        checkState();
     }, [values]);
 
     const arrayModifier = (id) => {
-        setValues(values.map((value, index) => (index == id ? value = player : value)));
+        setValues(values.map((value, index) => (index == id ? value = state.slice(0, 1) : value)));
     }
 
-    const playerModifier = (func) => {
-        (player == 'O') ? func('X') : func('O');
-    }
-
-    const reset = () => {
-        setValues(new Array(9).fill(''));
-        setPlayer('O');
-        setWin('');
+    const histModifier = (id) => {
+        setHistory(prev => state.slice(0, 1) + (id < 3 ? ' Top ' : (id < 6 ? ' Middle ' : ' Bottom ')) + (id % 3 == 0 ? 'Left' : (id % 3 == 1 ? 'Middle' : 'Right')) + '\n' + prev);
     }
 
     const winningCombos = [
@@ -47,29 +60,31 @@ export default function App() {
         [2, 4, 6],
     ];
 
-    const checkForWin = () => {
-        if (values.every(value => value != '')) {
-            setWin('draw');
-        }
-        winningCombos.forEach(combin => {
-            const [a, b, c] = combin;
+    const checkState = () => {
+        for (let i = 0; i < 8; i++) {
+            const [a, b, c] = winningCombos[i];
             if (values[a] != '') {
                 if (values[a] == values[b] && values[b] == values[c]) {
-                    playerModifier(setWin);
+                    setState(prev => prev + 'win');
+                    return;
                 }
             }
-        })
+        }
+        if (values.every(value => value != '')) {
+            setState(prev => prev + 'draw');
+            return;
+        }
+        setState(prev => prev == 'O' ? 'X' : 'O');
     }
 
     return (
         <div className="app">
-            <div aria-live="polite">
-                {((win == '') ? ('Player ' + player + "'s turn") : ((win == 'draw') ? 'Draw' : ('Winner is ' + win)))}
+            <div>
+                {state.slice(1) == 'draw' ? 'Draw' : (state.slice(1) == 'win' ? 'Player ' + state.slice(0, 1) + ' wins' : 'Player ' + state.slice(0,1) + "'s turn")}
             </div>
             <div className="board">
-                {values.map((value, index) => (<Cell key={index} value={value} win={win} setPlayer={() => playerModifier(setPlayer)} setArray={() => arrayModifier(index)} />))}
+                {values.map((value, index) => (<Cell value={value} state={state} setArray={() => arrayModifier(index)} setHistory={() => histModifier(index)} />))}
             </div>
-            <button onClick={reset}>Reset</button>
         </div>
     );
 }

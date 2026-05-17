@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import "./styles.css";
 
 const Cell = (props) => {
-    const { id, selected, value, win, player, setCount, setPlayer, setArray, setSelected, checkForMovement, checkForCastle } = props;
+    const { id, selected, value, win, player, setCount, setPlayer, setArray, setSelected, setHistory, checkForMovement, checkForCastle } = props;
 
     const handleClick = () => {
         if (selected.value) {
@@ -14,6 +14,7 @@ const Cell = (props) => {
             // Normal Move
             else {
                 var moves = selected.moved;
+                setHistory(selected.piece, id, value != '', selected.id, ((selected.piece == '♙' || selected.piece == '♟' || selected.piece == '🨅') && (Math.abs(id - selected.id) == 7 || Math.abs(id - selected.id) == 9) && value == ''), ((((id < 64 && id % 8 == 0) || (id < 64 && id % 8 == 7)) && selected.piece == '♙') || (((id < 64 && id % 8 == 7) || id > 87) && selected.piece == '♟') || (((id < 64 && id % 8 == 0) || id > 87) && selected.piece == '🨅')), ((selected.piece == '♔' || selected.piece == '♚' || selected.piece == '🨀') && (Math.abs(id - selected.id) == 2 || Math.abs(id - selected.id) == 16)));
                 if (selected.piece == '♚' && !moves[0]) {
                     moves[0] = true;
                 } else if (selected.piece == '♔' && !moves[1]) {
@@ -79,27 +80,60 @@ const Cell = (props) => {
                         setArray(39, '🨂');
                     }
                 }
-                var passant = selected.id;
+                var buffer1 = selected.passant[2];
+                var buffer2 = selected.passant[3];
+                if (buffer1) {
+                    var passant1 = selected.passant[0];
+                    var passant2 = selected.id;
+                } else {
+                    var passant1 = selected.id;
+                    var passant2 = selected.passant[1];
+                }
                 if ((selected.piece == '♙' || selected.piece == '♟' || selected.piece == '🨅') && (Math.abs(id - selected.id) == 16 || Math.abs(id - selected.id) == 2)) {
-                    if (id > 63) {
-                        passant -= 8;
-                    } else {
-                        if (id % 8 == 4) {
-                            passant--;
-                        } else if (id % 8 == 3) {
-                            passant++;
+                    if (buffer1) {
+                        if (id > 63) {
+                            passant2 -= 8;
+                        } else {
+                            if (id % 8 == 4) {
+                                passant2--;
+                            } else if (id % 8 == 3) {
+                                passant2++;
+                            }
                         }
+                        buffer1 = false;
+                        buffer2 = true;
+                    } else {
+                        if (id > 63) {
+                            passant1 -= 8;
+                        } else {
+                            if (id % 8 == 4) {
+                                passant1--;
+                            } else if (id % 8 == 3) {
+                                passant1++;
+                            }
+                        }
+                        buffer1 = true;
+                        buffer2 = false;
                     }
                 } else {
-                    passant = -1;
+                    if (buffer1) {
+                        buffer1 = false
+                    } else {
+                        passant1 = -1;
+                    }
+                    if (buffer2) {
+                        buffer2 = false;
+                    } else {
+                        passant2 = -1;
+                    }
                 }
                 if ((selected.piece == '♙' || selected.piece == '♟' || selected.piece == '🨅') && (Math.abs(id - selected.id) == 7 || Math.abs(id - selected.id) == 9) && value == '') {
                     if (Math.floor(id / 8) == 9) {
                         setArray(id - 8, '');
                     } else if (id < 64 && id % 8 == 2) {
-                        setArray(id++, '');
+                        setArray(id + 1, '');
                     } else if (id < 64 && id % 8 == 5) {
-                        setArray(id--, '');
+                        setArray(id - 1, '');
                     }
                 }
                 if (value == '' && selected.piece != '♙' && selected.piece != '♟' && selected.piece != '🨅') {
@@ -110,7 +144,7 @@ const Cell = (props) => {
                 setPlayer();
                 setArray(selected.id, '');
                 setArray(id, selected.piece);
-                setSelected({ id: selected.id, value: false, piece: selected.piece, blockedArray: selected.blockedArray, moved: moves, passant: passant });
+                setSelected({ id: selected.id, value: false, piece: selected.piece, blockedArray: selected.blockedArray, moved: moves, passant: [passant1, passant2, buffer1, buffer2] });
             }
             // Upgrade White Pawn to Queen
             if (((id < 64 && id % 8 == 0) || (id < 64 && id % 8 == 7)) && selected.piece == '♙') {
@@ -135,41 +169,49 @@ const Cell = (props) => {
     const blackCastle = selected.piece == '♚' ? (checkForCastle(32, 0) ? id != 16 : true) && (checkForCastle(32, 56) ? id != 48 : true) : true;
     const whiteCastle = selected.piece == '♔' ? (checkForCastle(92, 88) ? id != 90 : true) && (checkForCastle(92, 95) ? id != 94 : true) : true;
     const bichromeCastle = selected.piece == '🨀' ? (checkForCastle(31, 7) ? id != 15 : true) && (checkForCastle(31, 63) ? id != 47 : true) : true;
-    const blackPassant = id > 63 ? (id != selected.passant || id != selected.id + 7) && (id != selected.passant || id != selected.id + 9) :
-        (id != selected.passant || id != selected.id - 7) && (id != selected.passant || id != selected.id + 9);
-    const whitePassant = id % 8 > 3 ? (id != selected.passant || id != selected.id - 7) && (id != selected.passant || id != selected.id + 9) :
-        (id != selected.passant || id != selected.id + 7) && (id != selected.passant || id != selected.id - 9);
-    const bichromePassant = id > 63 ? (id != selected.passant || id != selected.id + 7) && (id != selected.passant || id != selected.id + 9) :
-        (id != selected.passant || id != selected.id + 7) && (id != selected.passant || id != selected.id - 9);
+    const blackPassant = id > 63 ? (id != selected.passant[0] || id != selected.id + 7) && (id != selected.passant[1] || id != selected.id + 7) &&
+        (id != selected.passant[0] || id != selected.id + 9) && (id != selected.passant[1] || id != selected.id + 9) :
+        (id != selected.passant[0] || id != selected.id - 7) && (id != selected.passant[1] || id != selected.id - 7) &&
+        (id != selected.passant[0] || id != selected.id + 9) && (id != selected.passant[1] || id != selected.id + 9);
+    const whitePassant = id % 8 > 3 ? (id != selected.passant[0] || id != selected.id - 7) && (id != selected.passant[1] || id != selected.id - 7) &&
+        (id != selected.passant[0] || id != selected.id + 9) && (id != selected.passant[1] || id != selected.id + 9) :
+        (id != selected.passant[0] || id != selected.id + 7) && (id != selected.passant[1] || id != selected.id + 7) &&
+        (id != selected.passant[0] || id != selected.id - 9) && (id != selected.passant[1] || id != selected.id - 9);
+    const bichromePassant = id > 63 ? (id != selected.passant[0] || id != selected.id + 7) && (id != selected.passant[1] || id != selected.id + 7) &&
+        (id != selected.passant[0] || id != selected.id + 9) && (id != selected.passant[1] || id != selected.id + 9) :
+        (id != selected.passant[0] || id != selected.id + 7) && (id != selected.passant[1] || id != selected.id + 7) &&
+        (id != selected.passant[0] || id != selected.id - 9) && (id != selected.passant[1] || id != selected.id - 9);
     const select = !selected.value && (selected.blockedArray.some(val => (id == val)) || (blackSelect || whiteSelect || bichromeSelect));
     const movement = selected.value && (!checkForMovement(selected.id).some(val => (id == val)) &&
         (player == 'Black' ? (selected.piece == '♟' ? blackPassant : blackCastle) : (player == 'White' ? (selected.piece == '♙' ? whitePassant : whiteCastle) : (selected.piece == '🨅' ? bichromePassant : bichromeCastle))));
     const noWin = win != '' && win != 'Check';
 
-    return <button className={"celll" + id.toString()} onClick={handleClick}
-        disabled={select || movement || noWin}>{value}</button>;
+    return <div className={(select || movement || noWin) ? "borderr" + id.toString() + " disabled" : "borderr" + id.toString()} onClick={handleClick}>
+        <button className={"celll" + id.toString()} disabled={select || movement || noWin}>{value}</button>
+    </div>;
 };
 
-export default function App() {
-    const [player, setPlayer] = useState('White'); // whose turn
-    const [win, setWin] = useState(''); // win state
-    const initArray = ['♜', '♟', '', '', '', '', '🨅', '🨂',
-        '♞', '♟', '', '', '', '', '🨅', '🨄',
-        '♝', '♟', '', '', '', '', '🨅', '🨃',
-        '♛', '♟', '', '', '', '', '🨅', '🨀',
-        '♚', '♟', '', '', '', '', '🨅', '🨁',
-        '♝', '♟', '', '', '', '', '🨅', '🨃',
-        '♞', '♟', '', '', '', '', '🨅', '🨄',
-        '♜', '♟', '', '', '', '', '🨅', '🨂',
-        '', '', '', '', '', '', '', '',
-        '', '', '', '', '', '', '', '',
-        '♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙',
-        '♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'];
-    const [values, setValues] = useState(initArray); // board state
-    const [selected, setSelected] = useState({ id: -1, value: false, piece: '', blockedArray: [], moved: [false, false, false, false, false, false, false, false, false], passant: -1 }); // trigger move state upon piece selection
-    const [count, setCount] = useState(0); // count for fifty move rule
-    const [repetitions, setRepetitions] = useState([]); // count for fivefold repetition rule
-    const [firstOut, setFirstOut] = useState('');
+export function ThrssSidebar(props) {
+    const { reset, history } = props;
+
+    return (
+        <div>
+            <div>
+                <button className="resetButton" onClick={reset}>Reset</button>
+            </div>
+            <br />
+            <div>Move History:</div>
+            <div className="moveHistory">{history}</div>
+        </div>
+    );
+}
+
+export default function Thress(props) {
+    const { state, setState, values, setValues, setHistory, selected, setSelected, count, setCount, repetitions, setRepetitions } = props;
+
+    const player = state.player;
+    const firstOut = state.firstOut;
+    const win = state.win;
 
     useEffect(() => {
         checkForCheck();
@@ -395,21 +437,346 @@ export default function App() {
         setValues(values => values.map((value, index) => (index == id ? newVal : value)));
     }
 
-    const playerModifier = (func) => {
-        (firstOut == '') ? ((player == 'White') ? func('Black') : ((player == 'Black') ? func('Bichrome') : func('White'))) :
-            ((firstOut == 'White') ? ((player == 'Black') ? func('Bichrome') : func('Black')) :
-                ((firstOut == 'Black' ? ((player == 'White') ? func('Bichrome') : func('White')) :
-                    ((player == 'White') ? func('Black') : func('White')))));
+    const playerModifier = () => {
+        setState({
+            player: (firstOut == '') ? ((player == 'White') ? 'Black' : ((player == 'Black') ? 'Bichrome' : 'White')) :
+                ((firstOut == 'White') ? ((player == 'Black') ? 'Bichrome' : 'Black') :
+                    ((firstOut == 'Black' ? ((player == 'White') ? 'Bichrome' : 'White') :
+                        ((player == 'White') ? 'Black' : 'White')))),
+            firstOut: firstOut,
+            win: win
+        });
     }
 
-    const reset = () => {
-        setValues(initArray);
-        setPlayer('White');
-        setWin('');
-        setSelected({ id: -1, value: false, piece: '', blockedArray: [], moved: [false, false, false, false, false, false, false, false, false], passant: -1 });
-        setCount(0);
-        setRepetitions([]);
-        setFirstOut('');
+    const histModifier = (piece, id, capture, fromID, passant, promote, castle) => {
+        if (castle) {
+            switch (id) {
+                case 15:
+                case 48:
+                case 94:
+                default:
+                    var zeroth = ' 0-0';
+                    break;
+                case 16:
+                case 47:
+                case 90:
+                    var zeroth = ' 0-0-0';
+                    break;
+            }
+        }
+        switch (piece) {
+            case '♔':
+            case '♚':
+            case '🨀':
+                var first = ' K';
+                break;
+            case '♕':
+            case '♛':
+            case '🨁':
+            case '♗':
+            case '♝':
+            case '🨃':
+            case '♘':
+            case '♞':
+            case '🨄':
+            case '♖':
+            case '♜':
+            case '🨂':
+                switch (piece) {
+                    case '♕':
+                    case '♛':
+                    case '🨁':
+                        var first = ' Q';
+                        break;
+                    case '♗':
+                    case '♝':
+                    case '🨃':
+                        var first = ' B';
+                        break;
+                    case '♘':
+                    case '♞':
+                    case '🨄':
+                        var first = ' N';
+                        break;
+                    case '♖':
+                    case '♜':
+                    case '🨂':
+                        var first = ' R';
+                        break;
+                }
+                if (fromID > 63) {
+                    switch (fromID % 8) {
+                        case 0:
+                        default:
+                            first += 'αa';
+                            break;
+                        case 1:
+                            first += 'αb';
+                            break;
+                        case 2:
+                            first += 'αc';
+                            break;
+                        case 3:
+                            first += 'αd';
+                            break;
+                        case 4:
+                            first += 'αe';
+                            break;
+                        case 5:
+                            first += 'αf';
+                            break;
+                        case 6:
+                            first += 'αg';
+                            break;
+                        case 7:
+                            first += 'αh';
+                            break;
+                    }
+                    first += (12 - Math.floor(fromID / 8)).toString();
+                } else if ((fromID % 8) < 4) {
+                    switch (Math.floor(fromID / 8)) {
+                        case 0:
+                        default:
+                            first += 'βa';
+                            break;
+                        case 1:
+                            first += 'βb';
+                            break;
+                        case 2:
+                            first += 'βc';
+                            break;
+                        case 3:
+                            first += 'βd';
+                            break;
+                        case 4:
+                            first += 'βe';
+                            break;
+                        case 5:
+                            first += 'βf';
+                            break;
+                        case 6:
+                            first += 'βg';
+                            break;
+                        case 7:
+                            first += 'βh';
+                            break;
+                    }
+                    first += ((fromID % 8) + 1).toString();
+                } else {
+                    switch (Math.floor(fromID / 8)) {
+                        case 0:
+                        default:
+                            first += 'γh';
+                            break;
+                        case 1:
+                            first += 'γg';
+                            break;
+                        case 2:
+                            first += 'γf';
+                            break;
+                        case 3:
+                            first += 'γe';
+                            break;
+                        case 4:
+                            first += 'γd';
+                            break;
+                        case 5:
+                            first += 'γc';
+                            break;
+                        case 6:
+                            first += 'γb';
+                            break;
+                        case 7:
+                            first += 'γa';
+                            break;
+                    }
+                    first += (8 - (fromID % 8)).toString();
+                }
+                break;
+            case '♙':
+            case '♟':
+            case '🨅':
+            default:
+                if (capture || passant) {
+                    if (fromID > 63) {
+                        switch (fromID % 8) {
+                            case 0:
+                            default:
+                                var first = ' αa';
+                                break;
+                            case 1:
+                                var first = ' αb';
+                                break;
+                            case 2:
+                                var first = ' αc';
+                                break;
+                            case 3:
+                                var first = ' αd';
+                                break;
+                            case 4:
+                                var first = ' αe';
+                                break;
+                            case 5:
+                                var first = ' αf';
+                                break;
+                            case 6:
+                                var first = ' αg';
+                                break;
+                            case 7:
+                                var first = ' αh';
+                                break;
+                        }
+                    } else if ((fromID % 8) < 4) {
+                        switch (Math.floor(fromID / 8)) {
+                            case 0:
+                            default:
+                                var first = ' βa';
+                                break;
+                            case 1:
+                                var first = ' βb';
+                                break;
+                            case 2:
+                                var first = ' βc';
+                                break;
+                            case 3:
+                                var first = ' βd';
+                                break;
+                            case 4:
+                                var first = ' βe';
+                                break;
+                            case 5:
+                                var first = ' βf';
+                                break;
+                            case 6:
+                                var first = ' βg';
+                                break;
+                            case 7:
+                                var first = ' βh';
+                                break;
+                        }
+                    } else {
+                        switch (Math.floor(fromID / 8)) {
+                            case 0:
+                            default:
+                                var first = ' γh';
+                                break;
+                            case 1:
+                                var first = ' γg';
+                                break;
+                            case 2:
+                                var first = ' γf';
+                                break;
+                            case 3:
+                                var first = ' γe';
+                                break;
+                            case 4:
+                                var first = ' γd';
+                                break;
+                            case 5:
+                                var first = ' γc';
+                                break;
+                            case 6:
+                                var first = ' γb';
+                                break;
+                            case 7:
+                                var first = ' γa';
+                                break;
+                        }
+                    }
+                } else {
+                    var first = ' ';
+                }
+                break;
+        }
+        if (id > 63) {
+            switch (id % 8) {
+                case 0:
+                default:
+                    var second = 'αa';
+                    break;
+                case 1:
+                    var second = 'αb';
+                    break;
+                case 2:
+                    var second = 'αc';
+                    break;
+                case 3:
+                    var second = 'αd';
+                    break;
+                case 4:
+                    var second = 'αe';
+                    break;
+                case 5:
+                    var second = 'αf';
+                    break;
+                case 6:
+                    var second = 'αg';
+                    break;
+                case 7:
+                    var second = 'αh';
+                    break;
+            }
+            second += (12 - Math.floor(id / 8)).toString();
+        } else if ((id % 8) < 4) {
+            switch (Math.floor(id / 8)) {
+                case 0:
+                default:
+                    var second = 'βa';
+                    break;
+                case 1:
+                    var second = 'βb';
+                    break;
+                case 2:
+                    var second = 'βc';
+                    break;
+                case 3:
+                    var second = 'βd';
+                    break;
+                case 4:
+                    var second = 'βe';
+                    break;
+                case 5:
+                    var second = 'βf';
+                    break;
+                case 6:
+                    var second = 'βg';
+                    break;
+                case 7:
+                    var second = 'βh';
+                    break;
+            }
+            second += ((id % 8) + 1).toString();
+        } else {
+            switch (Math.floor(id / 8)) {
+                case 0:
+                default:
+                    var second = 'γh';
+                    break;
+                case 1:
+                    var second = 'γg';
+                    break;
+                case 2:
+                    var second = 'γf';
+                    break;
+                case 3:
+                    var second = 'γe';
+                    break;
+                case 4:
+                    var second = 'γd';
+                    break;
+                case 5:
+                    var second = 'γc';
+                    break;
+                case 6:
+                    var second = 'γb';
+                    break;
+                case 7:
+                    var second = 'γa';
+                    break;
+            }
+            second += (8 - (id % 8)).toString();
+        }
+        setHistory(prev => player + (castle ? zeroth : (first + (capture || passant ? 'x' : '') + second + (promote ? '=Q' : '') + (passant ? ' e.p.' : ''))) + '\n' + prev);
     }
 
     const checkForBlocked = () => {
@@ -1153,6 +1520,9 @@ export default function App() {
                                 var a = value[i];
                                 if (uncheckArray.some(val => (a == val))) {
                                     moveArray.push(a);
+                                    if (values[a] != '') {
+                                        break;
+                                    }
                                 } else if (values[a] == '') {
                                     continue;
                                 } else {
@@ -1184,6 +1554,9 @@ export default function App() {
                                 var a = value[i];
                                 if (uncheckArray.some(val => (a == val))) {
                                     moveArray.push(a);
+                                    if (values[a] != '') {
+                                        break;
+                                    }
                                 } else if (values[a] == '') {
                                     continue;
                                 } else {
@@ -1198,6 +1571,9 @@ export default function App() {
                                     var a = value[i];
                                     if (uncheckArray.some(val => (a == val))) {
                                         moveArray.push(a);
+                                        if (values[a] != '') {
+                                            break;
+                                        }
                                     } else if (values[a] == '') {
                                         continue;
                                     } else {
@@ -1218,6 +1594,9 @@ export default function App() {
                                 var a = value[i];
                                 if (uncheckArray.some(val => (a == val))) {
                                     moveArray.push(a);
+                                    if (values[a] != '') {
+                                        break;
+                                    }
                                 } else if (values[a] == '') {
                                     continue;
                                 } else {
@@ -1232,6 +1611,9 @@ export default function App() {
                                 var a = value[i];
                                 if (uncheckArray.some(val => (a == val))) {
                                     moveArray.push(a);
+                                    if (values[a] != '') {
+                                        break;
+                                    }
                                 } else if (values[a] == '') {
                                     continue;
                                 } else {
@@ -1246,6 +1628,9 @@ export default function App() {
                                     var a = value[i];
                                     if (uncheckArray.some(val => (a == val))) {
                                         moveArray.push(a);
+                                        if (values[a] != '') {
+                                            break;
+                                        }
                                     } else if (values[a] == '') {
                                         continue;
                                     } else {
@@ -1730,7 +2115,7 @@ export default function App() {
         if (ind != -1) {
             if (repetitions[ind].repeats == '4') {
                 console.log('Draw by 5-fold repetition rule');
-                setWin('Draw');
+                setState({ player: player, firstOut: firstOut, win: 'Draw' });
             } else {
                 var rep = { boardState: boardState, repeats: repetitions[ind].repeats + 1 };
                 setRepetitions(repetitions => repetitions.map((value, index) => (index == ind ? rep : value)));
@@ -1761,10 +2146,10 @@ export default function App() {
             bichromeCheck = checkForCheckBichrome(bichromeIndex);
         }
         if (whiteCheck || blackCheck || bichromeCheck) {
-            setWin('Check');
+            setState({ player: player, firstOut: firstOut, win: 'Check' });
         }
         if (!whiteCheck && !blackCheck && !bichromeCheck) {
-            setWin('');
+            setState({ player: player, firstOut: firstOut, win: '' });
         }
     }
 
@@ -1779,25 +2164,21 @@ export default function App() {
             if (win == 'Check') {
                 console.log('White loses by checkmate');
                 if (firstOut == '') {
-                    setFirstOut('White');
-                    playerModifier(setPlayer);
-                    setWin('');
+                    setState({ player: 'Black', firstOut: 'White', win: '' });
                     values.forEach((value, index) => { if (whitePieces(value) || value == '♔') { copy[index] = '' } });
                     setValues(copy);
                 } else {
-                    setWin(firstOut == 'Black' ? 'Bichrome' : 'Black');
+                    setState({ player: player, firstOut: firstOut, win: (firstOut == 'Black' ? 'Bichrome' : 'Black') });
                     return;
                 }
             } else {
                 console.log('White loses by stalemate');
                 if (firstOut == '') {
-                    setFirstOut('White');
-                    playerModifier(setPlayer);
-                    setWin('');
+                    setState({ player: 'Black', firstOut: 'White', win: '' });
                     values.forEach((value, index) => { if (whitePieces(value) || value == '♔') { copy[index] = '' } });
                     setValues(copy);
                 } else {
-                    setWin(firstOut == 'Black' ? 'Bichrome' : 'Black');
+                    setState({ player: player, firstOut: firstOut, win: (firstOut == 'Black' ? 'Bichrome' : 'Black') });
                     return;
                 }
             }
@@ -1806,25 +2187,21 @@ export default function App() {
             if (win == 'Check') {
                 console.log('Black loses by checkmate');
                 if (firstOut == '') {
-                    setFirstOut('Black');
-                    playerModifier(setPlayer);
-                    setWin('');
+                    setState({ player: 'Bichrome', firstOut: 'Black', win: '' });
                     values.forEach((value, index) => { if (blackPieces(value) || value == '♚') { copy[index] = '' } });
                     setValues(copy);
                 } else {
-                    setWin(firstOut == 'White' ? 'Bichrome' : 'White');
+                    setState({ player: player, firstOut: firstOut, win: (firstOut == 'White' ? 'Bichrome' : 'White') });
                     return;
                 }
             } else {
                 console.log('Black loses by stalemate');
                 if (firstOut == '') {
-                    setFirstOut('Black');
-                    playerModifier(setPlayer);
-                    setWin('');
+                    setState({ player: 'Bichrome', firstOut: 'Black', win: '' });
                     values.forEach((value, index) => { if (blackPieces(value) || value == '♚') { copy[index] = '' } });
                     setValues(copy);
                 } else {
-                    setWin(firstOut == 'White' ? 'Bichrome' : 'White');
+                    setState({ player: player, firstOut: firstOut, win: (firstOut == 'White' ? 'Bichrome' : 'White') });
                     return;
                 }
             }
@@ -1833,45 +2210,40 @@ export default function App() {
             if (win == 'Check') {
                 console.log('Bichrome loses by checkmate');
                 if (firstOut == '') {
-                    setFirstOut('Bichrome');
-                    playerModifier(setPlayer);
-                    setWin('');
+                    setState({ player: 'White', firstOut: 'Bichrome', win: '' });
                     values.forEach((value, index) => { if (bichromePieces(value) || value == '🨀') { copy[index] = '' } });
                     setValues(copy);
                 } else {
-                    setWin(firstOut == 'Black' ? 'White' : 'Black');
+                    setState({ player: player, firstOut: firstOut, win: (firstOut == 'Black' ? 'White' : 'Black') });
                     return;
                 }
             } else {
                 console.log('Bichrome loses by stalemate');
                 if (firstOut == '') {
-                    setFirstOut('Bichrome');
-                    playerModifier(setPlayer);
-                    setWin('');
+                    setState({ player: 'White', firstOut: 'Bichrome', win: '' });
                     values.forEach((value, index) => { if (bichromePieces(value) || value == '🨀') { copy[index] = '' } });
                     setValues(copy);
                 } else {
-                    setWin(firstOut == 'Black' ? 'White' : 'Black');
+                    setState({ player: player, firstOut: firstOut, win: (firstOut == 'Black' ? 'White' : 'Black') });
                     return;
                 }
             }
         }
         if (count >= 150) {
             console.log('Draw by 50-Move Rule');
-            setWin('Draw');
+            setState({ player: player, firstOut: firstOut, win: 'Draw' });
         }
     }
 
     return (
-        <div className="app5">
-            <div aria-live="polite">
-                {((win == '') ? (player + "'s turn") : ((win == 'Draw') ? 'Draw' : ((win == 'Check') ? (player + ' is in check') : ('Winner is ' + win))))}
+        <div className="app3">
+            <div>
+                {((win == '') ? ('Player ' + player + "'s turn") : ((win == 'Draw') ? 'Draw' : ((win == 'Check') ? ('Player ' + player + ' is in check') : ('Player ' + win + ' wins'))))}
             </div>
-            <div className="board5">
+            <div className="board2">
                 {values.map((value, index) => (<Cell id={index} value={value} win={win} player={player} selected={selected} setCount={setCount}
-                    setPlayer={() => playerModifier(setPlayer)} setArray={arrayModifier} setSelected={setSelected} checkForMovement={checkForMovement} checkForCastle={checkForCastle} />))}
+                    setPlayer={playerModifier} setArray={arrayModifier} setSelected={setSelected} setHistory={histModifier} checkForMovement={checkForMovement} checkForCastle={checkForCastle} />))}
             </div>
-            <button onClick={reset}>Reset</button>
         </div>
     );
 } 

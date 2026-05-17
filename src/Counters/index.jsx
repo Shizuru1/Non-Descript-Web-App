@@ -1,67 +1,54 @@
-import React, { useState } from "react";
+import React from "react";
 
 // Counter Component
 function Counter(props) {
-    const { changeTotal } = props;
-    const [num, setNum] = useState(0);
+    const { index, value, setCount } = props;
 
     const onIncrement = () => {
-        // increase counter, change as needed
-        var inc = num;
-        inc += 1;
-        setNum(inc);
-        changeTotal((prevState) => (prevState + 1));
+        // increase counter
+        setCount(prev => prev.map((val, id) => id == index ? val + 1 : val))
     };
 
     const onDecrement = () => {
-        // decrease counter, change as needed
-        var dec = num;
-        dec -= 1;
-        setNum(dec);
-        changeTotal((prevState) => (prevState - 1));
+        // decrease counter
+        setCount(prev => prev.map((val, id) => id == index ? val - 1 : val))
     };
 
     return (
         <div>
             <div className="counter">
-                <b>{num}</b>
+                <b>{value}</b>
                 <div className="counter-controls">
-                    <button className="button is-danger is-small" onClick={onDecrement} disabled={num <= 0 ? true : false}>-</button>
-                    <button className="button is-success is-small" onClick={onIncrement}>+</button>
+                    <button className="minusButton" onClick={onDecrement} disabled={value <= 0 ? true : false}>-</button>
+                    <button className="plusButton" onClick={onIncrement}>+</button>
                 </div>
             </div>
         </div>
     );
 }
 
-function Total(props) {
-    const { total } = props;
+export function Total(props) {
+    const { count, setCount } = props;
 
-    return (<div className="total"><b>{total}</b></div>)
-}
-
-function Counters(props) {
-    const { amount } = props;
-    const [total, setTotal] = useState(0);
-    const data = new Array(amount).fill(0);
+    var total = 0;
+    count.forEach((value) => total += value);
 
     return (
-        <>
-            <div>
-                Counters:
-                <div>
-                    {data.map((_noth, index) => (<Counter key={index} changeTotal={setTotal} />))}
-                </div>
-            </div>
-            <br></br>
-            <div>
-                Total:
-                <div>
-                    <Total total={total} />
-                </div>
-            </div>
-        </>
+        <div>
+            Total:
+            <div><b>{total}</b></div>
+            <br />
+            <button className="resetButton" onClick={() => setCount(new Array(total).fill(0))}>Set Amount</button>
+        </div>
+    );
+}
+
+export default function Counters(props) {
+    const { count, setCount } = props;
+
+    return (
+        <div style={{ display: "grid", gridAutoFlow: "column", gridTemplateRows: "repeat(12, 1fr)" }}>
+            {count.map((val, ind) => (<Counter index={ind} value={val} setCount={setCount} />))}
+        </div>
     );
 };
-
-export default Counters;

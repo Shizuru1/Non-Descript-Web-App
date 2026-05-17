@@ -1,35 +1,96 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 import "./styles.css";
 
 const Cell = (props) => {
-    const { index, value, win, setPlayer, setArray } = props;
+    const { index, value, state, setArray, setHistory } = props;
 
     const handleClick = () => {
-        setPlayer();
         setArray();
+        setHistory();
     }
 
-    return <button className={"cell" + String.fromCharCode(97 + index)} onClick={handleClick} disabled={(value != '') || (win != '')}>{value}</button>;
+    return <div className={(value != '') || (state.length > 1) ? "border" + String.fromCharCode(97 + index) + " disabled" : "border" + String.fromCharCode(97 + index)} onClick={handleClick}>
+        <button className={"cell" + String.fromCharCode(97 + index)} disabled={(value != '') || (state.length > 1)}>{value}</button>
+    </div>;
 };
 
-export default function App() {
-    const [player, setPlayer] = useState('O'); // whose turn
-    const [win, setWin] = useState(''); // win state
-    const [values, setValues] = useState(new Array(13).fill('')); // board state
+export function ThrTTSidebar(props) {
+    const { reset, history } = props;
+
+    return (
+        <div>
+            <div>
+                <button className="resetButton" onClick={reset}>Reset</button>
+            </div>
+            <br />
+            <div>Move History:</div>
+            <div className="moveHistory">{history}</div>
+        </div>
+    );
+}
+
+export default function Thrictac(props) {
+    const { state, setState, values, setValues, setHistory } = props;
+
+    const loadPage = useRef(true); // don't activate useEffect on first load
 
     useEffect(() => {
-        checkForWin();
+        if (loadPage.current) {
+            loadPage.current = false;
+            return;
+        }
+        checkState();
     }, [values]);
 
     const arrayModifier = (id) => {
-        setValues(values.map((value, index) => (index == id ? value = player : value)));
+        setValues(values.map((value, index) => (index == id ? value = state.slice(0, 1) : value)));
     }
 
-    const reset = () => {
-        setValues(new Array(13).fill(''));
-        setPlayer('O');
-        setWin('');
+    const histModifier = (id) => {
+        switch (id) {
+            case 0:
+                var dir = " 10 O'Clock";
+                break;
+            case 1:
+                var dir = " 11 O'Clock";
+                break;
+            case 2:
+                var dir = " 12 O'Clock";
+                break;
+            case 3:
+                var dir = " 1 O'Clock";
+                break;
+            case 4:
+                var dir = " 2 O'Clock";
+                break;
+            case 5:
+                var dir = " 9 O'Clock";
+                break;
+            case 6:
+                var dir = " Middle";
+                break;
+            case 7:
+                var dir = " 3 O'Clock";
+                break;
+            case 8:
+                var dir = " 8 O'Clock";
+                break;
+            case 9:
+                var dir = " 7 O'Clock";
+                break;
+            case 10:
+                var dir = " 6 O'Clock";
+                break;
+            case 11:
+                var dir = " 5 O'Clock";
+                break;
+            case 12:
+            default:
+                var dir = " 4 O'Clock";
+                break;
+        }
+        setHistory(prev => state.slice(0, 1) + dir + '\n' + prev);
     }
 
     const winningCombos = [
@@ -47,29 +108,31 @@ export default function App() {
         [10, 11, 12],
     ];
 
-    const checkForWin = () => {
-        if (values.every(value => value != '')) {
-            setWin('draw');
-        }
-        winningCombos.forEach(combin => {
-            const [a, b, c] = combin;
+    const checkState = () => {
+        for (let i = 0; i < 12; i++) {
+            const [a, b, c] = winningCombos[i];
             if (values[a] != '') {
                 if (values[a] == values[b] && values[b] == values[c]) {
-                    (player == 'O') ? setWin('∆') : (player == 'X' ? setWin('O') : setWin('X'));
+                    setState(prev => prev + 'win');
+                    return;
                 }
             }
-        })
+        }
+        if (values.every(value => value != '')) {
+            setState(prev => prev + 'draw');
+            return;
+        }
+        setState(prev => prev == '∆' ? 'X' : (prev == 'X' ? 'O' : '∆'));
     }
 
     return (
         <div className="appa">
-            <div aria-live="polite">
-                {((win == '') ? ('Player ' + player + "'s turn") : ((win == 'draw') ? 'Draw' : ('Winner is ' + win)))}
+            <div>
+                {state.slice(1) == 'draw' ? 'Draw' : (state.slice(1) == 'win' ? 'Player ' + state.slice(0, 1) + ' wins' : 'Player ' + state.slice(0, 1) + "'s turn")}
             </div>
             <div className="boarda">
-                {values.map((value, index) => (<Cell index={index} value={value} win={win} setPlayer={() => ((player == 'O') ? setPlayer('X') : (player == 'X' ? setPlayer('∆') : setPlayer('O')))} setArray={() => arrayModifier(index)} />))}
+                {values.map((value, index) => (<Cell index={index} value={value} state={state} setArray={() => arrayModifier(index)} setHistory={() => histModifier(index)} />))}
             </div>
-            <button onClick={reset}>Reset</button>
         </div>
     );
 }

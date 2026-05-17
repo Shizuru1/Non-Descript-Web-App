@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-
-import "./styles.css";
+import React, { useEffect } from "react";
 
 const Cell = (props) => {
-    const { id, selected, value, win, player, setCount, setPlayer, setArray, setSelected, checkForMovement, checkForCastle } = props;
+    const { id, selected, value, state, setCount, setPlayer, setArray, setSelected, setHistory, checkForMovement, checkForCastle } = props;
+
+    const player = state.slice(0, 5);
 
     const handleClick = () => {
         if (selected.value) {
@@ -14,6 +14,7 @@ const Cell = (props) => {
             // Normal Move
             else {
                 var moves = selected.moved;
+                setHistory(selected.piece, id, value != '', selected.id, ((selected.piece == '♙' || selected.piece == '♟') && (Math.abs(id - selected.id) == 7 || Math.abs(id - selected.id) == 9) && value == ''), ((id < 8 && selected.piece == '♙') || (id > 55 && selected.piece == '♟')), ((selected.piece == '♔' || selected.piece == '♚') && Math.abs(id - selected.id) == 2));
                 if (selected.piece == '♔' && !moves[0]) {
                     moves[0] = true;
                 } else if (selected.piece == '♚' && !moves[1]) {
@@ -109,27 +110,31 @@ const Cell = (props) => {
     const select = !selected.value && (selected.blockedArray.some(val => (id == val)) || (blackSelect || whiteSelect));
     const movement = selected.value && (!checkForMovement(selected.id).some(val => (id == val)) &&
         (player == 'Black' ? (selected.piece == '♟' ? blackPassant : blackCastle) : (selected.piece == '♙' ? whitePassant : whiteCastle)));
-    const noWin = win != '' && win != 'Check';
+    const noWin = (state.length > 5) && state.slice(5) != 'check';
 
-    return <button className={"cell3" + (checkerboard ? "white" : "black")} onClick={handleClick}
+    return <button className={"cell2" + (checkerboard ? "white" : "black")} onClick={handleClick}
         disabled={select || movement || noWin}>{value}</button>;
 };
 
-export default function App() {
-    const [player, setPlayer] = useState('White'); // whose turn
-    const [win, setWin] = useState(''); // win state
-    const initArray = ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜',
-        '♟', '♟', '♟', '♟', '♟', '♟', '♟', '♟',
-        '', '', '', '', '', '', '', '',
-        '', '', '', '', '', '', '', '',
-        '', '', '', '', '', '', '', '',
-        '', '', '', '', '', '', '', '',
-        '♙', '♙', '♙', '♙', '♙', '♙', '♙', '♙',
-        '♖', '♘', '♗', '♕', '♔', '♗', '♘', '♖'];
-    const [values, setValues] = useState(initArray); // board state
-    const [selected, setSelected] = useState({ id: -1, value: false, piece: '', blockedArray: [], moved: [false, false, false, false, false, false], passant: -1 }); // trigger move state upon piece selection
-    const [count, setCount] = useState(0); // count for fifty move rule
-    const [repetitions, setRepetitions] = useState([]); // count for fivefold repetition rule
+export function ChssSidebar(props) {
+    const { reset, history } = props;
+
+    return (
+        <div>
+            <div>
+                <button className="resetButton" onClick={reset}>Reset</button>
+            </div>
+            <br />
+            <div>Move History:</div>
+            <div className="moveHistory">{history}</div>
+        </div>
+    );
+}
+
+export default function Chess(props) {
+    const { state, setState, values, setValues, setHistory, selected, setSelected, count, setCount, repetitions, setRepetitions } = props;
+
+    const player = state.slice(0, 5);
 
     useEffect(() => {
         checkForCheck();
@@ -199,22 +204,153 @@ export default function App() {
         setValues(values => values.map((value, index) => (index == id ? newVal : value)));
     }
 
-    const playerModifier = (func) => {
-        (player == 'White') ? func('Black') : func('White');
+    const playerModifier = () => {
+        setState(prev => prev.slice(0, 5) == 'White' ? 'Black' : 'White');
     }
 
-    const reset = () => {
-        setValues(initArray);
-        setPlayer('White');
-        setWin('');
-        setSelected({ id: -1, value: false, piece: '', blockedArray: [], moved: [false, false, false, false, false, false], passant: -1 });
-        setCount(0);
-        setRepetitions([]);
+    const histModifier = (piece, id, capture, fromID, passant, promote, castle) => {
+        if (castle) {
+            switch (id) {
+                case 6:
+                case 62:
+                default:
+                    var zeroth = ' 0-0';
+                    break;
+                case 2:
+                case 58:
+                    var zeroth = ' 0-0-0';
+                    break;
+            }
+        }
+        switch (piece) {
+            case '♔':
+            case '♚':
+                var first = ' K';
+                break;
+            case '♕':
+            case '♛':
+            case '♗':
+            case '♝':
+            case '♘':
+            case '♞':
+            case '♖':
+            case '♜':
+                switch (piece) {
+                    case '♕':
+                    case '♛':
+                        var first = ' Q';
+                        break;
+                    case '♗':
+                    case '♝':
+                        var first = ' B';
+                        break;
+                    case '♘':
+                    case '♞':
+                        var first = ' N';
+                        break;
+                    case '♖':
+                    case '♜':
+                        var first = ' R';
+                        break;
+                }
+                switch (fromID % 8) {
+                    case 0:
+                    default:
+                        first += 'a';
+                        break;
+                    case 1:
+                        first += 'b';
+                        break;
+                    case 2:
+                        first += 'c';
+                        break;
+                    case 3:
+                        first += 'd';
+                        break;
+                    case 4:
+                        first += 'e';
+                        break;
+                    case 5:
+                        first += 'f';
+                        break;
+                    case 6:
+                        first += 'g';
+                        break;
+                    case 7:
+                        first += 'h';
+                        break;
+                }
+                first += (8 - Math.floor(fromID / 8)).toString();
+                break;
+            case '♙':
+            case '♟':
+            default:
+                if (capture || passant) {
+                    switch (fromID % 8) {
+                        case 0:
+                        default:
+                            var first = ' a';
+                            break;
+                        case 1:
+                            var first = ' b';
+                            break;
+                        case 2:
+                            var first = ' c';
+                            break;
+                        case 3:
+                            var first = ' d';
+                            break;
+                        case 4:
+                            var first = ' e';
+                            break;
+                        case 5:
+                            var first = ' f';
+                            break;
+                        case 6:
+                            var first = ' g';
+                            break;
+                        case 7:
+                            var first = ' h';
+                            break;
+                    }
+                } else {
+                    var first = ' ';
+                }
+                break;
+        }
+        switch (id % 8) {
+            case 0:
+            default:
+                var second = 'a';
+                break;
+            case 1:
+                var second = 'b';
+                break;
+            case 2:
+                var second = 'c';
+                break;
+            case 3:
+                var second = 'd';
+                break;
+            case 4:
+                var second = 'e';
+                break;
+            case 5:
+                var second = 'f';
+                break;
+            case 6:
+                var second = 'g';
+                break;
+            case 7:
+                var second = 'h';
+                break;
+        }
+        setHistory(prev => player + (castle ? zeroth : (first + (capture || passant ? 'x' : '') + second + (8 - Math.floor(id / 8)).toString() + (promote ? '=Q' : '') + (passant ? ' e.p.' : ''))) + '\n' + prev);
     }
 
     const checkForBlocked = () => {
         var blockedArray = [];
-        values.forEach((value, index) => {
+        values.forEach((_noth, index) => {
             var a = checkForMovement(index);
             if (a.length <= 1) {
                 blockedArray.push(index);
@@ -1331,6 +1467,9 @@ export default function App() {
                         for (let i = upArray[index]; i > -1; i = upArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1340,6 +1479,9 @@ export default function App() {
                         for (let i = downArray[index]; i > -1; i = downArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1351,6 +1493,9 @@ export default function App() {
                         for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1360,6 +1505,9 @@ export default function App() {
                         for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1405,6 +1553,9 @@ export default function App() {
                         for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1414,6 +1565,9 @@ export default function App() {
                         for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1425,6 +1579,9 @@ export default function App() {
                         for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1434,6 +1591,9 @@ export default function App() {
                         for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1449,6 +1609,9 @@ export default function App() {
                         for (let i = upArray[index]; i > -1; i = upArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1458,6 +1621,9 @@ export default function App() {
                         for (let i = downArray[index]; i > -1; i = downArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1469,6 +1635,9 @@ export default function App() {
                         for (let i = leftArray[index]; i > -1; i = leftArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1478,6 +1647,9 @@ export default function App() {
                         for (let i = rightArray[index]; i > -1; i = rightArray[i]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1489,6 +1661,9 @@ export default function App() {
                         for (let i = upArray[leftArray[index]]; i > -1; i = upArray[leftArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1498,6 +1673,9 @@ export default function App() {
                         for (let i = downArray[rightArray[index]]; i > -1; i = downArray[rightArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1509,6 +1687,9 @@ export default function App() {
                         for (let i = upArray[rightArray[index]]; i > -1; i = upArray[rightArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -1518,6 +1699,9 @@ export default function App() {
                         for (let i = downArray[leftArray[index]]; i > -1; i = downArray[leftArray[i]]) {
                             if (uncheckArray.some(val => (i == val))) {
                                 moveArray.push(i);
+                                if (values[i] != '') {
+                                    break;
+                                }
                             } else if (values[i] == '') {
                                 continue;
                             } else {
@@ -2054,7 +2238,7 @@ export default function App() {
         if (ind != -1) {
             if (repetitions[ind].repeats == '4') {
                 console.log('Draw by 5-fold repetition rule');
-                setWin('Draw');
+                setState(prev => prev + 'draw');
             } else {
                 var rep = { boardState: boardState, repeats: repetitions[ind].repeats + 1 };
                 setRepetitions(repetitions => repetitions.map((value, index) => (index == ind ? rep : value)));
@@ -2072,11 +2256,13 @@ export default function App() {
         var blackIndex = values.findIndex(value => value == '♚');
         var whiteCheck = checkForCheckWhite(whiteIndex);
         var blackCheck = checkForCheckBlack(blackIndex);
-        if (whiteCheck || blackCheck) {
-            setWin('Check');
+        if (whiteCheck) {
+            setState('Whitecheck');
+        } else if (blackCheck) {
+            setState('Blackcheck');
         }
         if (!whiteCheck && !blackCheck) {
-            setWin('');
+            setState(prev => prev.slice(0, 5));
         }
     }
 
@@ -2087,55 +2273,55 @@ export default function App() {
             spliced.splice(blocked[i] - i, 1);
         }
         if (player == 'White' && spliced.every(value => value != '♔' && value != '♕' && value != '♗' && value != '♘' && value != '♖' && value != '♙')) {
-            if (win == 'Check') {
+            if (state.slice(5) == 'check') {
                 console.log('Black wins by checkmate');
-                setWin('Black');
+                setState('Blackwin');
                 return;
             } else {
                 console.log('Black draws by stalemate');
-                setWin('Draw');
+                setState('Blackdraw');
             }
         }
         if (player == 'Black' && spliced.every(value => value != '♚' && value != '♛' && value != '♝' && value != '♞' && value != '♜' && value != '♟')) {
-            if (win == 'Check') {
+            if (state.slice(5) == 'check') {
                 console.log('White wins by checkmate');
-                setWin('White');
+                setState('Whitewin');
                 return;
             } else {
                 console.log('White draws by stalemate');
-                setWin('Draw');
+                setState('Whitedraw');
             }
         }
         if (values.every(value => value != '♕' && value != '♗' && value != '♘' && value != '♖' && value != '♙' && value != '♛' && value != '♝' && value != '♞' && value != '♜' && value != '♟')) {
             console.log('Draw by dead position (King against King)');
-            setWin('Draw');
+            setState(prev => prev + 'draw');
         } else if (values.every(value => value != '♕' && value != '♘' && value != '♖' && value != '♙' && value != '♛' && value != '♝' && value != '♞' && value != '♜' && value != '♟')) {
             var a = values.findIndex(value => value == '♗');
             var b = values.findLastIndex(value => value == '♗');
             if (a == b) {
                 console.log('Draw by dead position (White King and Bishop against Black King)');
-                setWin('Draw');
+                setState(prev => prev + 'draw');
             }
         } else if (values.every(value => value != '♕' && value != '♗' && value != '♘' && value != '♖' && value != '♙' && value != '♛' && value != '♞' && value != '♜' && value != '♟')) {
             var a = values.findIndex(value => value == '♝');
             var b = values.findLastIndex(value => value == '♝');
             if (a == b) {
                 console.log('Draw by dead position (Black King and Bishop against White King)');
-                setWin('Draw');
+                setState(prev => prev + 'draw');
             }
         } else if (values.every(value => value != '♕' && value != '♗' && value != '♖' && value != '♙' && value != '♛' && value != '♝' && value != '♞' && value != '♜' && value != '♟')) {
             var a = values.findIndex(value => value == '♘');
             var b = values.findLastIndex(value => value == '♘');
             if (a == b) {
                 console.log('Draw by dead position (White King and Knight against Black King)');
-                setWin('Draw');
+                setState(prev => prev + 'draw');
             }
         } else if (values.every(value => value != '♕' && value != '♗' && value != '♘' && value != '♖' && value != '♙' && value != '♛' && value != '♝' && value != '♜' && value != '♟')) {
             var a = values.findIndex(value => value == '♞');
             var b = values.findLastIndex(value => value == '♞');
             if (a == b) {
                 console.log('Draw by dead position (Black King and Knight against White King)');
-                setWin('Draw');
+                setState(prev => prev + 'draw');
             }
         } else if (values.every(value => value != '♕' && value != '♘' && value != '♖' && value != '♙' && value != '♛' && value != '♞' && value != '♜' && value != '♟')) {
             var a = values.findIndex(value => value == '♗');
@@ -2146,32 +2332,34 @@ export default function App() {
                 if (((a % 2 != 1) && (Math.floor(a / 8) % 2 != 1)) || ((a % 2 == 1) && (Math.floor(a / 8) % 2 == 1))) {
                     if (((c % 2 != 1) && (Math.floor(c / 8) % 2 != 1)) || ((c % 2 == 1) && (Math.floor(c / 8) % 2 == 1))) {
                         console.log('Draw by dead position (King and Bishop on white square against King and Bishop on white square)');
-                        setWin('Draw');
+                        setState(prev => prev + 'draw');
                     }
                 } else {
                     if (!(((c % 2 != 1) && (Math.floor(c / 8) % 2 != 1)) || ((c % 2 == 1) && (Math.floor(c / 8) % 2 == 1)))) {
                         console.log('Draw by dead position (King and Bishop on black square against King and Bishop on black square)');
-                        setWin('Draw');
+                        setState(prev => prev + 'draw');
                     }
                 }
             }
         }
         if (count >= 100) {
             console.log('Draw by 50-Move Rule');
-            setWin('Draw');
+            setState(prev => prev + 'draw');
         }
     }
 
     return (
-        <div className="app3">
-            <div aria-live="polite">
-                {((win == '') ? (player + "'s turn") : ((win == 'Draw') ? 'Draw' : ((win == 'Check') ? (player + ' is in check') : ('Winner is ' + win))))}
+        <div className="app2">
+            <div>
+                {state.slice(5) == 'draw' ? 'Draw' : (state.slice(5) == 'win' ?
+                    'Player ' + (player) + ' wins' : (state.slice(5) == 'check' ? 
+                        'Player ' + (player) + ' is in check' :
+                            'Player ' + (player) + "'s turn"))}
             </div>
-            <div className="board3">
-                {values.map((value, index) => (<Cell id={index} value={value} win={win} player={player} selected={selected} setCount={setCount}
-                    setPlayer={() => playerModifier(setPlayer)} setArray={arrayModifier} setSelected={setSelected} checkForMovement={checkForMovement} checkForCastle={checkForCastle} />))}
+            <div className="board2">
+                {values.map((value, index) => (<Cell id={index} value={value} state={state} selected={selected} setCount={setCount}
+                    setPlayer={playerModifier} setArray={arrayModifier} setSelected={setSelected} setHistory={histModifier} checkForMovement={checkForMovement} checkForCastle={checkForCastle} />))}
             </div>
-            <button onClick={reset}>Reset</button>
         </div>
     );
 } 

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-
-import "./styles.css";
+import React, { useEffect } from "react";
 
 const Cell = (props) => {
-    const { id, selected, value, win, player, setPlayer, setArray, setSelected, checkForKing } = props;
+    const { id, selected, value, state, setPlayer, setArray, setSelected, setHistory, checkForKing } = props;
+
+    const player = state.slice(0, 1);
 
     const handleClick = () => {
         if (selected.value) {
@@ -13,6 +13,7 @@ const Cell = (props) => {
             }
             // Jump Move
             else if (selected.jumpArray.some(val => (id == val.jump))) {
+                setHistory(selected.id, id, true);
                 setArray(id, selected.king ? (player == '⛂' ? '⛃' : '⛁') : player);
                 setArray(selected.id, '');
                 setArray(selected.jumpArray.find(val => (id == val.jump)).eat, '');
@@ -20,6 +21,7 @@ const Cell = (props) => {
             }
             // Normal Move
             else {
+                setHistory(selected.id, id, false);
                 setPlayer();
                 setArray(selected.id, '');
                 setArray(id, selected.king ? (player == '⛂' ? '⛃' : '⛁') : player);
@@ -54,22 +56,26 @@ const Cell = (props) => {
         : (selected.king ? (blackKingSelect || whiteKingSelect || singleColour || noFlops) : (blackSelect || whiteSelect || singleColour || noFlops));
 
     return <button className={"cell2" + (checkerboard ? "white" : "black")} onClick={handleClick}
-        disabled={jumpersOnly || (win != '')}>{value}</button>;
+        disabled={jumpersOnly || (state.length > 1)}>{value}</button>;
 };
 
-export default function App() {
-    const [player, setPlayer] = useState('⛂'); // whose turn
-    const [win, setWin] = useState(''); // win state
-    const initArray = ['', '⛀', '', '⛀', '', '⛀', '', '⛀',
-        '⛀', '', '⛀', '', '⛀', '', '⛀', '',
-        '', '⛀', '', '⛀', '', '⛀', '', '⛀',
-        '', '', '', '', '', '', '', '',
-        '', '', '', '', '', '', '', '',
-        '⛂', '', '⛂', '', '⛂', '', '⛂', '',
-        '', '⛂', '', '⛂', '', '⛂', '', '⛂',
-        '⛂', '', '⛂', '', '⛂', '', '⛂', ''];
-    const [values, setValues] = useState(initArray); // board state
-    const [selected, setSelected] = useState({ id: -1, value: false, king: false, jumpArray: [], jumped: false, blockedArray: [] }); // trigger move state upon piece selection
+export function ChckrsSidebar(props) {
+    const { reset, history } = props;
+
+    return (
+        <div>
+            <div>
+                <button className="resetButton" onClick={reset}>Reset</button>
+            </div>
+            <br />
+            <div>Move History:</div>
+            <div className="moveHistory">{history}</div>
+        </div>
+    );
+}
+
+export default function Draughts(props) {
+    const { state, setState, values, setValues, setHistory, selected, setSelected } = props;
 
     useEffect(() => {
         checkForJump();
@@ -80,15 +86,14 @@ export default function App() {
         setValues(values => values.map((value, index) => (index == id ? newVal : value)));
     }
 
-    const playerModifier = (func) => {
-        (player == '⛂') ? func('⛀') : func('⛂');
+    const playerModifier = () => {
+        setState(prev => prev == '⛂' ? '⛀' : '⛂');
     }
 
-    const reset = () => {
-        setValues(initArray);
-        setPlayer('⛂');
-        setWin('');
-        setSelected({ id: -1, value: false, king: false, jumpArray: [], jumped: false, blockedArray: [] });
+    const histModifier = (id1, id2, capture) => {
+        setHistory(prev => (state.slice(0, 1) == '⛂' ? 'Black ' : 'White ') + 
+            (id1 % 2 == 1 ? (((63 - id1) / 2) + 1).toString() : ((64 - id1) / 2).toString()) + (capture ? 'x' : '-') +
+            (id2 % 2 == 1 ? (((63 - id2) / 2) + 1).toString() : ((64 - id2) / 2).toString()) + '\n' + prev);
     }
 
     const noJumpRightBlack = [23, 30, 39, 46, 55, 62]; // index > 16
@@ -103,7 +108,7 @@ export default function App() {
     const checkForJump = () => {
         var jumpArray = new Array();
         var blockedArray = new Array();
-        if (player == '⛂') {
+        if (state.slice(0, 1) == '⛂') {
             values.forEach((value, index, array) => {
                 // Black Soldier
                 if (value == '⛂') {
@@ -242,7 +247,7 @@ export default function App() {
                     }
                 }
             });
-        } else if (player == '⛀') {
+        } else if (state.slice(0, 1) == '⛀') {
             values.forEach((value, index, array) => {
                 // White Soldier
                 if (value == '⛀') {
@@ -385,7 +390,7 @@ export default function App() {
         else if (selected.jumped == true) {
             setSelected({ id: selected.id, value: false, king: checkForKing(selected.id), jumpArray: jumpArray, jumped: false, blockedArray: blockedArray });
             arrayModifier(0, '');
-            playerModifier(setPlayer);
+            playerModifier();
         }
         // No Jump
         else {
@@ -403,23 +408,24 @@ export default function App() {
 
     const checkForWin = () => {
         if (values.every(value => value != '⛀' && value != '⛁')) {
-            setWin('Black');
+            setState('⛂win');
         }
         if (values.every(value => value != '⛂' && value != '⛃')) {
-            setWin('White');
+            setState('⛀win');
         }
     }
 
     return (
         <div className="app2">
-            <div aria-live="polite">
-                {((win == '') ? ((player == '⛂' ? 'Black' : 'White') + "'s turn") : ((win == 'draw') ? 'Draw' : ('Winner is ' + win)))}
+            <div>
+                {state.slice(1) == 'draw' ? 'Draw' : (state.slice(1) == 'win' ?
+                    'Player ' + (state.slice(0, 1) == '⛂' ? 'Black' : 'White') + ' wins' :
+                    'Player ' + (state.slice(0, 1) == '⛂' ? 'Black' : 'White') + "'s turn")}
             </div>
             <div className="board2">
-                {values.map((value, index) => (<Cell id={index} value={value} win={win} player={player} selected={selected}
-                    setPlayer={() => playerModifier(setPlayer)} setArray={arrayModifier} setSelected={setSelected} checkForKing={checkForKing} />))}
+                {values.map((value, index) => (<Cell id={index} value={value} state={state} selected={selected}
+                    setPlayer={playerModifier} setArray={arrayModifier} setSelected={setSelected} setHistory={histModifier} checkForKing={checkForKing} />))}
             </div>
-            <button onClick={reset}>Reset</button>
         </div>
     );
 }

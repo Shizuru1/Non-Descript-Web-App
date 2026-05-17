@@ -1,8 +1,4 @@
-body {
-    font-family: sans-serif;
-}
-
-.app7 {
+.app5 {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -12,75 +8,89 @@ body {
     row-gap: 11px;
 }
 
-.board7 {
+.board5 {
     display: grid;
     width: 100%;
     grid-template-columns: repeat(5, 1fr);
     gap: 5px;
 }
 
+.base-text {
+    position: relative;
+    top: 2px;
+    height: 27px;
+    background-color: plum;
+    border-color: rebeccapurple;
+    border-radius: 5px;
+    margin-right: 9px;
+}
+
+    .base-text:focus {
+        outline: 2px solid blueviolet;
+    }
+
 .ans {
-    background-color: #999;
-    border: 1px solid #666;
+    background-color: thistle;
+    border: 1px solid violet;
     font-size: min(48px, 10vw);
     text-align: right;
+    padding-top: 3%;
     padding-right: 3%;
     height: min(81.6px, 16vw);
 }
 
 .ops {
-    background-color: #ffb968;
-    border: 1px solid #cc8635;
+    background-color: pink;
+    border-color: lightpink;
     text-align: center;
     padding-right: 3%;
     height: min(72px, 15vw);
 }
 
         .ops:not(:disabled):hover {
-            background-color: #fab463;
+            background-color: mistyrose;
         }
 
 .eqs {
-    background-color: #ffa33a;
-    border: 1px solid #666;
+    background-color: violet;
+    border-color: mediumpurple;
     text-align: center;
     padding-right: 3%;
     height: min(72px, 15vw);
 }
 
         .eqs:not(:disabled):hover {
-            background-color: #fa9e35;
+            background-color: plum;
         }
 
-.cell7 {
-    background-color: #ccc;
-    border: 1px solid #999;
+.cell5 {
+    background-color: powderblue;
+    border-color: lightsteelblue;
     height: min(72px, 15vw);
     align-self: center;
     text-align: center;
 }
 
-        .cell7:not(:disabled):hover {
-            background-color: #c7c7c7;
+        .cell5:not(:disabled):hover {
+            background-color: aliceblue;
         }
 
 .ans,
 .ops,
 .eqs,
-.cell7 {
-    color: #000;
+.cell5 {
+    color: black;
     font-weight: bold;
-    vertical-align: middle;
     border-radius: 12.5px;
     width: 100%;
 }
 
 .ops,
 .eqs,
-.cell7 {
+.cell5 {
     font-size: min(43.2px, 9vw);
 }
 
-    .ops:not(:disabled), .eqs:not(:disabled), .cell7:not(:disabled) {
+    .ops:not(:disabled), .eqs:not(:disabled), .cell5:not(:disabled) {
         cursor: pointer;
     }

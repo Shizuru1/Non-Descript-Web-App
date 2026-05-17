@@ -1,7 +1,3 @@
-body {
-    font-family: sans-serif;
-}
-
 .app {
     align-items: center;
     display: flex;
@@ -19,9 +15,9 @@ body {
 }
 
 .cell {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    color: #000;
+    background-color: powderblue;
+    border: 1px solid lightsteelblue;
+    color: black;
     font-size: min(48px, 10vw);
     font-weight: bold;
     vertical-align: middle;
@@ -33,5 +29,5 @@ body {
     }
 
         .cell:not(:disabled):hover {
-            background-color: #fafafa;
+            background-color: aliceblue;
         }

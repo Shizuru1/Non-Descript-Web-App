@@ -1,14 +1,4 @@
-body {
-    font-family: sans-serif;
-}
-
-@font-face {
-    font-family: 'Nishiki-Teki';
-    font-weight: 900;
-    src: local('Nishiki-Teki'), url(../../nishiki-teki.ttf) format('truetype');
-}
-
-.app5 {
+.app3 {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -16,12 +6,6 @@ body {
     max-width: 1280px;
     margin: 0 auto;
     row-gap: 16px;
-}
-
-.board5 {
-    display: grid;
-    width: 100%;
-    grid-template-columns: repeat(8, 1fr);
 }
 
 .celll0,
@@ -72,12 +56,10 @@ body {
 .celll90,
 .celll92,
 .celll94 {
-    border: 1px solid rgb(255, 224, 171);
+    border: 1px solid seagreen;
     font-size: min(48px, 10vw);
-    vertical-align: middle;
-    aspect-ratio: 1 / 1;
-    background-color: #779556;
-    color: #000;
+    background-color: seagreen;
+    color: black;
     font-family: Nishiki-Teki;
 }
 
@@ -129,763 +111,1386 @@ body {
 .celll91,
 .celll93,
 .celll95 {
-    border: 1px solid rgb(255, 224, 171);
+    border: 1px solid bisque;
     font-size: min(48px, 10vw);
-    vertical-align: middle;
-    aspect-ratio: 1 / 1;
-    background-color: #ebecd0;
-    color: #000;
+    background-color: bisque;
+    color: black;
     font-family: Nishiki-Teki;
 }
 
-.celll0 {
+.borderr0,
+.borderr1,
+.borderr2,
+.borderr3,
+.borderr4,
+.borderr5,
+.borderr6,
+.borderr7,
+.borderr8,
+.borderr9,
+.borderr10,
+.borderr11,
+.borderr12,
+.borderr13,
+.borderr14,
+.borderr15,
+.borderr16,
+.borderr17,
+.borderr18,
+.borderr19,
+.borderr20,
+.borderr21,
+.borderr22,
+.borderr23,
+.borderr24,
+.borderr25,
+.borderr26,
+.borderr27,
+.borderr28,
+.borderr29,
+.borderr30,
+.borderr31,
+.borderr32,
+.borderr33,
+.borderr34,
+.borderr35,
+.borderr36,
+.borderr37,
+.borderr38,
+.borderr39,
+.borderr40,
+.borderr41,
+.borderr42,
+.borderr43,
+.borderr44,
+.borderr45,
+.borderr46,
+.borderr47,
+.borderr48,
+.borderr49,
+.borderr50,
+.borderr51,
+.borderr52,
+.borderr53,
+.borderr54,
+.borderr55,
+.borderr56,
+.borderr57,
+.borderr58,
+.borderr59,
+.borderr60,
+.borderr61,
+.borderr62,
+.borderr63,
+.borderr64,
+.borderr65,
+.borderr66,
+.borderr67,
+.borderr68,
+.borderr69,
+.borderr70,
+.borderr71,
+.borderr72,
+.borderr73,
+.borderr74,
+.borderr75,
+.borderr76,
+.borderr77,
+.borderr78,
+.borderr79,
+.borderr80,
+.borderr81,
+.borderr82,
+.borderr83,
+.borderr84,
+.borderr85,
+.borderr86,
+.borderr87,
+.borderr88,
+.borderr89,
+.borderr90,
+.borderr91,
+.borderr92,
+.borderr93,
+.borderr94,
+.borderr95 {
+    background-color: darkolivegreen;
+    border: 1px solid darkolivegreen;
+}
+
+.celll0,
+.borderr0 {
     clip-path: polygon(33% 0%, 100% 0%, 75% 100%, 0% 80%);
+}
+
+.celll1,
+.borderr1 {
+    clip-path: polygon(27% 0%, 100% 0%, 82% 100%, 0% 83%);
+}
+
+.celll2,
+.borderr2 {
+    clip-path: polygon(20% 0%, 100% 0%, 90% 100%, 0% 86%);
+}
+
+.celll3,
+.borderr3 {
+    clip-path: polygon(11% 0%, 100% 0%, 100% 100%, 0% 88%);
+}
+
+.celll4,
+.borderr4 {
+    clip-path: polygon(0% 0%, 89% 0%, 100% 88%, 0% 100%);
+}
+
+.celll5,
+.borderr5 {
+    clip-path: polygon(0% 0%, 80% 0%, 100% 86%, 10% 100%);
+}
+
+.celll6,
+.borderr6 {
+    clip-path: polygon(0% 0%, 73% 0%, 100% 83%, 18% 100%);
+}
+
+.celll7,
+.borderr7 {
+    clip-path: polygon(0% 0%, 67% 0%, 100% 80%, 25% 100%);
+}
+
+.celll8,
+.borderr8 {
+    clip-path: polygon(31% 0%, 100% 17%, 77% 100%, 0% 67%);
+}
+
+.celll9,
+.borderr9 {
+    clip-path: polygon(25% 0%, 100% 14%, 83% 100%, 0% 71%);
+}
+
+.celll10,
+.borderr10 {
+    clip-path: polygon(18% 0%, 100% 13%, 91% 100%, 0% 75%);
+}
+
+.celll11,
+.borderr11 {
+    clip-path: polygon(10% 0%, 100% 11%, 100% 100%, 0% 78%);
+}
+
+.celll12,
+.borderr12 {
+    clip-path: polygon(0% 11%, 90% 0%, 100% 78%, 0% 100%);
+}
+
+.celll13,
+.borderr13 {
+    clip-path: polygon(0% 13%, 82% 0%, 100% 75%, 9% 100%);
+}
+
+.celll14,
+.borderr14 {
+    clip-path: polygon(0% 14%, 75% 0%, 100% 71%, 17% 100%);
+}
+
+.celll15,
+.borderr15 {
+    clip-path: polygon(0% 17%, 69% 0%, 100% 67%, 23% 100%);
+}
+
+.celll16,
+.borderr16 {
+    clip-path: polygon(29% 0%, 100% 29%, 79% 100%, 0% 57%);
+}
+
+.celll17,
+.borderr17 {
+    clip-path: polygon(23% 0%, 100% 25%, 85% 100%, 0% 63%);
+}
+
+.celll18,
+.borderr18 {
+    clip-path: polygon(17% 0%, 100% 22%, 92% 100%, 0% 67%);
+}
+
+.celll19,
+.borderr19 {
+    clip-path: polygon(9% 0%, 100% 20%, 100% 100%, 0% 70%);
+}
+
+.celll20,
+.borderr20 {
+    clip-path: polygon(0% 20%, 91% 0%, 100% 70%, 0% 100%);
+}
+
+.celll21,
+.borderr21 {
+    clip-path: polygon(0% 22%, 83% 0%, 100% 67%, 8% 100%);
+}
+
+.celll22,
+.borderr22 {
+    clip-path: polygon(0% 25%, 77% 0%, 100% 63%, 15% 100%);
+}
+
+.celll23,
+.borderr23 {
+    clip-path: polygon(0% 29%, 71% 0%, 100% 57%, 21% 100%);
+}
+
+.celll24,
+.borderr24 {
+    clip-path: polygon(27% 0%, 100% 38%, 80% 100%, 0% 50%);
+}
+
+.celll25,
+.borderr25 {
+    clip-path: polygon(21% 0%, 100% 33%, 86% 100%, 0% 55%);
+}
+
+.celll26,
+.borderr26 {
+    clip-path: polygon(15% 0%, 100% 30%, 92% 100%, 0% 60%);
+}
+
+.celll27,
+.borderr27 {
+    clip-path: polygon(8% 0%, 100% 27%, 100% 100%, 0% 64%);
+}
+
+.celll28,
+.borderr28 {
+    clip-path: polygon(0% 27%, 92% 0%, 100% 64%, 0% 100%);
+}
+
+.celll29,
+.borderr29 {
+    clip-path: polygon(0% 30%, 85% 0%, 100% 60%, 8% 100%);
+}
+
+.celll30,
+.borderr30 {
+    clip-path: polygon(0% 33%, 79% 0%, 100% 56%, 14% 100%);
+}
+
+.celll31,
+.borderr31 {
+    clip-path: polygon(0% 38%, 73% 0%, 100% 50%, 20% 100%);
+}
+
+.celll32,
+.borderr32 {
+    clip-path: polygon(25% 0%, 100% 50%, 63% 100%, 0% 50%);
+}
+
+.celll33,
+.borderr33 {
+    clip-path: polygon(33% 0%, 100% 50%, 56% 100%, 0% 50%);
+}
+
+.celll34,
+.borderr34 {
+    clip-path: polygon(40% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.celll35,
+.borderr35 {
+    clip-path: polygon(45% 0%, 100% 50%, 45% 100%, 0% 50%);
+}
+
+.celll36,
+.borderr36 {
+    clip-path: polygon(0% 50%, 55% 0%, 100% 50%, 55% 100%);
+}
+
+.celll37,
+.borderr37 {
+    clip-path: polygon(0% 50%, 60% 0%, 100% 50%, 50% 100%);
+}
+
+.celll38,
+.borderr38 {
+    clip-path: polygon(0% 50%, 67% 0%, 100% 50%, 44% 100%);
+}
+
+.celll39,
+.borderr39 {
+    clip-path: polygon(0% 50%, 75% 0%, 100% 50%, 38% 100%);
+}
+
+.celll40,
+.borderr40 {
+    clip-path: polygon(29% 0%, 100% 50%, 57% 100%, 0% 50%);
+}
+
+.celll41,
+.borderr41 {
+    clip-path: polygon(38% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.celll42,
+.borderr42 {
+    clip-path: polygon(44% 0%, 100% 50%, 44% 100%, 0% 50%);
+}
+
+.celll43,
+.borderr43 {
+    clip-path: polygon(50% 0%, 100% 50%, 40% 100%, 0% 50%);
+}
+
+.celll44,
+.borderr44 {
+    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 60% 100%);
+}
+
+.celll45,
+.borderr45 {
+    clip-path: polygon(0% 50%, 56% 0%, 100% 50%, 56% 100%);
+}
+
+.celll46,
+.borderr46 {
+    clip-path: polygon(0% 50%, 63% 0%, 100% 50%, 50% 100%);
+}
+
+.celll47,
+.borderr47 {
+    clip-path: polygon(0% 50%, 71% 0%, 100% 50%, 43% 100%);
+}
+
+.celll48,
+.borderr48 {
+    clip-path: polygon(33% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.celll49,
+.borderr49 {
+    clip-path: polygon(43% 0%, 100% 50%, 43% 100%, 0% 50%);
+}
+
+.celll50,
+.borderr50 {
+    clip-path: polygon(50% 0%, 100% 50%, 38% 100%, 0% 50%);
+}
+
+.celll51,
+.borderr51 {
+    clip-path: polygon(56% 0%, 100% 50%, 33% 100%, 0% 50%);
+}
+
+.celll52,
+.borderr52 {
+    clip-path: polygon(0% 50%, 44% 0%, 100% 50%, 67% 100%);
+}
+
+.celll53,
+.borderr53 {
+    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 63% 100%);
+}
+
+.celll54,
+.borderr54 {
+    clip-path: polygon(0% 50%, 57% 0%, 100% 50%, 57% 100%);
+}
+
+.celll55,
+.borderr55 {
+    clip-path: polygon(0% 50%, 67% 0%, 100% 50%, 50% 100%);
+}
+
+.celll56,
+.borderr56 {
+    clip-path: polygon(40% 0%, 100% 50%, 40% 100%, 0% 50%);
+}
+
+.celll57,
+.borderr57 {
+    clip-path: polygon(50% 0%, 100% 50%, 33% 100%, 0% 50%);
+}
+
+.celll58,
+.borderr58 {
+    clip-path: polygon(57% 0%, 100% 50%, 29% 100%, 0% 50%);
+}
+
+.celll59,
+.borderr59 {
+    clip-path: polygon(63% 0%, 100% 50%, 25% 100%, 0% 50%);
+}
+
+.celll60,
+.borderr60 {
+    clip-path: polygon(0% 50%, 38% 0%, 100% 50%, 75% 100%);
+}
+
+.celll61,
+.borderr61 {
+    clip-path: polygon(0% 50%, 43% 0%, 100% 50%, 71% 100%);
+}
+
+.celll62,
+.borderr62 {
+    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 67% 100%);
+}
+
+.celll63,
+.borderr63 {
+    clip-path: polygon(0% 50%, 60% 0%, 100% 50%, 60% 100%);
+}
+
+.celll64,
+.borderr64 {
+    clip-path: polygon(0% 50%, 80% 0%, 100% 63%, 27% 100%);
+}
+
+.celll65,
+.borderr65 {
+    clip-path: polygon(0% 44%, 86% 0%, 100% 67%, 21% 100%);
+}
+
+.celll66,
+.borderr66 {
+    clip-path: polygon(0% 40%, 92% 0%, 100% 70%, 15% 100%);
+}
+
+.celll67,
+.borderr67 {
+    clip-path: polygon(0% 36%, 100% 0%, 100% 73%, 8% 100%);
+}
+
+.celll68,
+.borderr68 {
+    clip-path: polygon(0% 0%, 100% 36%, 92% 100%, 0% 73%);
+}
+
+.celll69,
+.borderr69 {
+    clip-path: polygon(8% 0%, 100% 40%, 85% 100%, 0% 70%);
+}
+
+.celll70,
+.borderr70 {
+    clip-path: polygon(14% 0%, 100% 44%, 79% 100%, 0% 67%);
+}
+
+.celll71,
+.borderr71 {
+    clip-path: polygon(20% 0%, 100% 50%, 73% 100%, 0% 63%);
+}
+
+.celll72,
+.borderr72 {
+    clip-path: polygon(0% 43%, 79% 0%, 100% 71%, 29% 100%);
+}
+
+.celll73,
+.borderr73 {
+    clip-path: polygon(0% 38%, 85% 0%, 100% 75%, 23% 100%);
+}
+
+.celll74,
+.borderr74 {
+    clip-path: polygon(0% 33%, 92% 0%, 100% 78%, 17% 100%);
+}
+
+.celll75,
+.borderr75 {
+    clip-path: polygon(0% 30%, 100% 0%, 100% 80%, 9% 100%);
+}
+
+.celll76,
+.borderr76 {
+    clip-path: polygon(0% 0%, 100% 30%, 91% 100%, 0% 80%);
+}
+
+.celll77,
+.borderr77 {
+    clip-path: polygon(8% 0%, 100% 33%, 83% 100%, 0% 78%);
+}
+
+.celll78,
+.borderr78 {
+    clip-path: polygon(15% 0%, 100% 38%, 77% 100%, 0% 75%);
+}
+
+.celll79,
+.borderr79 {
+    clip-path: polygon(21% 0%, 100% 43%, 71% 100%, 0% 71%);
+}
+
+.celll80,
+.borderr80 {
+    clip-path: polygon(0% 33%, 77% 0%, 100% 83%, 31% 100%);
+}
+
+.celll81,
+.borderr81 {
+    clip-path: polygon(0% 29%, 83% 0%, 100% 86%, 25% 100%);
+}
+
+.celll82,
+.borderr82 {
+    clip-path: polygon(0% 25%, 91% 0%, 100% 88%, 18% 100%);
+}
+
+.celll83,
+.borderr83 {
+    clip-path: polygon(0% 22%, 100% 0%, 100% 89%, 10% 100%);
+}
+
+.celll84,
+.borderr84 {
+    clip-path: polygon(0% 0%, 100% 22%, 90% 100%, 0% 89%);
+}
+
+.celll85,
+.borderr85 {
+    clip-path: polygon(9% 0%, 100% 25%, 82% 100%, 0% 88%);
+}
+
+.celll86,
+.borderr86 {
+    clip-path: polygon(17% 0%, 100% 29%, 75% 100%, 0% 86%);
+}
+
+.celll87,
+.borderr87 {
+    clip-path: polygon(23% 0%, 100% 33%, 69% 100%, 0% 83%);
+}
+
+.celll88,
+.borderr88 {
+    clip-path: polygon(0% 20%, 75% 0%, 100% 100%, 33% 100%);
+}
+
+.celll89,
+.borderr89 {
+    clip-path: polygon(0% 17%, 82% 0%, 100% 100%, 27% 100%);
+}
+
+.celll90,
+.borderr90 {
+    clip-path: polygon(0% 14%, 90% 0%, 100% 100%, 20% 100%);
+}
+
+.celll91,
+.borderr91 {
+    clip-path: polygon(0% 13%, 100% 0%, 100% 100%, 11% 100%);
+}
+
+.celll92,
+.borderr92 {
+    clip-path: polygon(0% 0%, 100% 13%, 89% 100%, 0% 100%);
+}
+
+.celll93,
+.borderr93 {
+    clip-path: polygon(10% 0%, 100% 14%, 80% 100%, 0% 100%);
+}
+
+.celll94,
+.borderr94 {
+    clip-path: polygon(18% 0%, 100% 17%, 73% 100%, 0% 100%);
+}
+
+.celll95,
+.borderr95 {
+    clip-path: polygon(25% 0%, 100% 20%, 67% 100%, 0% 100%);
+}
+
+.borderr0,
+.borderr7,
+.borderr88,
+.borderr95 {
     height: 62.5px;
+}
+
+.borderr1,
+.borderr6,
+.borderr8,
+.borderr15,
+.borderr80,
+.borderr87,
+.borderr89,
+.borderr94 {
+    height: 75px;
+}
+
+.borderr2,
+.borderr5,
+.borderr9,
+.borderr14,
+.borderr16,
+.borderr23,
+.borderr72,
+.borderr79,
+.borderr81,
+.borderr86,
+.borderr90,
+.borderr93 {
+    height: 87.5px;
+}
+
+.borderr3,
+.borderr4,
+.borderr10,
+.borderr13,
+.borderr17,
+.borderr22,
+.borderr24,
+.borderr31,
+.borderr32,
+.borderr33,
+.borderr34,
+.borderr35,
+.borderr36,
+.borderr37,
+.borderr38,
+.borderr39,
+.borderr40,
+.borderr41,
+.borderr42,
+.borderr43,
+.borderr44,
+.borderr45,
+.borderr46,
+.borderr47,
+.borderr48,
+.borderr49,
+.borderr50,
+.borderr51,
+.borderr52,
+.borderr53,
+.borderr54,
+.borderr55,
+.borderr56,
+.borderr57,
+.borderr58,
+.borderr59,
+.borderr60,
+.borderr61,
+.borderr62,
+.borderr63,
+.borderr64,
+.borderr71,
+.borderr73,
+.borderr78,
+.borderr82,
+.borderr85,
+.borderr91,
+.borderr92 {
+    height: 100px;
+}
+
+.borderr11,
+.borderr12,
+.borderr18,
+.borderr21,
+.borderr25,
+.borderr30,
+.borderr65,
+.borderr70,
+.borderr74,
+.borderr77,
+.borderr83,
+.borderr84 {
+    height: 112.5px;
+}
+
+.borderr19,
+.borderr20,
+.borderr26,
+.borderr29,
+.borderr66,
+.borderr69,
+.borderr75,
+.borderr76 {
+    height: 125px;
+}
+
+.borderr27,
+.borderr28,
+.borderr67,
+.borderr68 {
+    height: 137.5px;
+}
+
+.celll0,
+.celll7,
+.celll88,
+.celll95 {
+    height: 60.5px;
+}
+
+.celll1,
+.celll6,
+.celll8,
+.celll15,
+.celll80,
+.celll87,
+.celll89,
+.celll94 {
+    height: 73px;
+}
+
+.celll2,
+.celll5,
+.celll9,
+.celll14,
+.celll16,
+.celll23,
+.celll72,
+.celll79,
+.celll81,
+.celll86,
+.celll90,
+.celll93 {
+    height: 85.5px;
+}
+
+.celll3,
+.celll4,
+.celll10,
+.celll13,
+.celll17,
+.celll22,
+.celll24,
+.celll31,
+.celll32,
+.celll33,
+.celll34,
+.celll35,
+.celll36,
+.celll37,
+.celll38,
+.celll39,
+.celll40,
+.celll41,
+.celll42,
+.celll43,
+.celll44,
+.celll45,
+.celll46,
+.celll47,
+.celll48,
+.celll49,
+.celll50,
+.celll51,
+.celll52,
+.celll53,
+.celll54,
+.celll55,
+.celll56,
+.celll57,
+.celll58,
+.celll59,
+.celll60,
+.celll61,
+.celll62,
+.celll63,
+.celll64,
+.celll71,
+.celll73,
+.celll78,
+.celll82,
+.celll85,
+.celll91,
+.celll92 {
+    height: 98px;
+}
+
+.celll11,
+.celll12,
+.celll18,
+.celll21,
+.celll25,
+.celll30,
+.celll65,
+.celll70,
+.celll74,
+.celll77,
+.celll83,
+.celll84 {
+    height: 110.5px;
+}
+
+.celll19,
+.celll20,
+.celll26,
+.celll29,
+.celll66,
+.celll69,
+.celll75,
+.celll76 {
+    height: 123px;
+}
+
+.celll27,
+.celll28,
+.celll67,
+.celll68 {
+    height: 135.5px;
+}
+
+.borderr0,
+.borderr7,
+.borderr9,
+.borderr14,
+.borderr18,
+.borderr21,
+.borderr27,
+.borderr28,
+.borderr48,
+.borderr55,
+.borderr57,
+.borderr62,
+.borderr67,
+.borderr68,
+.borderr74,
+.borderr77,
+.borderr81,
+.borderr86,
+.borderr88,
+.borderr95 {
     width: 120px;
+}
+
+.borderr1,
+.borderr6,
+.borderr10,
+.borderr13,
+.borderr19,
+.borderr20,
+.borderr75,
+.borderr76,
+.borderr82,
+.borderr85,
+.borderr89,
+.borderr94 {
+    width: 110px;
+}
+
+.borderr2,
+.borderr5,
+.borderr11,
+.borderr12,
+.borderr56,
+.borderr63,
+.borderr83,
+.borderr84,
+.borderr90,
+.borderr93 {
+    width: 100px;
+}
+
+.borderr3,
+.borderr4,
+.borderr91,
+.borderr92 {
+    width: 90px;
+}
+
+.borderr8,
+.borderr15,
+.borderr17,
+.borderr22,
+.borderr26,
+.borderr29,
+.borderr66,
+.borderr69,
+.borderr73,
+.borderr78,
+.borderr80,
+.borderr87 {
+    width: 130px;
+}
+
+.borderr16,
+.borderr23,
+.borderr25,
+.borderr30,
+.borderr40,
+.borderr47,
+.borderr49,
+.borderr54,
+.borderr58,
+.borderr61,
+.borderr65,
+.borderr70,
+.borderr72,
+.borderr79 {
+    width: 140px;
+}
+
+.borderr24,
+.borderr31,
+.borderr64,
+.borderr71 {
+    width: 150px;
+}
+
+.borderr32,
+.borderr39,
+.borderr41,
+.borderr46,
+.borderr50,
+.borderr53,
+.borderr59,
+.borderr60 {
+    width: 160px;
+}
+
+.borderr33,
+.borderr38,
+.borderr42,
+.borderr45,
+.borderr51,
+.borderr52 {
+    width: 180px;
+}
+
+.borderr34,
+.borderr37,
+.borderr43,
+.borderr44 {
+    width: 200px;
+}
+
+.borderr35,
+.borderr36 {
+    width: 220px;
+}
+
+.celll0,
+.celll7,
+.celll9,
+.celll14,
+.celll18,
+.celll21,
+.celll27,
+.celll28,
+.celll48,
+.celll55,
+.celll57,
+.celll62,
+.celll67,
+.celll68,
+.celll74,
+.celll77,
+.celll81,
+.celll86,
+.celll88,
+.celll95 {
+    width: 118px;
+}
+
+.celll1,
+.celll6,
+.celll10,
+.celll13,
+.celll19,
+.celll20,
+.celll75,
+.celll76,
+.celll82,
+.celll85,
+.celll89,
+.celll94 {
+    width: 108px;
+}
+
+.celll2,
+.celll5,
+.celll11,
+.celll12,
+.celll56,
+.celll63,
+.celll83,
+.celll84,
+.celll90,
+.celll93 {
+    width: 98px;
+}
+
+.celll3,
+.celll4,
+.celll91,
+.celll92 {
+    width: 88px;
+}
+
+.celll8,
+.celll15,
+.celll17,
+.celll22,
+.celll26,
+.celll29,
+.celll66,
+.celll69,
+.celll73,
+.celll78,
+.celll80,
+.celll87 {
+    width: 128px;
+}
+
+.celll16,
+.celll23,
+.celll25,
+.celll30,
+.celll40,
+.celll47,
+.celll49,
+.celll54,
+.celll58,
+.celll61,
+.celll65,
+.celll70,
+.celll72,
+.celll79 {
+    width: 138px;
+}
+
+.celll24,
+.celll31,
+.celll64,
+.celll71 {
+    width: 148px;
+}
+
+.celll32,
+.celll39,
+.celll41,
+.celll46,
+.celll50,
+.celll53,
+.celll59,
+.celll60 {
+    width: 158px;
+}
+
+.celll33,
+.celll38,
+.celll42,
+.celll45,
+.celll51,
+.celll52 {
+    width: 178px;
+}
+
+.celll34,
+.celll37,
+.celll43,
+.celll44 {
+    width: 198px;
+}
+
+.celll35,
+.celll36 {
+    width: 218px;
+}
+
+.borderr0,
+.borderr88 {
     margin-left: 280px;
 }
 
-.celll1 {
-    clip-path: polygon(27% 0%, 100% 0%, 82% 100%, 0% 83%);
-    height: 75px;
-    width: 110px;
+.borderr1,
+.borderr19,
+.borderr75,
+.borderr89 {
     margin-left: -30px;
 }
 
-.celll2 {
-    clip-path: polygon(20% 0%, 100% 0%, 90% 100%, 0% 86%);
-    height: 87.5px;
-    width: 100px;
+.borderr2,
+.borderr11,
+.borderr83,
+.borderr90 {
     margin-left: -20px;
 }
 
-.celll3 {
-    clip-path: polygon(11% 0%, 100% 0%, 100% 100%, 0% 88%);
-    height: 100px;
-    width: 90px;
+.borderr3,
+.borderr91 {
     margin-left: -10px;
 }
 
-.celll4 {
-    clip-path: polygon(0% 0%, 89% 0%, 100% 88%, 0% 100%);
-    height: 100px;
-    width: 90px;
-}
-
-.celll5 {
-    clip-path: polygon(0% 0%, 80% 0%, 100% 86%, 10% 100%);
-    height: 87.5px;
-    width: 100px;
+.borderr5,
+.borderr59,
+.borderr93 {
     margin-left: -440px;
 }
 
-.celll6 {
-    clip-path: polygon(0% 0%, 73% 0%, 100% 83%, 18% 100%);
-    height: 75px;
-    width: 110px;
+.borderr6,
+.borderr37,
+.borderr58,
+.borderr94 {
     margin-left: -400px;
 }
 
-.celll7 {
-    clip-path: polygon(0% 0%, 67% 0%, 100% 80%, 25% 100%);
-    height: 62.5px;
-    width: 120px;
+.borderr7,
+.borderr22,
+.borderr57,
+.borderr78,
+.borderr95 {
     margin-left: -360px;
 }
 
-.celll8 {
-    clip-path: polygon(31% 0%, 100% 17%, 77% 100%, 0% 67%);
-    height: 75px;
-    width: 130px;
-    margin-top: -50px;
+.borderr8,
+.borderr52,
+.borderr80 {
     margin-left: 240px;
 }
 
-.celll9 {
-    clip-path: polygon(25% 0%, 100% 14%, 83% 100%, 0% 71%);
-    height: 87.5px;
-    width: 120px;
-    margin-top: -37.5px;
+.borderr9,
+.borderr18,
+.borderr63,
+.borderr74,
+.borderr81 {
     margin-left: -60px;
 }
 
-.celll10 {
-    clip-path: polygon(18% 0%, 100% 13%, 91% 100%, 0% 75%);
-    height: 100px;
-    width: 110px;
-    margin-top: -25px;
+.borderr10,
+.borderr27,
+.borderr67,
+.borderr82 {
     margin-left: -40px;
 }
 
-.celll11 {
-    clip-path: polygon(10% 0%, 100% 11%, 100% 100%, 0% 78%);
-    height: 112.5px;
-    width: 100px;
-    margin-top: -12.5px;
-    margin-left: -20px;
-}
-
-.celll12 {
-    clip-path: polygon(0% 11%, 90% 0%, 100% 78%, 0% 100%);
-    height: 112.5px;
-    width: 100px;
-    margin-top: -12.5px;
-}
-
-.celll13 {
-    clip-path: polygon(0% 13%, 82% 0%, 100% 75%, 9% 100%);
-    height: 100px;
-    width: 110px;
-    margin-top: -25px;
+.borderr13,
+.borderr85 {
     margin-left: -430px;
 }
 
-.celll14 {
-    clip-path: polygon(0% 14%, 75% 0%, 100% 71%, 17% 100%);
-    height: 87.5px;
-    width: 120px;
-    margin-top: -37.5px;
+.borderr14,
+.borderr86 {
     margin-left: -380px;
 }
 
-.celll15 {
-    clip-path: polygon(0% 17%, 69% 0%, 100% 67%, 23% 100%);
-    height: 75px;
-    width: 130px;
-    margin-top: -50px;
+.borderr15,
+.borderr87 {
     margin-left: -330px;
 }
 
-.celll16 {
-    clip-path: polygon(29% 0%, 100% 29%, 79% 100%, 0% 57%);
-    height: 87.5px;
-    width: 140px;
-    margin-top: -100px;
+.borderr16,
+.borderr72 {
     margin-left: 200px;
 }
 
-.celll17 {
-    clip-path: polygon(23% 0%, 100% 25%, 85% 100%, 0% 63%);
-    height: 100px;
-    width: 130px;
-    margin-top: -75px;
+.borderr17,
+.borderr73 {
     margin-left: -90px;
 }
 
-.celll18 {
-    clip-path: polygon(17% 0%, 100% 22%, 92% 100%, 0% 67%);
-    height: 112.5px;
-    width: 120px;
-    margin-top: -50px;
-    margin-left: -60px;
-}
-
-.celll19 {
-    clip-path: polygon(9% 0%, 100% 20%, 100% 100%, 0% 70%);
-    height: 125px;
-    width: 110px;
-    margin-top: -25px;
-    margin-left: -30px;
-}
-
-.celll20 {
-    clip-path: polygon(0% 20%, 91% 0%, 100% 70%, 0% 100%);
-    height: 125px;
-    width: 110px;
-    margin-top: -25px;
-}
-
-.celll21 {
-    clip-path: polygon(0% 22%, 83% 0%, 100% 67%, 8% 100%);
-    height: 112.5px;
-    width: 120px;
-    margin-top: -50px;
+.borderr21,
+.borderr77 {
     margin-left: -420px;
 }
 
-.celll22 {
-    clip-path: polygon(0% 25%, 77% 0%, 100% 63%, 15% 100%);
-    height: 100px;
-    width: 130px;
-    margin-top: -75px;
-    margin-left: -360px;
-}
-
-.celll23 {
-    clip-path: polygon(0% 29%, 71% 0%, 100% 57%, 21% 100%);
-    height: 87.5px;
-    width: 140px;
-    margin-top: -100px;
+.borderr23,
+.borderr45,
+.borderr49,
+.borderr79 {
     margin-left: -300px;
 }
 
-.celll24 {
-    clip-path: polygon(27% 0%, 100% 38%, 80% 100%, 0% 50%);
-    height: 100px;
-    width: 150px;
-    margin-top: -150px;
+.borderr24,
+.borderr64 {
     margin-left: 160px;
 }
 
-.celll25 {
-    clip-path: polygon(21% 0%, 100% 33%, 86% 100%, 0% 55%);
-    height: 112.5px;
-    width: 140px;
-    margin-top: -112.5px;
+.borderr25,
+.borderr55,
+.borderr65 {
     margin-left: -120px;
 }
 
-.celll26 {
-    clip-path: polygon(15% 0%, 100% 30%, 92% 100%, 0% 60%);
-    height: 125px;
-    width: 130px;
-    margin-top: -75px;
+.borderr26,
+.borderr62,
+.borderr66 {
     margin-left: -80px;
 }
 
-.celll27 {
-    clip-path: polygon(8% 0%, 100% 27%, 100% 100%, 0% 64%);
-    height: 137.5px;
-    width: 120px;
-    margin-top: -37.5px;
-    margin-left: -40px;
-}
-
-.celll28 {
-    clip-path: polygon(0% 27%, 92% 0%, 100% 64%, 0% 100%);
-    height: 137.5px;
-    width: 120px;
-    margin-top: -37.5px;
-}
-
-.celll29 {
-    clip-path: polygon(0% 30%, 85% 0%, 100% 60%, 8% 100%);
-    height: 125px;
-    width: 130px;
-    margin-top: -75px;
+.borderr29,
+.borderr69 {
     margin-left: -410px;
 }
 
-.celll30 {
-    clip-path: polygon(0% 33%, 79% 0%, 100% 56%, 14% 100%);
-    height: 112.5px;
-    width: 140px;
-    margin-top: -112.5px;
+.borderr30,
+.borderr51,
+.borderr70 {
     margin-left: -340px;
 }
 
-.celll31 {
-    clip-path: polygon(0% 38%, 73% 0%, 100% 50%, 20% 100%);
-    height: 100px;
-    width: 150px;
-    margin-top: -150px;
+.borderr31,
+.borderr71 {
     margin-left: -270px;
 }
 
-.celll32 {
-    clip-path: polygon(25% 0%, 100% 50%, 63% 100%, 0% 50%);
-    height: 100px;
-    width: 160px;
-    margin-top: -200px;
+.borderr32,
+.borderr44 {
     margin-left: 120px;
 }
 
-.celll33 {
-    clip-path: polygon(33% 0%, 100% 50%, 56% 100%, 0% 50%);
-    height: 100px;
-    width: 180px;
-    margin-top: -150px;
+.borderr33,
+.borderr47 {
     margin-left: -180px;
 }
 
-.celll34 {
-    clip-path: polygon(40% 0%, 100% 50%, 50% 100%, 0% 50%);
-    height: 100px;
-    width: 200px;
-    margin-top: -100px;
+.borderr34,
+.borderr54 {
     margin-left: -160px;
 }
 
-.celll35 {
-    clip-path: polygon(45% 0%, 100% 50%, 45% 100%, 0% 50%);
-    height: 100px;
-    width: 220px;
-    margin-top: -50px;
+.borderr35 {
     margin-left: -140px;
 }
 
-.celll36 {
-    clip-path: polygon(0% 50%, 55% 0%, 100% 50%, 55% 100%);
-    height: 100px;
-    width: 220px;
-    margin-top: -50px;
-}
-
-.celll37 {
-    clip-path: polygon(0% 50%, 60% 0%, 100% 50%, 50% 100%);
-    height: 100px;
-    width: 200px;
-    margin-top: -100px;
-    margin-left: -400px;
-}
-
-.celll38 {
-    clip-path: polygon(0% 50%, 67% 0%, 100% 50%, 44% 100%);
-    height: 100px;
-    width: 180px;
-    margin-top: -150px;
+.borderr38,
+.borderr50 {
     margin-left: -320px;
 }
 
-.celll39 {
-    clip-path: polygon(0% 50%, 75% 0%, 100% 50%, 38% 100%);
-    height: 100px;
-    width: 160px;
-    margin-top: -200px;
+.borderr39,
+.borderr41,
+.borderr42,
+.borderr43,
+.borderr46 {
     margin-left: -240px;
 }
 
-.celll40 {
-    clip-path: polygon(29% 0%, 100% 50%, 57% 100%, 0% 50%);
-    height: 100px;
-    width: 140px;
-    margin-top: -200px;
+.borderr40 {
     margin-left: 80px;
 }
 
-.celll41 {
-    clip-path: polygon(38% 0%, 100% 50%, 50% 100%, 0% 50%);
-    height: 100px;
-    width: 160px;
-    margin-top: -150px;
-    margin-left: -240px;
-}
-
-.celll42 {
-    clip-path: polygon(44% 0%, 100% 50%, 44% 100%, 0% 50%);
-    height: 100px;
-    width: 180px;
-    margin-top: -100px;
-    margin-left: -240px;
-}
-
-.celll43 {
-    clip-path: polygon(50% 0%, 100% 50%, 40% 100%, 0% 50%);
-    height: 100px;
-    width: 200px;
-    margin-top: -50px;
-    margin-left: -240px;
-}
-
-.celll44 {
-    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 60% 100%);
-    height: 100px;
-    width: 200px;
-    margin-top: -50px;
-    margin-left: 120px;
-}
-
-.celll45 {
-    clip-path: polygon(0% 50%, 56% 0%, 100% 50%, 56% 100%);
-    height: 100px;
-    width: 180px;
-    margin-top: -100px;
-    margin-left: -300px;
-}
-
-.celll46 {
-    clip-path: polygon(0% 50%, 63% 0%, 100% 50%, 50% 100%);
-    height: 100px;
-    width: 160px;
-    margin-top: -150px;
-    margin-left: -240px;
-}
-
-.celll47 {
-    clip-path: polygon(0% 50%, 71% 0%, 100% 50%, 43% 100%);
-    height: 100px;
-    width: 140px;
-    margin-top: -200px;
-    margin-left: -180px;
-}
-
-.celll48 {
-    clip-path: polygon(33% 0%, 100% 50%, 50% 100%, 0% 50%);
-    height: 100px;
-    width: 120px;
-    margin-top: -200px;
+.borderr48 {
     margin-left: 40px;
 }
 
-.celll49 {
-    clip-path: polygon(43% 0%, 100% 50%, 43% 100%, 0% 50%);
-    height: 100px;
-    width: 140px;
-    margin-top: -150px;
-    margin-left: -300px;
-}
-
-.celll50 {
-    clip-path: polygon(50% 0%, 100% 50%, 38% 100%, 0% 50%);
-    height: 100px;
-    width: 160px;
-    margin-top: -100px;
-    margin-left: -320px;
-}
-
-.celll51 {
-    clip-path: polygon(56% 0%, 100% 50%, 33% 100%, 0% 50%);
-    height: 100px;
-    width: 180px;
-    margin-top: -50px;
-    margin-left: -340px;
-}
-
-.celll52 {
-    clip-path: polygon(0% 50%, 44% 0%, 100% 50%, 67% 100%);
-    height: 100px;
-    width: 180px;
-    margin-top: -50px;
-    margin-left: 240px;
-}
-
-.celll53 {
-    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 63% 100%);
-    height: 100px;
-    width: 160px;
-    margin-top: -100px;
+.borderr53 {
     margin-left: -200px;
 }
 
-.celll54 {
-    clip-path: polygon(0% 50%, 57% 0%, 100% 50%, 57% 100%);
-    height: 100px;
-    width: 140px;
-    margin-top: -150px;
-    margin-left: -160px;
-}
-
-.celll55 {
-    clip-path: polygon(0% 50%, 67% 0%, 100% 50%, 50% 100%);
-    height: 100px;
-    width: 120px;
-    margin-top: -200px;
-    margin-left: -120px;
-}
-
-.celll56 {
-    clip-path: polygon(40% 0%, 100% 50%, 40% 100%, 0% 50%);
-    height: 100px;
-    width: 100px;
-    margin-top: -200px;
-}
-
-.celll57 {
-    clip-path: polygon(50% 0%, 100% 50%, 33% 100%, 0% 50%);
-    height: 100px;
-    width: 120px;
-    margin-top: -150px;
-    margin-left: -360px;
-}
-
-.celll58 {
-    clip-path: polygon(57% 0%, 100% 50%, 29% 100%, 0% 50%);
-    height: 100px;
-    width: 140px;
-    margin-top: -100px;
-    margin-left: -400px;
-}
-
-.celll59 {
-    clip-path: polygon(63% 0%, 100% 50%, 25% 100%, 0% 50%);
-    height: 100px;
-    width: 160px;
-    margin-top: -50px;
-    margin-left: -440px;
-}
-
-.celll60 {
-    clip-path: polygon(0% 50%, 38% 0%, 100% 50%, 75% 100%);
-    height: 100px;
-    width: 160px;
-    margin-top: -50px;
+.borderr60 {
     margin-left: 360px;
 }
 
-.celll61 {
-    clip-path: polygon(0% 50%, 43% 0%, 100% 50%, 71% 100%);
-    height: 100px;
-    width: 140px;
-    margin-top: -100px;
+.borderr61 {
     margin-left: -100px;
 }
 
-.celll62 {
-    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 67% 100%);
-    height: 100px;
-    width: 120px;
-    margin-top: -150px;
-    margin-left: -80px;
-}
-
-.celll63 {
-    clip-path: polygon(0% 50%, 60% 0%, 100% 50%, 60% 100%);
-    height: 100px;
-    width: 100px;
-    margin-top: -200px;
-    margin-left: -60px;
-}
-
-.celll64 {
-    clip-path: polygon(0% 50%, 80% 0%, 100% 63%, 27% 100%);
-    height: 100px;
-    width: 150px;
+.borderr8,
+.borderr15,
+.borderr18,
+.borderr21,
+.borderr35,
+.borderr36,
+.borderr43,
+.borderr44,
+.borderr51,
+.borderr52,
+.borderr59,
+.borderr60,
+.borderr64,
+.borderr71,
+.borderr81,
+.borderr86,
+.borderr91,
+.borderr92 {
     margin-top: -50px;
-    margin-left: 160px;
 }
 
-.celll65 {
-    clip-path: polygon(0% 44%, 86% 0%, 100% 67%, 21% 100%);
-    height: 112.5px;
-    width: 140px;
-    margin-top: -100px;
-    margin-left: -120px;
-}
-
-.celll66 {
-    clip-path: polygon(0% 40%, 92% 0%, 100% 70%, 15% 100%);
-    height: 125px;
-    width: 130px;
-    margin-top: -150px;
-    margin-left: -80px;
-}
-
-.celll67 {
-    clip-path: polygon(0% 36%, 100% 0%, 100% 73%, 8% 100%);
-    height: 137.5px;
-    width: 120px;
-    margin-top: -200px;
-    margin-left: -40px;
-}
-
-.celll68 {
-    clip-path: polygon(0% 0%, 100% 36%, 92% 100%, 0% 73%);
-    height: 137.5px;
-    width: 120px;
-    margin-top: -200px;
-}
-
-.celll69 {
-    clip-path: polygon(8% 0%, 100% 40%, 85% 100%, 0% 70%);
-    height: 125px;
-    width: 130px;
-    margin-top: -150px;
-    margin-left: -410px;
-}
-
-.celll70 {
-    clip-path: polygon(14% 0%, 100% 44%, 79% 100%, 0% 67%);
-    height: 112.5px;
-    width: 140px;
-    margin-top: -100px;
-    margin-left: -340px;
-}
-
-.celll71 {
-    clip-path: polygon(20% 0%, 100% 50%, 73% 100%, 0% 63%);
-    height: 100px;
-    width: 150px;
-    margin-top: -50px;
-    margin-left: -270px;
-}
-
-.celll72 {
-    clip-path: polygon(0% 43%, 79% 0%, 100% 71%, 29% 100%);
-    height: 87.5px;
-    width: 140px;
+.borderr9,
+.borderr14,
+.borderr27,
+.borderr28,
+.borderr72,
+.borderr79,
+.borderr90,
+.borderr93 {
     margin-top: -37.5px;
-    margin-left: 200px;
 }
 
-.celll73 {
-    clip-path: polygon(0% 38%, 85% 0%, 100% 75%, 23% 100%);
-    height: 100px;
-    width: 130px;
-    margin-top: -75px;
-    margin-left: -90px;
-}
-
-.celll74 {
-    clip-path: polygon(0% 33%, 92% 0%, 100% 78%, 17% 100%);
-    height: 112.5px;
-    width: 120px;
-    margin-top: -112.5px;
-    margin-left: -60px;
-}
-
-.celll75 {
-    clip-path: polygon(0% 30%, 100% 0%, 100% 80%, 9% 100%);
-    height: 125px;
-    width: 110px;
-    margin-top: -150px;
-    margin-left: -30px;
-}
-
-.celll76 {
-    clip-path: polygon(0% 0%, 100% 30%, 91% 100%, 0% 80%);
-    height: 125px;
-    width: 110px;
-    margin-top: -150px;
-}
-
-.celll77 {
-    clip-path: polygon(8% 0%, 100% 33%, 83% 100%, 0% 78%);
-    height: 112.5px;
-    width: 120px;
-    margin-top: -112.5px;
-    margin-left: -420px;
-}
-
-.celll78 {
-    clip-path: polygon(15% 0%, 100% 38%, 77% 100%, 0% 75%);
-    height: 100px;
-    width: 130px;
-    margin-top: -75px;
-    margin-left: -360px;
-}
-
-.celll79 {
-    clip-path: polygon(21% 0%, 100% 43%, 71% 100%, 0% 71%);
-    height: 87.5px;
-    width: 140px;
-    margin-top: -37.5px;
-    margin-left: -300px;
-}
-
-.celll80 {
-    clip-path: polygon(0% 33%, 77% 0%, 100% 83%, 31% 100%);
-    height: 75px;
-    width: 130px;
+.borderr10,
+.borderr13,
+.borderr19,
+.borderr20,
+.borderr80,
+.borderr87,
+.borderr89,
+.borderr94 {
     margin-top: -25px;
-    margin-left: 240px;
 }
 
-.celll81 {
-    clip-path: polygon(0% 29%, 83% 0%, 100% 86%, 25% 100%);
-    height: 87.5px;
-    width: 120px;
-    margin-top: -50px;
-    margin-left: -60px;
-}
-
-.celll82 {
-    clip-path: polygon(0% 25%, 91% 0%, 100% 88%, 18% 100%);
-    height: 100px;
-    width: 110px;
-    margin-top: -75px;
-    margin-left: -40px;
-}
-
-.celll83 {
-    clip-path: polygon(0% 22%, 100% 0%, 100% 89%, 10% 100%);
-    height: 112.5px;
-    width: 100px;
-    margin-top: -100px;
-    margin-left: -20px;
-}
-
-.celll84 {
-    clip-path: polygon(0% 0%, 100% 22%, 90% 100%, 0% 89%);
-    height: 112.5px;
-    width: 100px;
-    margin-top: -100px;
-}
-
-.celll85 {
-    clip-path: polygon(9% 0%, 100% 25%, 82% 100%, 0% 88%);
-    height: 100px;
-    width: 110px;
-    margin-top: -75px;
-    margin-left: -430px;
-}
-
-.celll86 {
-    clip-path: polygon(17% 0%, 100% 29%, 75% 100%, 0% 86%);
-    height: 87.5px;
-    width: 120px;
-    margin-top: -50px;
-    margin-left: -380px;
-}
-
-.celll87 {
-    clip-path: polygon(23% 0%, 100% 33%, 69% 100%, 0% 83%);
-    height: 75px;
-    width: 130px;
-    margin-top: -25px;
-    margin-left: -330px;
-}
-
-.celll88 {
-    clip-path: polygon(0% 20%, 75% 0%, 100% 100%, 33% 100%);
-    height: 62.5px;
-    width: 120px;
+.borderr11,
+.borderr12,
+.borderr88,
+.borderr95 {
     margin-top: -12.5px;
-    margin-left: 280px;
 }
 
-.celll89 {
-    clip-path: polygon(0% 17%, 82% 0%, 100% 100%, 27% 100%);
-    height: 75px;
-    width: 110px;
-    margin-top: -25px;
-    margin-left: -30px;
+.borderr16,
+.borderr23,
+.borderr34,
+.borderr37,
+.borderr42,
+.borderr45,
+.borderr50,
+.borderr53,
+.borderr58,
+.borderr61,
+.borderr65,
+.borderr70,
+.borderr83,
+.borderr84 {
+    margin-top: -100px;
 }
 
-.celll90 {
-    clip-path: polygon(0% 14%, 90% 0%, 100% 100%, 20% 100%);
-    height: 87.5px;
-    width: 100px;
-    margin-top: -37.5px;
-    margin-left: -20px;
+.borderr17,
+.borderr22,
+.borderr26,
+.borderr29,
+.borderr73,
+.borderr78,
+.borderr82,
+.borderr85 {
+    margin-top: -75px;
 }
 
-.celll91 {
-    clip-path: polygon(0% 13%, 100% 0%, 100% 100%, 11% 100%);
-    height: 100px;
-    width: 90px;
-    margin-top: -50px;
-    margin-left: -10px;
+.borderr24,
+.borderr31,
+.borderr33,
+.borderr38,
+.borderr41,
+.borderr46,
+.borderr49,
+.borderr54,
+.borderr57,
+.borderr62,
+.borderr66,
+.borderr69,
+.borderr75,
+.borderr76 {
+    margin-top: -150px;
 }
 
-.celll92 {
-    clip-path: polygon(0% 0%, 100% 13%, 89% 100%, 0% 100%);
-    height: 100px;
-    width: 90px;
-    margin-top: -50px;
+.borderr25,
+.borderr30,
+.borderr74,
+.borderr77 {
+    margin-top: -112.5px;
 }
 
-.celll93 {
-    clip-path: polygon(10% 0%, 100% 14%, 80% 100%, 0% 100%);
-    height: 87.5px;
-    width: 100px;
-    margin-top: -37.5px;
-    margin-left: -440px;
-}
-
-.celll94 {
-    clip-path: polygon(18% 0%, 100% 17%, 73% 100%, 0% 100%);
-    height: 75px;
-    width: 110px;
-    margin-top: -25px;
-    margin-left: -400px;
-}
-
-.celll95 {
-    clip-path: polygon(25% 0%, 100% 20%, 67% 100%, 0% 100%);
-    height: 62.5px;
-    width: 120px;
-    margin-top: -12.5px;
-    margin-left: -360px;
+.borderr32,
+.borderr39,
+.borderr40,
+.borderr47,
+.borderr48,
+.borderr55,
+.borderr56,
+.borderr63,
+.borderr67,
+.borderr68 {
+    margin-top: -200px;
 }
 
     .celll0:not(:disabled),
@@ -937,7 +1542,8 @@ body {
     .celll92:not(:disabled),
     .celll94:not(:disabled) {
         cursor: pointer;
-        background-color: #97b556;
+        background-color: mediumseagreen;
+        border: 1px solid mediumseagreen;
     }
 
     .celll1:not(:disabled),
@@ -989,7 +1595,8 @@ body {
     .celll93:not(:disabled),
     .celll95:not(:disabled) {
         cursor: pointer;
-        background-color: #cbccd0;
+        background-color: palegoldenrod;
+        border: 1px solid palegoldenrod;
     }
 
         .celll0:not(:disabled):hover,
@@ -1040,7 +1647,8 @@ body {
         .celll90:not(:disabled):hover,
         .celll92:not(:disabled):hover,
         .celll94:not(:disabled):hover {
-            background-color: #97b576;
+            background-color: darkseagreen;
+            border: 1px solid darkseagreen;
         }
 
         .celll1:not(:disabled):hover,
@@ -1091,5 +1699,6 @@ body {
         .celll91:not(:disabled):hover,
         .celll93:not(:disabled):hover,
         .celll95:not(:disabled):hover {
-            background-color: #cbccb0;
+            background-color: lightgoldenrodyellow;
+            border: 1px solid lightgoldenrodyellow;
         }

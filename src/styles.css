@@ -1,63 +1,222 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-p {
-  margin-bottom: 1rem;
-}
 .counter {
-  padding: 10px;
-  
-  .counter-controls {
+    padding: 10px;
+}
+
+.counter-controls {
     display: inline-block;
     margin-left: 10px;
-    
-    button {
-      margin-right: 4px;
-    }
-  }
 }
 
-ol.instructions {
-  list-style-type: decimal;
-  margin-left: 1rem;
-  margin-top: .5rem;
-  
-  li {
-    margin-bottom: 1rem;
-    
-    ol {
-      margin-top: .5rem;
-      margin-left: 2.5rem;
-      list-style-type: decimal;
+@font-face {
+    font-family: 'Nishiki-Teki';
+    font-weight: 900;
+    src: local('Nishiki-Teki'), url(../nishiki-teki.ttf) format('truetype');
+}
+
+.minusButton,
+.plusButton,
+.menuButton,
+.sideButton,
+.pageButton,
+.resetButton {
+    border-radius: 5px;
+}
+
+.minusButton,
+.plusButton {
+    width: 22px;
+    height: 22px;
+    border-width: 1px;
+}
+
+.menuButton,
+.sideButton {
+    height: 38px;
+    width: 44px;
+    background-color: lightsteelblue;
+    border-color: powderblue;
+}
+
+    .menuButton:not(:disabled):hover,
+    .sideButton:not(:disabled):hover {
+        border-color: aliceblue;
     }
-  }
+
+.minusButton {
+    background-color: palevioletred;
+    border-color: rosybrown;
+}
+
+    .minusButton:not(:disabled):hover {
+        border-color: indianred;
+    }
+
+    .minusButton:disabled {
+        background-color: lightpink;
+    }
+
+.plusButton {
+    background-color: springgreen;
+    border-color: seagreen;
+}
+
+    .plusButton:not(:disabled):hover {
+        border-color: darkolivegreen;
+    }
+
+    .plusButton:disabled {
+        background-color: lightgreen;
+    }
+
+.sideButton {
+    grid-column: 3;
+}
+
+.pageButton {
+    height: 25px;
+    background-color: violet;
+    border-color: pink;
+}
+
+    .pageButton:not(:disabled):hover {
+        border-color: antiquewhite;
+    }
+
+.resetButton {
+    background-color: mediumpurple;
+    border-color: violet;
+}
+    
+    .resetButton:not(:disabled):hover {
+        border-color: plum;
+    }
+
+    .minusButton:not(:disabled),
+    .plusButton:not(:disabled),
+    .menuButton:not(:disabled),
+    .sideButton:not(:disabled),
+    .pageButton:not(:disabled),
+    .resetButton:not(:disabled) {
+        cursor: pointer;
+    }
+
+.moveHistory {
+    background-color: plum;
+    border: 1px solid rebeccapurple;
+    width: fit-content;
+    white-space: pre-line;
+    font-weight: normal;
+    margin: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    max-height: 82vh;
+    overflow-y: scroll;
+}
+
+.app2 {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 640px;
+    margin: 0 auto;
+    row-gap: 16px;
+}
+
+.board2 {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.cell2black {
+    border: 1px solid darkolivegreen;
+    font-size: min(48px, 10vw);
+    aspect-ratio: 1 / 1;
+    background-color: seagreen;
+    color: black;
+    font-family: Nishiki-Teki;
+}
+
+.cell2white {
+    border: 1px solid darkolivegreen;
+    font-size: min(48px, 10vw);
+    aspect-ratio: 1 / 1;
+    background-color: bisque;
+    color: black;
+    font-family: Nishiki-Teki;
+}
+
+    .cell2black:not(:disabled),
+    .cell2white:not(:disabled) {
+        cursor: pointer;
+    }
+
+    .cell2black:not(:disabled) {
+        background-color: mediumseagreen;
+    }
+
+    .cell2white:not(:disabled) {
+        background-color: palegoldenrod;
+    }
+
+        .cell2black:not(:disabled):hover {
+            background-color: darkseagreen;
+        }
+
+        .cell2white:not(:disabled):hover {
+            background-color: lightgoldenrodyellow;
+        }
+
+.disabled {
+    pointer-events: none;
+}
+
+h2 {
+    text-align: center;
 }
 
 body {
-  font-family: sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-  margin: 0;
-}
-
-* {
-  box-sizing: border-box;
+    font-family: sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
 }
 
 header,
 nav,
 main,
-aside,
-footer {
-  padding: 12px;
+aside {
+    padding: 12px;
+    font-weight: bold;
+}
+
+nav,
+main,
+aside {
+    text-align: center;
+    min-height: 92%;
+    top: 8%;
+    overflow: auto;
+}
+
+nav,
+aside {
+    height: auto;
+    position: fixed;
+    width: 10%;
 }
 
 header {
-    background-color: rgb(255, 88, 63);
-    text-align: center;
-    font-weight: bold;
-    color: rgb(155, 1, 1);
+    display: flex;
+    background-color: teal;
+    color: midnightblue;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     height: 8%;
     position: fixed;
@@ -67,53 +226,22 @@ header {
 }
 
 nav {
-  background-color: rgb(255, 116, 70);
-  display: grid;
-  text-align: center;
-  font-weight: bold;
-  width: 10%;
-  min-height: 92%;
-  height: auto;
-  position: fixed;
-  overflow: auto;
-  left: 0%;
-  top: 8%;
+    background-color: rebeccapurple;
+    display: grid;
+    left: 0%;
 }
 
 main {
-  background-color: rgb(255, 224, 171);
-  text-align: center;
-  font-weight: bold;
-  width: 90%;
-  min-height: 92%;
-  height: fit-content;
-  overflow: auto;
-  position: absolute;
-  left: 10%;
-  top: 8%;
-  padding-bottom: 11%;
+    background-color: cadetblue;
+    width: 80%;
+    height: fit-content;
+    position: absolute;
+    left: 10%;
+    padding-bottom: 3%;
 }
 
 aside {
-  background-color: rgb(242, 153, 86);
-  text-align: center;
-  font-weight: bold;
-  width: 10%;
-  min-height: 81%;
-  height: auto;
-  position: fixed;
-  overflow: auto;
-  left: 90%;
-  top: 8%;
-}
-
-footer {
-  background-color: rgb(101, 116, 132);
-  text-align: center;
-  font-weight: bold;
-  width: 100%;
-  height: 11%;
-  position: fixed;
-  overflow: hidden;
-  bottom: 0%;
+    background-color: palevioletred;
+    justify-content: center;
+    left: 90%;
 }

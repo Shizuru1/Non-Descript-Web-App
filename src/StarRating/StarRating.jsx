@@ -1,30 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { Star } from "./Star";
 
 export const StarRating = (props) => {
-    const { max, filled } = props;
-    var arr = new Array(max).fill(false);
-    for (var i = 0; i < filled && i < max; i++) {
-        arr[i] = true;
-    }
-    const [hovarr, setHovarr] = useState(arr);
-    const [starr, setStarr] = useState(hovarr);
-
-    const onChange = () => {
-        setStarr(hovarr);
-    }
-
-    const onHover = (index) => {
-        setHovarr(hovarr.map((val, id) => (id <= index ? val = true : val = false)));
-    }
-
-    const onUnhover = () => {
-        setHovarr(starr);
+    const { max, filled, hover, onChange, onHover, onUnhover } = props;
+    var arr = new Array(max).fill(0);
+    for (var i = 0; i < max; i++) {
+        if (i < hover) {
+            arr[i] = 2;
+        } else if (i < filled) {
+            arr[i] = 1;
+        }
     }
 
     return (
         <div>
-            Star Rating: {hovarr.map((value, index) => (<Star key={index} filled={value} hoverRating={() => onHover(index)} setRating={onChange} persistRating={onUnhover} />))}
+            {arr.map((value, index) =>
+                <Star key={index} filled={value} hoverRating={() => onHover(index)}
+                    setRating={() => onChange(index)} persistRating={onUnhover} />)}
         </div>
     );
 };
