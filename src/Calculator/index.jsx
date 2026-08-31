@@ -43,128 +43,6 @@ const convertDec = (num, base) => {
     return result;
 }
 
-const convert = (num, base) => {
-    if (num.includes('i')) {
-        // complex
-        if (num.includes('+')) {
-            // a + bi, -a + bi
-            if (num.startsWith('-')) {
-                // -a + bi
-                var nnum = num.split('+')[0].split('-')[1];
-                var inum = num.split('+')[0].split('i')[0];
-                if (nnum.includes('.')) {
-                    if (inum.includes('.')) {
-                        // a and b are real
-                        return '-' + convertInt(Number.parseInt(nnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(nnum.split('.')[1]), base) + '+' + convertInt(Number.parseInt(inum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(inum.split('.')[1]), base) + 'i';
-                    } else {
-                        // a is real, b is integer
-                        return '-' + convertInt(Number.parseInt(nnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(nnum.split('.')[1]), base) + '+' + convertInt(Number.parseInt(inum), base) + 'i';
-                    }
-                } else if (inum.includes('.')) {
-                    // a is integer, b is real
-                    return '-' + convertInt(Number.parseInt(nnum), base) + '+' + convertInt(Number.parseInt(inum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(inum.split('.')[1]), base) + 'i';
-                } else {
-                    //a and b are integers
-                    return '-' + convertInt(Number.parseInt(nnum), base) + '+' + convertInt(Number.parseInt(inum), base) + 'i';
-                }
-            } else {
-                // a + bi
-                var pnum = num.split('+')[0];
-                var inum = num.split('+')[1].split('i')[0];
-                if (pnum.includes('.')) {
-                    if (inum.includes('.')) {
-                        // a and b are real
-                        return convertInt(Number.parseInt(pnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(pnum.split('.')[1]), base) + '+' + convertInt(Number.parseInt(inum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(inum.split('.')[1]), base) + 'i';
-                    } else {
-                        // a is real, b is integer
-                        return convertInt(Number.parseInt(pnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(pnum.split('.')[1]), base) + '+' + convertInt(Number.parseInt(inum), base) + 'i';
-                    }
-                } else if (inum.includes('.')) {
-                    // a is integer, b is real
-                    return convertInt(Number.parseInt(pnum), base) + '+' + convertInt(Number.parseInt(inum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(inum.split('.')[1]), base) + 'i';
-                } else {
-                    //a and b are integers
-                    return convertInt(Number.parseInt(pnum), base) + '+' + convertInt(Number.parseInt(inum), base) + 'i';
-                }
-            }
-        } else if (num.includes('-')) {
-            // a - bi, -a - bi, -bi
-            if (num.split('-').length > 2) {
-                // -a - bi
-                var nnum = num.split('-')[1];
-                var ninum = num.split('-')[2].split('i')[0];
-                if (nnum.includes('.')) {
-                    if (ninum.includes('.')) {
-                        // a and b are real
-                        return '-' + convertInt(Number.parseInt(nnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(nnum.split('.')[1]), base) + '-' + convertInt(Number.parseInt(ninum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(ninum.split('.')[1]), base) + 'i';
-                    } else {
-                        // a is real, b is integer
-                        return '-' + convertInt(Number.parseInt(nnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(nnum.split('.')[1]), base) + '-' + convertInt(Number.parseInt(ninum), base) + 'i';
-                    }
-                } else if (ninum.includes('.')) {
-                    // a is integer, b is real
-                    return '-' + convertInt(Number.parseInt(nnum), base) + '-' + convertInt(Number.parseInt(ninum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(ninum.split('.')[1]), base) + 'i';
-                } else {
-                    //a and b are integers
-                    return '-' + convertInt(Number.parseInt(nnum), base) + '-' + convertInt(Number.parseInt(ninum), base) + 'i';
-                }
-            } else if (num.split('-')[0] == '') {
-                // -bi
-                var ninum = num.split('-')[1].split('i')[0];
-                if (ninum.includes('.')) {
-                    // real
-                    return '-' + convertInt(Number.parseInt(ninum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(ninum.split('.')[1]), base) + 'i';
-                } else {
-                    // integer
-                    return '-' + convertInt(Number.parseInt(ninum), base) + 'i';
-                }
-            } else {
-                // a - bi
-                var pnum = num.split('-')[0];
-                var ninum = num.split('-')[1].split('i')[0];
-                if (pnum.includes('.')) {
-                    if (ninum.includes('.')) {
-                        // a and b are real
-                        return convertInt(Number.parseInt(pnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(pnum.split('.')[1]), base) + '-' + convertInt(Number.parseInt(ninum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(ninum.split('.')[1]), base) + 'i';
-                    } else {
-                        // a is real, b is integer
-                        return convertInt(Number.parseInt(pnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(pnum.split('.')[1]), base) + '-' + convertInt(Number.parseInt(ninum), base) + 'i';
-                    }
-                } else if (ninum.includes('.')) {
-                    // a is integer, b is real
-                    return convertInt(Number.parseInt(pnum), base) + '-' + convertInt(Number.parseInt(ninum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(ninum.split('.')[1]), base) + 'i';
-                } else {
-                    //a and b are integers
-                    return convertInt(Number.parseInt(pnum), base) + '-' + convertInt(Number.parseInt(ninum), base) + 'i';
-                }
-            }
-        } else {
-            // bi
-            var inum = num.split('i')[0];
-            if (inum.includes('.')) {
-                // real
-                return convertInt(Number.parseInt(inum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(inum.split('.')[1]), base) + 'i';
-            } else {
-                // integer
-                return convertInt(Number.parseInt(inum), base) + 'i';
-            }
-        }
-    } else {
-        if (num.includes('.')) {
-            // real
-            if (num.includes('-')) {
-                var nnum = num.split('-')[1];
-                return '-' + convertInt(Number.parseInt(nnum.split('.')[0]), base) + '.' + convertDec(Number.parseInt(nnum.split('.')[1]), base);
-            } else {
-                return convertInt(Number.parseInt(num.split('.')[0]), base) + '.' + convertDec(Number.parseInt(num.split('.')[1]), base);
-            }
-        } else {
-            // integer
-            return convertInt(Number.parseInt(num), base);
-        }
-    }
-}
-
 const binaryRealAdd = (aa, bb, base) => {
     var result = '';
     if (base.num == 1) {
@@ -617,11 +495,15 @@ const binaryRealMultiply = (aa, bb, base) => {
         if (aa.length == 1) {
             if (aa[0] == bValues[0]) {
                 return bValues[0];
+            } else if (aa[0] == bValues[1]) {
+                return bb.reverse().join('');
             }
         }
         if (bb.length == 1) {
             if (bb[0] == bValues[0]) {
                 return bValues[0];
+            } else if (bb[0] == bValues[1]) {
+                return aa.reverse().join('');
             }
         }
         var rem = 0;
@@ -742,31 +624,28 @@ const binaryRealDivide = (aa, bb, base) => {
             }
         }
         var cc = aa.slice().reverse();
-        var last = [];
+        var last = cc.slice();
         for (let i = 0; i < cc.length; i++) {
             if (cc[i] == '.') {
                 result += '.';
                 continue;
             }
-            if (last.includes('.')) {
-                var decDec = last.findIndex(val => val == '.');
-                last.splice(decDec, 1);
-                if (last.length > decDec + 1) {
-                    last.splice(decDec + 1, 0, '.');
-                }
-                if (last[0] == bValues[0]) {
-                    last.splice(0, 1);
-                }
-                last = binaryRealAdd(last.reverse(), cc[i], base).split('');
-            } else {
-                if (last[0] == bValues[0]) {
-                    last.splice(0, 1, cc[i]);
+            if (i != 0) {
+                if (last.includes('.')) {
+                    var decDec = last.findIndex(val => val == '.');
+                    last.splice(decDec, 1);
+                    if (last.length > decDec + 1) {
+                        last.splice(decDec + 1, 0, '.');
+                    }
+                    if (last[0] == bValues[0]) {
+                        last.splice(0, 1);
+                    }
                 } else {
-                    last.push(cc[i]);
+                    last.push(bValues[0]);
                 }
             }
             for (let j = 0; j < base.num; j++) {
-                var k = binaryRealSubtract(last.reverse(), bb, base);
+                var k = binaryRealSubtract(last.slice().reverse(), bb, base);
                 if (k.startsWith('-')) {
                     result += bValues[j];
                     last = binaryRealSubtract(bb, k.split('-')[1].split('').reverse(), base).split('');
@@ -900,11 +779,58 @@ const binaryRealExponentiate = (aa, bb, base) => {
     var result = '';
     if (base.num == 1) {
         for (let i = 0; i < aa.length ** bb.length; i++) {
-            result += '|';
+            result += base.values[14];
         }
     } else {
-        // exponentiate
+        var bValues = base.values.slice(17);
+        if (bb.length == 1) {
+            if (bb[0] == bValues[0]) {
+                return bValues[1];
+            } else if (bb[0] == bValues[1]) {
+                return aa.reverse().join('');
+            }
+        }
+        if (aa.length == 1) {
+            if (aa[0] == bValues[0]) {
+                return bValues[0];
+            } else if (aa[0] == bValues[1]) {
+                return bValues[1];
+            }
+        }
+        // exponentiation logic here
+        if (result.length > 17) {
+            if (result.includes('.')) {
+                if (bValues.findIndex(val => val == result.split('')[17]) >= (base.num / 2)) {
+                    result = result.slice(0, 17);
+                    var replc = [];
+                    var lenLen = result.length;
+                    for (let i = 0; i < lenLen; i++) {
+                        if (result.endsWith('.')) {
+                            continue;
+                        }
+                        if (result.endsWith(bValues[base.num - 1])) {
+                            replc.splice(0, 0, bValues[0]);
+                        } else {
+                            replc.splice(0, 0, bValues[bValues.findIndex(val => val == result.split('')[result.length - 1]) + 1]);
+                            result = result.slice(0, result.length - 1);
+                            break;
+                        }
+                        result = result.slice(0, result.length - 1);
+                    }
+                    result = result += replc.join('');
+                } else {
+                    result = result.slice(0, 17);
+                }
+            }
+        }
+        while (result.startsWith(bValues[0])) {
+            result = result.slice(1, result.length);
+        }
+        if (result.startsWith('.')) {
+            result = bValues[0] + result;
+        }
     }
+    return result;
 }
 
 const binaryRealRoot = (aa, bb, base) => {
@@ -1187,12 +1113,10 @@ const Cell = (props) => {
     const handleClick = () => {
         switch (value) {
             case 'π':
-                var val = '3.1415926535897932';
-                setValues({ value: convert(val, base), memory: (values.repeat ? '' : values.memory), repeat: false });
+                setValues({ value: (convertInt(3, base) + '.' + convertDec(1415926535897932, base)), memory: (values.repeat ? '' : values.memory), repeat: false });
                 break;
             case 'e':
-                var val = '2.7182818284590452';
-                setValues({ value: convert(val, base), memory: (values.repeat ? '' : values.memory), repeat: false });
+                setValues({ value: (convertInt(2, base) + '.' + convertDec(7182818284590452, base)), memory: (values.repeat ? '' : values.memory), repeat: false });
                 break;
             case 'i':
                 setValues({
