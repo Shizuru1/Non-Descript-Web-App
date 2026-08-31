@@ -360,6 +360,162 @@ body {
             background-color: aliceblue;
             border: 1px solid aliceblue;
         }
+/*!*************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/Chess+/styles.css ***!
+  \*************************************************************************/
+.cell5a,
+.cell5b,
+.cell5c,
+.cell5d,
+.cell5e,
+.cell5f,
+.cell5g,
+.cell5h,
+.cel5a,
+.cel5b,
+.cel5c,
+.cel5d,
+.cel5e,
+.cel5f,
+.cel5g,
+.cel5h {
+    border: 1px solid darkolivegreen;
+    font-size: min(48px, 10vw);
+    aspect-ratio: 1 / 1;
+    color: black;
+    font-family: Nishiki-Teki;
+}
+
+.cell5a,
+.cel5a {
+    background-color: #b86b45;
+}
+
+.cell5b,
+.cel5b {
+    background-color: #c58958;
+}
+
+.cell5c,
+.cel5c {
+    background-color: #d2a66b;
+}
+
+.cell5d,
+.cel5d {
+    background-color: #d5c68a;
+}
+
+.cell5e,
+.cel5e {
+    background-color: #b9c77b;
+}
+
+.cell5f,
+.cel5f {
+    background-color: #91b56d;
+}
+
+.cell5g,
+.cel5g {
+    background-color: #63965e;
+}
+
+.cell5h,
+.cel5h {
+    background-color: #3e7650;
+}
+
+    .cel5a:not(:disabled) {
+        background-color: #c87b55;
+    }
+
+    .cel5b:not(:disabled) {
+        background-color: #d59968;
+    }
+
+    .cel5c:not(:disabled) {
+        background-color: #e2b67b;
+    }
+
+    .cel5d:not(:disabled) {
+        background-color: #e5d69a;
+    }
+
+    .cel5e:not(:disabled) {
+        background-color: #c9d78b;
+    }
+
+    .cel5f:not(:disabled) {
+        background-color: #a1c57d;
+    }
+
+    .cel5g:not(:disabled) {
+        background-color: #73a66e;
+    }
+
+    .cel5h:not(:disabled) {
+        background-color: #4e8660;
+    }
+
+    .cell5a:not(:disabled),
+    .cell5b:not(:disabled),
+    .cell5c:not(:disabled),
+    .cell5d:not(:disabled),
+    .cell5e:not(:disabled),
+    .cell5f:not(:disabled),
+    .cell5g:not(:disabled),
+    .cell5h:not(:disabled),
+    .cel5a:not(:disabled),
+    .cel5b:not(:disabled),
+    .cel5c:not(:disabled),
+    .cel5d:not(:disabled),
+    .cel5e:not(:disabled),
+    .cel5f:not(:disabled),
+    .cel5g:not(:disabled),
+    .cel5h:not(:disabled) {
+        cursor: pointer;
+    }
+
+        .cell5a:not(:disabled):hover,
+        .cel5a:not(:disabled):hover {
+            background-color: #d88b65;
+        }
+
+        .cell5b:not(:disabled):hover,
+        .cel5b:not(:disabled):hover {
+            background-color: #e5a978;
+        }
+
+        .cell5c:not(:disabled):hover,
+        .cel5c:not(:disabled):hover {
+            background-color: #f2c68b;
+        }
+
+        .cell5d:not(:disabled):hover,
+        .cel5d:not(:disabled):hover {
+            background-color: #f5e6aa;
+        }
+
+        .cell5e:not(:disabled):hover,
+        .cel5e:not(:disabled):hover {
+            background-color: #d9e79b;
+        }
+
+        .cell5f:not(:disabled):hover,
+        .cel5f:not(:disabled):hover {
+            background-color: #b1d58d;
+        }
+
+        .cell5g:not(:disabled):hover,
+        .cel5g:not(:disabled):hover {
+            background-color: #83b67e;
+        }
+
+        .cell5h:not(:disabled):hover,
+        .cel5h:not(:disabled):hover {
+            background-color: #5e9670;
+        }
 /*!**************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./src/3PChess/styles.css ***!
   \**************************************************************************/
